@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block sidebar %}
+    <div id="sidebar">
+        <h1>404</h1>
+        <h3>These are not the droids you are looking for.</h3>
+        <p>
+            Looks like you've taken a wrong turn, friend.<br />
+            <a href="{{ url_for('auth.login') }}">Can I point you in the right direction?</a>
+        </p>
+    </div>
+{% endblock %}
+
+{% block content %}
+    <div id="content">
+        <p class="hero-text">Not sure how you got here... Sorry about that.</p>
+    </div>
+{% endblock %}

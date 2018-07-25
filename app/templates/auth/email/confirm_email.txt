@@ -1,0 +1,11 @@
+Dear {{ user.username }},
+
+To confirm your email click on the following link:
+
+{{ url_for('auth.confirm_email', token=token, _external=True) }}
+
+If you have not registered with our site then simply ignore this message.
+
+Sincerely,
+
+The Dex Team

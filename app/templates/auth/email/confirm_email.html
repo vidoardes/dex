@@ -1,0 +1,12 @@
+<p>Dear {{ user.username }},</p>
+<p>
+    To confirm your email
+    <a href="{{ url_for('auth.confirm_email', token=token, _external=True) }}">
+        click here
+    </a>.
+</p>
+<p>Alternatively, you can paste the following link in your browser's address bar:</p>
+<p>{{ url_for('auth.confirm_email', token=token, _external=True) }}</p>
+<p>If you have not registered with our site then simply ignore this message.</p>
+<p>Sincerely,</p>
+<p>The Dex Team</p>

@@ -1,0 +1,531 @@
+@import "vendor/normalize";
+
+/* apply a natural box layout model to all elements, but allowing components to change */
+html {
+  box-sizing: border-box;
+}
+
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
+body {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 14px;
+  color: rgba(0, 0, 0, .87);
+  height: 100vh;
+}
+
+a {
+  color: #e37222;
+  text-decoration: none;
+}
+
+label {
+  font-weight: 300;
+  margin-bottom: 5px;
+  display: inline-block;
+  text-align: left;
+  width: 100%;
+  text-transform: uppercase;
+}
+
+input[type=password], input[type=text], input[type=number] {
+  padding: 6px 0;
+  background-color: #fff;
+  border: none;
+  border-bottom: 1px solid #E1E3DF;
+  height: 35px;
+
+  &:hover {
+    border-color: #adaeaa;
+  }
+}
+
+input:focus,
+select:focus,
+textarea:focus,
+button:focus {
+  outline: none;
+}
+
+input[type=button], input[type=submit] {
+  border: 0;
+  border-radius: 4px;
+  line-height: 1.42857143;
+  display: block;
+  font-size: 16px;
+  margin-top: 15px;
+  padding: 10px 12px;
+  width: 100%;
+  color: #fff;
+  font-weight: 600;
+  background-color: #e37222;
+}
+
+input[type=checkbox] {
+  float: left;
+  margin-top: 3px;
+}
+
+.flashed-message {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  width: calc(450px - 20px);
+  line-height: 20px;
+  box-shadow: 0 0 0 1px rgba(34, 36, 38, .22) inset, 0 0 0 0 transparent;
+  background: rgb(248, 248, 249);
+  font-size: 14px;
+  padding: 15px;
+  border-radius: 4px;
+  display: none;
+
+  &.info {
+    box-shadow: 0 0 0 1px #a9d5de inset, 0 0 0 0 transparent;
+    background-color: #f8ffff;
+    color: #276f86;
+  }
+
+  &.success {
+    box-shadow: 0 0 0 1px #a3c293 inset, 0 0 0 0 transparent;
+    background-color: #fcfff5;
+    color: #2c662d;
+  }
+
+  &.warning {
+    box-shadow: 0 0 0 1px #c9ba9b inset, 0 0 0 0 transparent;
+    background-color: #fffaf3;
+    color: #573a08;
+  }
+
+  &.error {
+    box-shadow: 0 0 0 1px #e0b4b4 inset, 0 0 0 0 transparent;
+    background-color: #fff6f6;
+    color: #9f3a38;
+  }
+}
+
+#container {
+  display: grid;
+  grid-template-areas: "sidebar content";
+  grid-template-columns: 450px 1fr;
+  height: 100vh;
+}
+
+#sidebar {
+  grid-area: sidebar;
+  padding: 20px 60px;
+
+  h1 {
+    font-family: 'Patua One', cursive;
+    font-size: 80px;
+    font-weight: 400;
+    text-align: center;
+    margin-bottom: 20px;
+    color: #215788;
+  }
+
+  h2 {
+    font-family: 'Patua One', cursive;
+    font-size: 25px;
+    font-weight: 400;
+    text-align: center;
+    margin-bottom: 20px;
+    color: #215788;
+  }
+
+  h3 {
+    font-size: 20px;
+    font-weight: 400;
+    color: #333;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  input[type=password], input[type=text] {
+    height: 44px;
+    width: 100%;
+  }
+
+  p {
+    text-align: center;
+    margin: 0;
+    padding-bottom: 25px;
+  }
+
+  form {
+    margin-top: 21px;
+    padding-top: 21px;
+  }
+
+  label[for=remember_me] {
+    font-weight: 400;
+    font-size: 14px;
+    padding-left: 20px;
+    display: block;
+  }
+}
+
+#content {
+  background-color: #215788;
+  background-image: url('../img/img_charizard-silhouette-14.png');
+  background-size: 300px;
+  background-repeat: no-repeat;
+  background-position: bottom right;
+  overflow-y: scroll;
+
+  p.hero-text {
+    color: #fff;
+    font-size: 60px;
+    text-align: left;
+    margin: 40vh 80px;
+    font-family: 'Patua One', cursive;
+  }
+}
+
+.form-container {
+  overflow: hidden;
+  margin: 20px;
+  background: #fff;
+  border-radius: 4px;
+  padding: 20px 40px;
+
+  p {
+    margin: 0;
+    padding-bottom: 25px;
+  }
+}
+
+#sidebar.user-profile {
+  display: grid;
+  grid-template-areas: "body" "footer";
+  grid-template-rows: auto 40px;
+
+  #sidebar-body {
+    grid-area: body;
+  }
+
+  #footer-links {
+    grid-area: footer;
+    text-align: center;
+  }
+
+  #player-card {
+    display: grid;
+    grid-template-columns: 96px 1fr;
+    grid-template-rows: auto auto;
+    grid-template-areas: "logo name" "logo level";
+    height: 96px;
+
+    #player-team-logo {
+      width: 96px;
+      height: 96px;
+      margin-right: 10px;
+      grid-area: logo;
+      background-repeat: no-repeat;
+
+      &.Mystic {
+        background-image: url('../img/TeamMystic.svg');
+        background-position: -20px -46px;
+        background-size: 125px;
+      }
+
+      &.Instinct {
+        background-image: url('../img/TeamInstinct.svg');
+        background-position: -20px -38px;
+        background-size: 125px;
+      }
+
+      &.Valor {
+        background-image: url('../img/TeamValor.svg');
+        background-position: -20px -38px;
+        background-size: 125px;
+      }
+
+      &.Harmony {
+        background-image: url('../img/TeamHarmony.svg');
+        background-position: 18px 2px;
+        background-size: 65px;
+      }
+    }
+
+    h2 {
+      grid-area: name;
+    }
+
+    label {
+      grid-area: level;
+      text-align: center;
+    }
+  }
+}
+
+#pokemon-filters {
+  overflow: hidden;
+  margin: 20px;
+  background: #fff;
+  border-radius: 4px;
+  padding: 10px;
+  display: grid;
+  grid-column-gap: 10px;
+  grid-template-rows: auto;
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+#pokemon-list {
+  overflow: hidden;
+  margin: 20px;
+  background: #fff;
+  border-radius: 4px;
+  padding: 10px;
+
+  #pokemon-wrapper {
+    display: grid;
+    grid-template-rows: auto;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  }
+
+  #no-results {
+    grid-column: span 10;
+    text-align: center;
+    font-family: 'Patua One', cursive;
+    font-size: 20px;
+    font-weight: 400;
+    margin-bottom: 20px;
+    color: #215788;
+  }
+}
+
+.pokemon {
+  height: 195px;
+  float: left;
+  margin: 5px;
+  border-radius: 4px;
+  position: relative;
+  box-shadow: 0 0 0 1px #a9d5de inset, 0 0 0 0 transparent;
+  background-color: #f8ffff;
+  color: #276f86;
+
+  &.owned {
+    background-color: darken(#f8ffff, 3%);
+  }
+
+  .img {
+    height: 116px;
+    background-image: url('../img/sprites/pokemon/0.png');
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+
+  .info {
+    font-weight: 600;
+    text-align: center;
+    width: 100%;
+    height: 40px;
+  }
+
+  .dex-num {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 2px 5px;
+    font-weight: 700;
+    background: #a9d5de;
+    color: #276f86;
+    border-radius: 0 4px 0 4px;
+  }
+
+  .dex-special {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 20px;
+    width: 20px;
+
+    background-color: #a9d5de;
+    color: #276f86;
+    text-align: center;
+    border-radius: 4px 0 4px 0;
+
+    &.legendary {
+      background-size: 16px;
+      background-repeat: no-repeat;
+      background-position: 2px 3px;
+      background-image: url('../img/legendary-icon.png');
+    }
+
+    &.regional {
+
+    }
+  }
+
+  .pm-opt {
+    width: 100%;
+    overflow: hidden;
+    margin-top: 6px;
+
+    .opt {
+      width: 20%;
+      height: 32px;
+      line-height: 32px;
+      display: inline-block;
+      text-align: center;
+      float: left;
+      color: #333;
+
+      &:hover {
+        background: #a9d5de;
+      }
+
+      &:first-child {
+        border-radius: 0 0 0 4px;
+      }
+
+      &:last-child {
+        border-radius: 0 0 4px 0;
+      }
+
+      &.owned {
+        background: #276f86;
+        color: white;
+      }
+
+      .fas.fa-ban {
+        color: Tomato;
+        margin-top: 1px;
+      }
+    }
+
+    span.opt {
+      &:hover {
+        background: transparent;
+      }
+
+      i {
+        color: #ddd;
+      }
+    }
+  }
+}
+
+.register {
+  #player_team {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-column-gap: 20px;
+    padding: 0;
+
+    li {
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
+      position: relative;
+
+      label {
+        display: inline-block;
+        padding: 10px 10px 10px 68px;
+        border: solid 1px #E1E3DF;
+        border-radius: 4px;
+        height: 68px;
+        line-height: 48px;
+        background-repeat: no-repeat;
+        opacity: 0.8;
+
+        &:hover {
+          border-color: #adaeaa;
+        }
+
+        &[for=player_team-0] {
+          background-image: url('../img/TeamMystic.svg');
+          background-position: -5px -25px;
+          background-size: 75px;
+        }
+
+        &[for=player_team-1] {
+          background-image: url('../img/TeamInstinct.svg');
+          background-position: -5px -25px;
+          background-size: 80px;
+        }
+
+        &[for=player_team-2] {
+          background-image: url('../img/TeamValor.svg');
+          background-position: -8px -24px;
+          background-size: 80px;
+        }
+
+        &[for=player_team-3] {
+          background-image: url('../img/TeamHarmony.svg');
+          background-position: 10px 2px;
+          background-size: 45px;
+        }
+      }
+
+      input[type=radio] {
+        opacity: 0;
+        height: 1px;
+        width: 1px;
+        position: absolute;
+
+        &:checked + label {
+          border-color: #a3c293;
+          background-color: #fcfff5;
+          color: #2c662d;
+          opacity: 1;
+        }
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 1140px) {
+  #pokemon-list {
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+  }
+}
+
+@media only screen and (max-width: 1023px) {
+
+  #container {
+    grid-template-columns: 100%;
+    grid-template-rows: 50px auto;
+    grid-auto-flow: column;
+
+    #pokemon-list {
+      grid-template-columns: 1fr 1fr 1fr;
+      padding: 5px;
+      margin: 10px;
+    }
+  }
+}
+
+@media only screen and (max-width: 700px) {
+  #container {
+    grid-template-columns: 100%;
+    grid-template-rows: 50px auto;
+    grid-auto-flow: column;
+
+    #pokemon-list {
+      grid-template-columns: 1fr 1fr;
+      padding: 5px;
+      margin: 10px;
+    }
+  }
+}
+
+@media only screen and (min-width: 1320px) {
+  #pokemon-list {
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+  }
+}
+
+@media only screen and (min-width: 1550px) {
+  #pokemon-list {
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+  }
+}
+
+
+
+
+

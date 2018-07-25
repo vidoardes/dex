@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block sidebar %}
+    <div id="sidebar">
+        <h1>500</h1>
+        <h3>An unexpected error has occurred.</h3>
+        <p>
+            The administrator has been notified and given a stren telling off. Sorry for the inconvenience!.<br />
+            <a href="{{ url_for('auth.login') }}">Let me help you back to the start.</a>
+        </p>
+    </div>
+{% endblock %}
+
+{% block content %}
+    <div id="content">
+        <p class="hero-text">That one is on me. My bad.</p>
+    </div>
+{% endblock %}
