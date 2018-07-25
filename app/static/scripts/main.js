@@ -26,7 +26,7 @@ $.fn.renderlist = function() {
                 ${alolanowned ? 'data-alolanowned="True"' : ''}
                 data-key="${name}">
                 
-                ${shinyowned ? '<div class="img" style="background-image: url(https://s3-eu-west-1.amazonaws.com/dex-static-img/${dex}.png)"></div>
+                <div class="img" style="background-image: url(https://s3-eu-west-1.amazonaws.com/dex-static-img/${dex}.png)"></div>
                 <div class="info">${name}</div>
                 <div class="dex-num">#${dex.toString().padStart(3, '0')}</div>
                 ${legendary ? '<div class="dex-special legendary"></div>' : ''}
