@@ -1,5 +1,8 @@
 {% extends "base.html" %}
 
+
+{% block container %}
+    <div id="container" class="user-profile">
 {% block sidebar %}
     <div id="sidebar" class="user-profile" data-username="{{ user.username }}">
         <div id="sidebar-body">
@@ -17,7 +20,7 @@
 {% endblock %}
 
 {% block content %}
-    <div id="content">
+    <div id="content" class="dex">
         <div id="pokemon-filters">
             <select id="gen-select">
                 <option value="all">All Released Generations</option>
@@ -37,5 +40,7 @@
         <div id="pokemon-list">
              <div id="pokemon-wrapper"></div>
         </div>
+    </div>
+{% endblock %}
     </div>
 {% endblock %}

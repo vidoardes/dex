@@ -1,0 +1,33 @@
+/* MEDIA QUERIES */
+$tablet-width: 768px;
+$small-desktop-width: 1023px;
+$large-desktop-width: 1920px;
+
+
+/* Large desktop */
+@mixin largedesktop {
+  @media (min-width: $large-desktop-width) {
+    @content;
+  }
+}
+
+/* Normal Desktop */
+@mixin desktop {
+  @media (min-width: $small-desktop-width) and (max-width: $large-desktop-width) {
+    @content;
+  }
+}
+
+/* Portrait tablet to landscape and desktop */
+@mixin tablet {
+  @media (min-width: $tablet-width) and (max-width: $small-desktop-width) {
+    @content;
+  }
+}
+
+/* Mobile phone to portrait tablet */
+@mixin phone {
+  @media (max-width: $tablet-width) {
+    @content;
+  }
+}

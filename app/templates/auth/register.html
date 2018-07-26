@@ -1,67 +1,73 @@
 {% extends "base.html" %}
 
-{% block sidebar %}
-    <div id="sidebar">
-        <h1>dex</h1>
-        <h3>The ultimate online tracker for Pokemon GO</h3>
-        <p>
-            Enter your details in the form to create a new account. Make sure you pick the right
-            trainer name!
-        </p>
-        <p>
-            <a href="{{ url_for('auth.login') }}">Click here to go back to the login page.</a>
-        </p>
-    </div>
-{% endblock %}
+{% block container %}
+    <div id="container" class="register">
+        {% block sidebar %}
+            <div id="sidebar">
+                <h1>dex</h1>
+                <h3>The ultimate online tracker for Pokemon GO</h3>
+                <p>
+                    Enter your details in the form to create a new account. Make sure you pick the
+                    right
+                    trainer name!
+                </p>
+                <p>
+                    <a href="{{ url_for('auth.login') }}">Click here to go back to the login
+                        page.</a>
+                </p>
+            </div>
+        {% endblock %}
 
-{% block content %}
-    <div id="content">
-        <div class="form-container register">
-            <h1>Register</h1>
-            <form action="" method="post">
-                {{ form.hidden_tag() }}
-                <p>
-                    {{ form.username.label }}<br>
-                    {{ form.username(size=32) }}<br>
-                    {% for error in form.username.errors %}
-                        <span style="color: red;">{{ error }}</span>
-                    {% endfor %}
-                </p>
-                <p>
-                    {{ form.email.label }}<br>
-                    {{ form.email(size=32) }}<br>
-                    {% for error in form.email.errors %}
-                        <span style="color: red;">{{ error }}</span>
-                    {% endfor %}
-                </p>
-                <p>
-                    {{ form.password.label }}<br>
-                    {{ form.password(size=32) }}<br>
-                    {% for error in form.password.errors %}
-                        <span style="color: red;">{{ error }}</span>
-                    {% endfor %}
-                </p>
-                <p>
-                    {{ form.confirm.label }}<br>
-                    {{ form.confirm(size=32) }}<br>
-                    {% for error in form.confirm.errors %}
-                        <span style="color: red;">{{ error }}</span>
-                    {% endfor %}
-                </p>
-                <p>
-                    {{ form.player_level.label }}<br>
-                    {{ form.player_level(size=2) }}<br>
-                    {% for error in form.player_level.errors %}
-                        <span style="color: red;">{{ error }}</span>
-                    {% endfor %}
-                </p>
-                    {{ form.player_team.label }}
-                    {{ form.player_team(size=2) }}<br>
-                    {% for error in form.player_level.errors %}
-                        <span style="color: red;">{{ error }}</span>
-                    {% endfor %}
-                <p>{{ form.submit() }}</p>
-            </form>
-        </div>
+        {% block content %}
+            <div id="content">
+                <div class="form-container register">
+                    <h1>Register a New Account</h1>
+                    <form action="" method="post">
+                        {{ form.hidden_tag() }}
+                        <p>
+                            {{ form.username.label }}<br>
+                            {{ form.username(size=32) }}<br>
+                            {% for error in form.username.errors %}
+                                <span style="color: red;">{{ error }}</span>
+                            {% endfor %}
+                        </p>
+                        <p>
+                            {{ form.email.label }}<br>
+                            {{ form.email(size=32) }}<br>
+                            {% for error in form.email.errors %}
+                                <span style="color: red;">{{ error }}</span>
+                            {% endfor %}
+                        </p>
+                        <p>
+                            {{ form.password.label }}<br>
+                            {{ form.password(size=32) }}<br>
+                            {% for error in form.password.errors %}
+                                <span style="color: red;">{{ error }}</span>
+                            {% endfor %}
+                        </p>
+                        <p>
+                            {{ form.confirm.label }}<br>
+                            {{ form.confirm(size=32) }}<br>
+                            {% for error in form.confirm.errors %}
+                                <span style="color: red;">{{ error }}</span>
+                            {% endfor %}
+                        </p>
+                        <p>
+                            {{ form.player_level.label }}<br>
+                            {{ form.player_level(size=2) }}<br>
+                            {% for error in form.player_level.errors %}
+                                <span style="color: red;">{{ error }}</span>
+                            {% endfor %}
+                        </p>
+                        {{ form.player_team.label }}
+                        {{ form.player_team(size=2) }}<br>
+                        {% for error in form.player_level.errors %}
+                            <span style="color: red;">{{ error }}</span>
+                        {% endfor %}
+                        <p>{{ form.submit() }}</p>
+                    </form>
+                </div>
+            </div>
+        {% endblock %}
     </div>
 {% endblock %}

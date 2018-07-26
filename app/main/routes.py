@@ -31,7 +31,7 @@ def user(username):
     return render_template('main/user.html', user=user)
 
 
-@bp.route("/api/<username>/pokemon/get", methods=['get'])
+@bp.route("/api/<username>/pokemon/get", methods=['GET'])
 @login_required
 def fetch(username):
     user = User.query.filter_by(username=username).first_or_404()
