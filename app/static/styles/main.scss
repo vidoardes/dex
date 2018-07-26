@@ -221,66 +221,206 @@
   }
 }
 
-#sidebar.user-profile {
-  display: grid;
-  grid-template-areas: "body" "footer";
-  grid-template-rows: auto 40px;
+/*--------------*/
+/* USER PROFILE */
+/*--------------*/
+#container.user-profile {
+  grid-template-columns: 350px 1fr;
 
-  #sidebar-body {
-    grid-area: body;
+  @include tablet {
+    grid-template-areas: "sidebar" "content";
+    grid-template-columns: 1fr;
+    grid-template-rows: 80px 1fr;
   }
 
-  #footer-links {
-    grid-area: footer;
-    text-align: center;
+  @include phone {
+    grid-template-areas: "sidebar" "content";
+    grid-template-columns: 1fr;
+    grid-template-rows: 80px 1fr;
   }
 
-  #player-card {
+  #sidebar {
     display: grid;
-    grid-template-columns: 96px 1fr;
-    grid-template-rows: auto auto;
-    grid-template-areas: "logo name" "logo level";
-    height: 96px;
+    grid-template-areas: "body" "footer";
+    grid-template-rows: auto 40px;
 
-    #player-team-logo {
-      width: 96px;
-      height: 96px;
-      margin-right: 10px;
-      grid-area: logo;
-      background-repeat: no-repeat;
-
-      &.Mystic {
-        background-image: url('../img/TeamMystic.svg');
-        background-position: -20px -46px;
-        background-size: 125px;
-      }
-
-      &.Instinct {
-        background-image: url('../img/TeamInstinct.svg');
-        background-position: -20px -38px;
-        background-size: 125px;
-      }
-
-      &.Valor {
-        background-image: url('../img/TeamValor.svg');
-        background-position: -20px -38px;
-        background-size: 125px;
-      }
-
-      &.Harmony {
-        background-image: url('../img/TeamHarmony.svg');
-        background-position: 18px 2px;
-        background-size: 65px;
-      }
+    @include tablet {
+      grid-template-areas: "body footer";
+      grid-template-columns: 1fr 50px;
+      grid-template-rows: auto;
+      grid-auto-flow: row;
+      padding: 10px;
+      background: #215788;
+      box-shadow: 0 8px 6px -6px black;
+      border-bottom: solid 1px #444;
     }
 
-    h2 {
-      grid-area: name;
+    @include phone {
+      grid-template-areas: "body footer";
+      grid-template-columns: 1fr 50px;
+      grid-template-rows: auto;
+      grid-auto-flow: row;
+      padding: 10px;
+      background: #215788;
+      box-shadow: 0 8px 6px -6px black;
+      border-bottom: solid 1px #444;
     }
 
-    label {
-      grid-area: level;
+    #sidebar-body {
+      grid-area: body;
+    }
+
+    #footer-links {
+      grid-area: footer;
       text-align: center;
+
+      a {
+        @include tablet {
+          i {
+            font-size: 30px;
+            margin: 15px 0 20px;
+          }
+        }
+
+        @include phone {
+          i {
+            font-size: 30px;
+            margin: 15px 0 20px;
+          }
+        }
+      }
+    }
+
+    #player-card {
+      display: grid;
+      grid-template-columns: 96px 1fr;
+      grid-template-rows: auto auto;
+      grid-template-areas: "logo name" "logo level";
+      grid-column-gap: 10px;
+      height: 96px;
+
+      @include tablet {
+        height: 60px;
+        grid-template-columns: 60px 1fr;
+      }
+
+      @include phone {
+        height: 60px;
+        grid-template-columns: 60px 1fr;
+      }
+
+      #player-team-logo {
+        width: 96px;
+        height: 96px;
+        margin-right: 10px;
+        grid-area: logo;
+        background-repeat: no-repeat;
+
+        @include tablet {
+          height: 60px;
+          width: 60px;
+        }
+
+        @include phone {
+          height: 60px;
+          width: 60px;
+        }
+
+        &.Mystic {
+          background-image: url('../img/TeamMystic.svg');
+          background-position: -20px -46px;
+          background-size: 125px;
+
+          @include tablet {
+            background-position: -18px -40px;
+            background-size: 95px;
+          }
+
+          @include phone {
+            background-position: -18px -40px;
+            background-size: 95px;
+          }
+        }
+
+        &.Instinct {
+          background-image: url('../img/TeamInstinct.svg');
+          background-position: -20px -38px;
+          background-size: 125px;
+
+          @include tablet {
+            background-position: -18px -36px;
+            background-size: 95px;
+          }
+
+          @include phone {
+            background-position: -18px -36px;
+            background-size: 95px;
+          }
+        }
+
+        &.Valor {
+          background-image: url('../img/TeamValor.svg');
+          background-position: -20px -38px;
+          background-size: 125px;
+
+          @include tablet {
+            background-position: -18px -36px;
+            background-size: 95px;
+          }
+
+          @include phone {
+            background-position: -18px -36px;
+            background-size: 95px;
+          }
+        }
+
+        &.Harmony {
+          background-image: url('../img/TeamHarmony.svg');
+          background-position: 18px 2px;
+          background-size: 65px;
+
+          @include tablet {
+            background-position: 10px 0px;
+            background-size: 45px;
+          }
+
+          @include phone {
+            background-position: 10px 0px;
+            background-size: 45px;
+          }
+        }
+      }
+    }
+  }
+
+  h2 {
+    grid-area: name;
+
+    @include tablet {
+      text-align: left;
+      margin: 0;
+      color: #fff;
+    }
+
+    @include phone {
+      text-align: left;
+      margin: 0;
+      color: #fff;
+    }
+  }
+
+  label {
+    grid-area: level;
+    text-align: center;
+
+    @include tablet {
+      text-align: left;
+      color: #fff;
+    }
+
+    @include phone {
+      text-align: left;
+      color: #fff;
     }
   }
 }
@@ -296,6 +436,17 @@
     grid-column-gap: 10px;
     grid-template-rows: auto;
     grid-template-columns: 1fr 1fr 1fr;
+
+    @include tablet {
+      padding: 5px;
+      margin: 3px;
+    }
+
+    @include phone {
+      padding: 5px;
+      margin: 2px 2px 0 2px;
+      border-radius: 4px 4px 0 0;
+    }
   }
 
   #pokemon-list {
@@ -305,10 +456,41 @@
     border-radius: 4px;
     padding: 10px;
 
+    @include tablet {
+      padding: 3px;
+      margin: 3px;
+    }
+
+    @include phone {
+      padding: 2px;
+      margin: 0 2px;
+      border-radius: 0;
+    }
+
     #pokemon-wrapper {
       display: grid;
       grid-template-rows: auto;
-      grid-template-columns: repeat(7, 1fr);
+      grid-template-columns: repeat(6, 1fr);
+
+      @include ultrahddesktop {
+        grid-template-columns: repeat(10, 1fr);
+      }
+
+      @include largedesktop {
+        grid-template-columns: repeat(7, 1fr);
+      }
+
+      @include desktop {
+        grid-template-columns: repeat(5, 1fr);
+      }
+
+      @include tablet {
+        grid-template-columns: repeat(5, 1fr);
+      }
+
+      @include phone {
+        grid-template-columns: repeat(2, 1fr);
+      }
 
       .pokemon {
         height: 195px;
@@ -434,48 +616,3 @@
     }
   }
 }
-
-@media only screen and (max-width: 1140px) {
-  #pokemon-list {
-    grid-template-columns: repeat(4, 1fr);
-  }
-}
-
-@media only screen and (max-width: 1023px) {
-  #container {
-
-  }
-}
-
-@media only screen and (max-width: 700px) {
-  #container {
-
-    #pokemon-list {
-      padding: 2px;
-      margin: 0px;
-    }
-
-    #pokemon-wrapper {
-      grid-template-columns: repeat(3, 1fr);
-      padding: 0;
-      margin: 0;
-    }
-  }
-}
-
-@media only screen and (min-width: 1320px) {
-  #pokemon-wrapper {
-    grid-template-columns: repeat(6, 1fr);
-  }
-}
-
-@media only screen and (min-width: 1550px) {
-  #pokemon-wrapper {
-    grid-template-columns: repeat(7, 1fr);
-  }
-}
-
-
-
-
-

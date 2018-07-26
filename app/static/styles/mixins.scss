@@ -1,19 +1,32 @@
 /* MEDIA QUERIES */
-$tablet-width: 768px;
+$tablet-width: 767px;
 $small-desktop-width: 1023px;
-$large-desktop-width: 1920px;
-
+$medium-desktop-width: 1200px;
+$large-desktop-width: 1910px;
+$ultrahd-desktop-width: 3839px;
 
 /* Large desktop */
+@mixin ultrahddesktop {
+  @media (min-width: $ultrahd-desktop-width) {
+    @content;
+  }
+}
+
 @mixin largedesktop {
-  @media (min-width: $large-desktop-width) {
+  @media (min-width: $large-desktop-width) and (max-width: $ultrahd-desktop-width) {
+    @content;
+  }
+}
+
+@mixin mediumdesktop {
+  @media (min-width: $medium-desktop-width) and (max-width: $large-desktop-width) {
     @content;
   }
 }
 
 /* Normal Desktop */
 @mixin desktop {
-  @media (min-width: $small-desktop-width) and (max-width: $large-desktop-width) {
+  @media (min-width: $small-desktop-width) and (max-width: $medium-desktop-width) {
     @content;
   }
 }
