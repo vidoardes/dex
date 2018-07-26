@@ -174,6 +174,7 @@ input[type=checkbox] {
   background-repeat: no-repeat;
   background-position: bottom right;
   overflow-y: scroll;
+  position: relative;
 
   p.hero-text {
     color: #fff;
@@ -283,7 +284,7 @@ input[type=checkbox] {
   #pokemon-wrapper {
     display: grid;
     grid-template-rows: auto;
-    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    grid-template-columns: repeat(7, 1fr);
   }
 
   #no-results {
@@ -480,21 +481,29 @@ input[type=checkbox] {
 
 @media only screen and (max-width: 1140px) {
   #pokemon-list {
-    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-columns: repeat(4, 1fr);
   }
 }
 
 @media only screen and (max-width: 1023px) {
-
   #container {
     grid-template-columns: 100%;
     grid-template-rows: 50px auto;
     grid-auto-flow: column;
 
+    #pokemon-filters {
+      margin: 5px;
+    }
+
     #pokemon-list {
-      grid-template-columns: 1fr 1fr 1fr;
       padding: 5px;
-      margin: 10px;
+      margin: 5px;
+    }
+
+    #pokemon-wrapper {
+      grid-template-columns: repeat(4, 1fr);
+      padding: 5px;
+      margin: 0;
     }
   }
 }
@@ -506,22 +515,27 @@ input[type=checkbox] {
     grid-auto-flow: column;
 
     #pokemon-list {
-      grid-template-columns: 1fr 1fr;
-      padding: 5px;
-      margin: 10px;
+      padding: 2px;
+      margin: 0px;
+    }
+
+    #pokemon-wrapper {
+      grid-template-columns: repeat(3, 1fr);
+      padding: 0;
+      margin:0;
     }
   }
 }
 
 @media only screen and (min-width: 1320px) {
-  #pokemon-list {
-    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+  #pokemon-wrapper {
+    grid-template-columns: repeat(6, 1fr);
   }
 }
 
 @media only screen and (min-width: 1550px) {
-  #pokemon-list {
-    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+  #pokemon-wrapper {
+    grid-template-columns: repeat(7, 1fr);
   }
 }
 

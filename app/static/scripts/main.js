@@ -5,7 +5,8 @@ $.fn.renderlist = function() {
            'female': 'fa-venus',
            'ungendered': 'fa-circle',
            'shiny': 'fa-star',
-           'alolan': 'fa-umbrella-beach'
+           'alolan': 'fa-umbrella-beach',
+           'lucky': 'fa-dice'
        };
 
        if(istype && type == 'ungendered') {
@@ -17,13 +18,14 @@ $.fn.renderlist = function() {
        }
     }
 
-    const Item = ({ name, dex, shiny, shinyowned, male, maleowned, female, femaleowned, ungendered, ungenderedowned, alolan, alolanowned, regional, legendary }) => `
-        <div class="pokemon ${(shinyowned | maleowned | femaleowned | ungenderedowned | alolanowned) ? 'owned' : ''}"
+    const Item = ({ name, dex, shiny, shinyowned, male, maleowned, female, femaleowned, ungendered, ungenderedowned, alolan, alolanowned, luckyowned, regional, legendary }) => `
+        <div class="pokemon ${(shinyowned | maleowned | femaleowned | ungenderedowned | alolanowned | luckyowned) ? 'owned' : ''}"
                 ${maleowned ? 'data-maleowned="True"' : ''}
                 ${femaleowned ? 'data-femaleowned="True"' : ''}
                 ${ungenderedowned ? 'data-ungenderedowned="True"' : ''}
                 ${shinyowned ? 'data-shinyowned="True"' : ''}
                 ${alolanowned ? 'data-alolanowned="True"' : ''}
+                ${luckyowned ? 'data-luckyowned="True"' : ''}
                 data-key="${name}">
                 
                 <div class="img" style="background-image: url(https://s3-eu-west-1.amazonaws.com/dex-static-img/${dex}.png)"></div>
@@ -35,6 +37,7 @@ $.fn.renderlist = function() {
                     ${ungendered ? pokemonoptions('ungendered', ungendered, ungenderedowned) : pokemonoptions('male', male, maleowned) + pokemonoptions('female', female, femaleowned)}
                     ${pokemonoptions('shiny', shiny, shinyowned)}
                     ${pokemonoptions('alolan', alolan, alolanowned)}
+                    ${pokemonoptions('lucky', 'True', luckyowned)}
                 </div>
             </div>
     `;
@@ -146,7 +149,9 @@ $('#pokemon-list').on('click', 'a.opt.shiny', function () {
     }).on('click', '.pokemon a.opt.female', function () {
         $(this).updatestate('femaleowned');
     }).on('click', '.pokemon a.opt.ungendered', function () {
-        $(this).updatestate('ungendered');
+        $(this).updatestate('ungenderedowned');
+    }).on('click', '.pokemon a.opt.lucky', function () {
+        $(this).updatestate('luckyowned');
     });
 
 $('#pokemon-filters').on('change', '#gen-select', function (){
