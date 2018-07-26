@@ -42,10 +42,13 @@
     {% endif %}
 {% endwith %}
 
+
+{% block container %}
 <div id="container">
     {% block sidebar %}{% endblock %}
     {% block content %}{% endblock %}
 </div>
+{% endblock %}
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"
         integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="

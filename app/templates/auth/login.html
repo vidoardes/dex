@@ -1,43 +1,48 @@
 {% extends "base.html" %}
 
-{% block sidebar %}
-    <div id="sidebar" class="auth-process">
-        <h1>dex</h1>
-        <h3>The ultimate online tracker for Pokemon GO</h3>
-        <p>
-            Need a DEX tracker account?<br/>
-            <a href="{{ url_for('auth.register') }}">Create an account</a>, or login below.
-        </p>
+{% block container %}
+    <div id="container" class="login-auth">
+        {% block sidebar %}
+            <div id="sidebar">
+                <h1>dex</h1>
+                <h3>The ultimate online tracker for Pokemon GO</h3>
+                <p>
+                    Need a DEX tracker account?<br/>
+                    <a href="{{ url_for('auth.register') }}">Create an account</a>, or login below.
+                </p>
 
-        <form action="" method="post" novalidate>
-            {{ form.hidden_tag() }}
-            <p>
-                {{ form.email.label }}<br>
-                {{ form.email(size=32) }}<br>
-                {% for error in form.email.errors %}
-                    <span style="color: red;">{{ error }}</span>
-                {% endfor %}
-            </p>
-            <p>
-                {{ form.password.label }}<br>
-                {{ form.password(size=32) }}<br>
-                {% for error in form.password.errors %}
-                    <span style="color: red;">{{ error }}</span>
-                {% endfor %}
-            </p>
-            <p>
-                {{ form.remember_me() }} {{ form.remember_me.label }}
-            </p>
-            <p>{{ form.submit() }}</p>
-        </form>
-        <span>
-            <a href="{{ url_for('auth.reset_password_request') }}">Forgot Your Password?</a>
-        </span>
-    </div>
-{% endblock %}
+                <form action="" method="post" novalidate>
+                    {{ form.hidden_tag() }}
+                    <p>
+                        {{ form.email.label }}<br>
+                        {{ form.email(size=32) }}<br>
+                        {% for error in form.email.errors %}
+                            <span style="color: red;">{{ error }}</span>
+                        {% endfor %}
+                    </p>
+                    <p>
+                        {{ form.password.label }}<br>
+                        {{ form.password(size=32) }}<br>
+                        {% for error in form.password.errors %}
+                            <span style="color: red;">{{ error }}</span>
+                        {% endfor %}
+                    </p>
+                    <p>
+                        {{ form.remember_me() }} {{ form.remember_me.label }}
+                    </p>
+                    <p>{{ form.submit() }}</p>
+                </form>
+                <p>
+                    <a href="{{ url_for('auth.reset_password_request') }}">Forgot Your
+                        Password?</a>
+                </p>
+            </div>
+        {% endblock %}
 
-{% block content %}
-    <div id="content">
-        <p class="hero-text">Never lose track of your little monsters again.</p>
+        {% block content %}
+            <div id="content">
+                <p class="hero-text">Never lose track of your little monsters again.</p>
+            </div>
+        {% endblock %}
     </div>
 {% endblock %}
