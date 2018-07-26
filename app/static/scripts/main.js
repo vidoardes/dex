@@ -130,12 +130,6 @@ let qs = {};
 
 $(function () {
     $('#pokemon-list').renderlist('');
-
-    $('.flashed-message').fadeIn();
-
-    setTimeout(function () {
-        $('.flashed-message').fadeOut();
-    }, 5000);
 });
 
 $('#pokemon-list').on('click', 'a.opt.shiny', function () {
