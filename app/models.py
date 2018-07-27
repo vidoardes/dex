@@ -24,6 +24,7 @@ class User(UserMixin, db.Model):
     is_admin = db.Column(db.Boolean, default=False, nullable=True)
     is_public = db.Column(db.Boolean, default=True, nullable=False)
     created = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    settings = db.Column(db.Text, nullable=False, default='[]')
 
     def __repr__(self):
         return '<User {}>'.format(self.username)
@@ -69,6 +70,8 @@ class Pokemon(db.Model):
     mythical = db.Column(db.Boolean, default=False, nullable=False)
     gen = db.Column(db.Integer, default=0, nullable=False)
     released = db.Column(db.Boolean, default=False, nullable=False)
+    hatch = db.Column(db.Boolean, default=False, nullable=False)
+    raid = db.Column(db.Boolean, default=False, nullable=False)
 
     def __repr__(self):
         return '<Profile {}>'.format(self.body)
