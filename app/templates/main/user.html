@@ -1,46 +1,53 @@
 {% extends "base.html" %}
 
-
 {% block container %}
     <div id="container" class="user-profile">
-{% block sidebar %}
-    <div id="sidebar" data-username="{{ user.username }}">
-        <div id="sidebar-body">
-            <div id="player-card">
-                <div id="player-team-logo" class="{{ user.player_team }}"></div>
-                <h2>{{ user.username }}</h2>
-                <label>Level {{ user.player_level }}</label>
+        {% block sidebar %}
+            <div id="sidebar" data-username="{{ user.username }}">
+                <div id="sidebar-body">
+                    <div id="player-card">
+                        <div id="player-team-logo" class="{{ user.player_team }}"></div>
+                        <h2>{{ user.username }}</h2>
+                        <label>Level {{ user.player_level }}</label>
+                    </div>
+                </div>
+
+                <div id="footer-links">
+                    <a href="{{ url_for('auth.logout') }}"><i class="fas fa-sign-out"></i>
+                        Logout</a>
+                </div>
             </div>
-        </div>
+        {% endblock %}
 
-        <div id="footer-links">
-            <a href="{{ url_for('auth.logout') }}"><i class="fas fa-sign-out"></i> Logout</a>
-        </div>
+        {% block content %}
+            <div id="content" class="dex">
+                <div id="pokemon-filters">
+                    <select id="gen-select">
+                        <option value="all">All Released Generations</option>
+                        <option value="1">Gen I (Kanto)</option>
+                        <option value="2">Gen II (Johto)</option>
+                        <option value="3">Gen III (Hoenn)</option>
+                    </select>
+                    <select id="cat-select">
+                        <option value="all">All Released</option>
+                        <option value="shiny">Shiny</option>
+                        <option value="alolan">Alolan</option>
+                        <option value="regional">Regional</option>
+                        <option value="legendary">Legendary</option>
+                        <option value="mythical">Mythical</option>
+                    </select>
+                </div>
+                <div id="pokemon-list">
+                    <div id="pokemon-wrapper"></div>
+                </div>
+            </div>
+        {% endblock %}
     </div>
 {% endblock %}
 
-{% block content %}
-    <div id="content" class="dex">
-        <div id="pokemon-filters">
-            <select id="gen-select">
-                <option value="all">All Released Generations</option>
-                <option value="1">Gen I (Kanto)</option>
-                <option value="2">Gen II (Johto)</option>
-                <option value="3">Gen III (Hoenn)</option>
-            </select>
-            <select id="cat-select">
-                <option value="all">All Released</option>
-                <option value="shiny">Shiny</option>
-                <option value="alolan">Alolan</option>
-                <option value="regional">Regional</option>
-                <option value="legendary">Legendary</option>
-                <option value="mythical">Mythical</option>
-            </select>
-        </div>
-        <div id="pokemon-list">
-             <div id="pokemon-wrapper"></div>
-        </div>
-    </div>
-{% endblock %}
-    </div>
+{% block scripts %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"
+            integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+            crossorigin="anonymous"></script>
+    <script src="{{ url_for('static', filename='scripts/main.js') }}"></script>
 {% endblock %}
