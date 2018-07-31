@@ -1,24 +1,24 @@
-$.fn.renderlist = function() {
+$.fn.renderlist = function () {
     function pokemonoptions(type, istype, isowned) {
-       let icons = {
-           'male': 'fa-mars',
-           'female': 'fa-venus',
-           'ungendered': 'fa-circle',
-           'shiny': 'fa-star',
-           'alolan': 'fa-umbrella-beach',
-           'lucky': 'fa-dice'
-       };
+        let icons = {
+            'male': 'fa-mars',
+            'female': 'fa-venus',
+            'ungendered': 'fa-circle',
+            'shiny': 'fa-star',
+            'alolan': 'fa-umbrella-beach',
+            'lucky': 'fa-dice'
+        };
 
-       if(istype && type == 'ungendered') {
-           return `<a class="${type} opt ${isowned ? 'owned' : ''}" href="#"><i class="${isowned ? 'fas' : 'far'} ${icons[type]}"></i></a><span class="opt"></span>`;
-       } else if(istype) {
-           return `<a class="${type} opt ${isowned ? 'owned' : ''}" href="#"><i class="${isowned ? 'fas' : 'far'} ${icons[type]}"></i></a>`;
-       } else {
-           return `<span class="${type} opt ${isowned ? 'owned' : ''}" href="#"><i class="${isowned ? 'fas' : 'far'} ${icons[type]}"></i></span>`;
-       }
+        if (istype && type == 'ungendered') {
+            return `<a class="${type} opt ${isowned ? 'owned' : ''}" href="#"><i class="${isowned ? 'fas' : 'far'} ${icons[type]}"></i></a><span class="opt"></span>`;
+        } else if (istype) {
+            return `<a class="${type} opt ${isowned ? 'owned' : ''}" href="#"><i class="${isowned ? 'fas' : 'far'} ${icons[type]}"></i></a>`;
+        } else {
+            return `<span class="${type} opt ${isowned ? 'owned' : ''}" href="#"><i class="${isowned ? 'fas' : 'far'} ${icons[type]}"></i></span>`;
+        }
     }
 
-    const Item = ({ name, dex, shiny, shinyowned, male, maleowned, female, femaleowned, ungendered, ungenderedowned, alolan, alolanowned, luckyowned, regional, legendary }) => `
+    const Item = ({name, dex, shiny, shinyowned, male, maleowned, female, femaleowned, ungendered, ungenderedowned, alolan, alolanowned, luckyowned, regional, legendary}) => `
         <div class="pokemon ${(shinyowned | maleowned | femaleowned | ungenderedowned | alolanowned | luckyowned) ? 'owned' : ''}"
                 ${maleowned ? 'data-maleowned="True"' : ''}
                 ${femaleowned ? 'data-femaleowned="True"' : ''}
@@ -43,12 +43,10 @@ $.fn.renderlist = function() {
     `;
 
     let _qs = '?' + $.param(qs);
-    let data = {};
     let _container = $(this);
 
     $.ajax({
-        url: '/api/' + $('#sidebar').data('username') + '/pokemon/get' + _qs,
-        data: data,
+        url: '/api/' + $('#user-profile').data('username') + '/pokemon/get' + _qs,
         type: 'GET',
         success: function (response) {
             let _pokemon_list = JSON.parse(response)['pokemon'];
@@ -100,7 +98,7 @@ $.fn.updatestate = function (statetype) {
 
 
     $.ajax({
-        url: '/api/' + $('#sidebar').data('username') + '/pokemon/update',
+        url: '/api/' + $('#user-profile').data('username') + '/pokemon/update',
         data: data,
         type: 'POST',
         success: function (response) {
@@ -133,25 +131,25 @@ $(function () {
 });
 
 $('#pokemon-list').on('click', 'a.opt.shiny', function () {
-        $(this).updatestate('shinyowned');
-    }).on('click', 'a.opt.alolan', function () {
-        $(this).updatestate('alolanowned');
-    }).on('click', '.pokemon a.opt.regional', function () {
-        $(this).updatestate('regionalowned');
-    }).on('click', 'a.opt.male', function () {
-        $(this).updatestate('maleowned');
-    }).on('click', '.pokemon a.opt.female', function () {
-        $(this).updatestate('femaleowned');
-    }).on('click', '.pokemon a.opt.ungendered', function () {
-        $(this).updatestate('ungenderedowned');
-    }).on('click', '.pokemon a.opt.lucky', function () {
-        $(this).updatestate('luckyowned');
-    });
+    $(this).updatestate('shinyowned');
+}).on('click', 'a.opt.alolan', function () {
+    $(this).updatestate('alolanowned');
+}).on('click', '.pokemon a.opt.regional', function () {
+    $(this).updatestate('regionalowned');
+}).on('click', 'a.opt.male', function () {
+    $(this).updatestate('maleowned');
+}).on('click', '.pokemon a.opt.female', function () {
+    $(this).updatestate('femaleowned');
+}).on('click', '.pokemon a.opt.ungendered', function () {
+    $(this).updatestate('ungenderedowned');
+}).on('click', '.pokemon a.opt.lucky', function () {
+    $(this).updatestate('luckyowned');
+});
 
-$('#pokemon-filters').on('change', '#gen-select', function (){
+$('#pokemon-filters').on('change', '#gen-select', function () {
     qs.gen = $('#gen-select').val();
     $('#pokemon-list').renderlist();
-}).on('change', '#cat-select', function (){
+}).on('change', '#cat-select', function () {
     qs.cat = $('#cat-select').val();
     $('#pokemon-list').renderlist();
 });

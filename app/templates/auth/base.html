@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <title>DEX | The Ultimate Online Tracker for Pokemon GO</title>
+    <meta name="author" content="vidoardes">
+    <meta name="description" content="The Ultimate Online Tracker for Pokemon GO">
+    <meta name="keywords" content="pokemon,tacker,pokedex,dex">
+    {% include 'blocks/icons.html' %}
+    {% include 'blocks/fonts.html' %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/main.min.css') }}"
+          type="text/css">
+</head>
+
+<body>
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+            <div class="flashed-message {{ category }}">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+
+
+{% block container %}
+    <div id="container">
+        {% block sidebar %}{% endblock %}
+        {% block content %}{% endblock %}
+    </div>
+{% endblock %}
+
+<script src="{{ url_for('static', filename='scripts/cookieconsent.min.js') }}"></script>
+<script>
+    window.addEventListener("load", function () {
+        window.cookieconsent.initialise({
+            "palette": {
+                "popup": {
+                    "background": "#383b75"
+                },
+                "button": {
+                    "background": "#f1d600"
+                }
+            },
+            "position": "bottom-right",
+            "type": "opt-out",
+            "content": {
+                "message": "Ironically this site only uses cookies to remember you've read this message about cookies, and to remember your login.",
+                "link": "Privacy Policy",
+                "href": "/app/static/docs/privacy-policy.pdf"
+            }
+        })
+    });
+</script>
+</body>
+</html>

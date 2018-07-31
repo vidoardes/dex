@@ -1,9 +1,17 @@
-{% extends "base.html" %}
+{% extends "main/base.html" %}
 
 {% block container %}
-    <div id="container" class="user-profile">
+    <div id="user-profile" data-username="{{ user.username }}">
+        {% block header %}
+            <div id="header">
+                <h1>dex</h1>
+                <input id="user-search" type="search"/>
+                <a href="{{ url_for('auth.logout') }}"><i class="fas fa-sign-out"></i>Logout</a>
+            </div>
+        {% endblock %}
+
         {% block sidebar %}
-            <div id="sidebar" data-username="{{ user.username }}">
+            <div id="sidebar">
                 <div id="sidebar-body">
                     <div id="player-card">
                         <div id="player-team-logo" class="{{ user.player_team }}"></div>
@@ -13,8 +21,7 @@
                 </div>
 
                 <div id="footer-links">
-                    <a href="{{ url_for('auth.logout') }}"><i class="fas fa-sign-out"></i>
-                        Logout</a>
+
                 </div>
             </div>
         {% endblock %}
