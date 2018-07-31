@@ -41,7 +41,7 @@ def fetch(username):
     if gen != "all":
         filtered_query = filtered_query.filter_by(gen=gen)
 
-    if user is not None:
+    if user is not None and user.is_public:
         for u in filtered_query.all():
             pokemon_list.append(u.as_dict())
 

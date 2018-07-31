@@ -10,7 +10,9 @@ from app.models import User, Pokemon
 @bp.route("/user/<username>")
 @login_required
 def user(username):
-    user = User.query.filter_by(username=username).first_or_404()
+    user = (
+        User.query.filter_by(username=username).filter_by(is_public=True).first_or_404()
+    )
     return render_template("main/user.html", user=user)
 
 
