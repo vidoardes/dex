@@ -27,7 +27,7 @@
 
   #content {
     background-color: #215788;
-    background-image: url('../img/img_charizard-silhouette-14.png');
+    background-image: url('../static/img/img_charizard-silhouette-14.png');
     background-size: 300px;
     background-repeat: no-repeat;
     background-position: bottom right;
@@ -239,35 +239,59 @@
 #user-profile {
   display: grid;
   height: 100vh;
-  width: 100vw;
-  grid-template-areas: "header header"
-                        "sidebar content";
+  width: 100%;
+  grid-template-areas: "header header" "sidebar content";
   grid-template-columns: minmax(auto, 350px) 1fr;
+  grid-template-rows: minmax(auto, 62px) 1fr;
 
   #header {
     grid-area: header;
     padding-top: 12px;
     padding-bottom: 12px;
-    color: rgba(255,255,255,0.75);
+    color: rgba(255, 255, 255, 0.75);
     background-color: #215788;
     display: grid;
     grid-template-areas: "logo search menu";
-    grid-template-columns: 50px 1fr 100px;
+    grid-template-columns: auto minmax(auto, 350px) 1fr;
 
     #logo {
       grid-area: logo;
 
       h1 {
-        margin: 0;
+        padding: 0 32px 0 16px;
+        color: rgba(255, 255, 255, 0.8);
       }
     }
 
-    #search {
+    .search {
       grid-area: search;
+
+      input {
+        padding: 0 26px 0 5px !important;
+        border-radius: 4px !important;
+        background-color: rgba(255, 255, 255, 0.125) !important;
+      }
+
+      .icon {
+        right: 5px;
+      }
     }
 
-    #header-menu {
+    #menu {
       grid-area: menu;
+      padding: 0 16px;
+
+      a {
+        float: right;
+        padding: 0 0 0 16px;
+        line-height: 38px;
+        color: rgba(255, 255, 255, 0.8);
+        font-size: 25px;
+
+        &:hover {
+          color: rgba(255, 255, 255, 0.95)
+        }
+      }
     }
   }
 
@@ -276,151 +300,50 @@
     display: grid;
     grid-template-areas: "body" "footer";
     grid-template-rows: auto 40px;
-
-    @include tablet {
-      grid-template-areas: "body footer";
-      grid-template-columns: 1fr 50px;
-      grid-template-rows: auto;
-      grid-auto-flow: row;
-      padding: 10px;
-      background: #215788;
-      box-shadow: 0 8px 6px -6px black;
-      border-bottom: solid 1px #444;
-    }
-
-    @include phone {
-      grid-template-areas: "body footer";
-      grid-template-columns: 1fr 50px;
-      grid-template-rows: auto;
-      grid-auto-flow: row;
-      padding: 10px;
-      background: #215788;
-      box-shadow: 0 8px 6px -6px black;
-      border-bottom: solid 1px #444;
-    }
+    padding: 24px;
+    border-right: 1px #e1e4e8 solid;
 
     #sidebar-body {
       grid-area: body;
     }
 
-    #footer-links {
-      grid-area: footer;
-      text-align: center;
-
-      a {
-        @include tablet {
-          i {
-            font-size: 30px;
-            margin: 15px 0 20px;
-          }
-        }
-
-        @include phone {
-          i {
-            font-size: 30px;
-            margin: 15px 0 20px;
-          }
-        }
-      }
-    }
-
     #player-card {
       display: grid;
-      grid-template-columns: 96px 1fr;
+      height: 60px;
+      grid-template-columns: 60px 1fr;
       grid-template-rows: auto auto;
       grid-template-areas: "logo name" "logo level";
       grid-column-gap: 10px;
-      height: 96px;
-
-      @include tablet {
-        height: 60px;
-        grid-template-columns: 60px 1fr;
-      }
-
-      @include phone {
-        height: 60px;
-        grid-template-columns: 60px 1fr;
-      }
 
       #player-team-logo {
-        width: 96px;
-        height: 96px;
+        height: 60px;
+        width: 60px;
         margin-right: 10px;
         grid-area: logo;
         background-repeat: no-repeat;
 
-        @include tablet {
-          height: 60px;
-          width: 60px;
-        }
-
-        @include phone {
-          height: 60px;
-          width: 60px;
-        }
-
         &.Mystic {
-          background-image: url('../img/TeamMystic.svg');
-          background-position: -20px -46px;
-          background-size: 125px;
-
-          @include tablet {
-            background-position: -18px -40px;
-            background-size: 95px;
-          }
-
-          @include phone {
-            background-position: -18px -40px;
-            background-size: 95px;
-          }
+          background-image: url('../static/img/TeamMystic.svg');
+          background-position: -18px -40px;
+          background-size: 95px;
         }
 
         &.Instinct {
-          background-image: url('../img/TeamInstinct.svg');
-          background-position: -20px -38px;
-          background-size: 125px;
-
-          @include tablet {
-            background-position: -18px -36px;
-            background-size: 95px;
-          }
-
-          @include phone {
-            background-position: -18px -36px;
-            background-size: 95px;
-          }
+          background-image: url('../static/img/TeamInstinct.svg');
+          background-position: -18px -36px;
+          background-size: 95px;
         }
 
         &.Valor {
-          background-image: url('../img/TeamValor.svg');
-          background-position: -20px -38px;
-          background-size: 125px;
-
-          @include tablet {
-            background-position: -18px -36px;
-            background-size: 95px;
-          }
-
-          @include phone {
-            background-position: -18px -36px;
-            background-size: 95px;
-          }
+          background-image: url('../static/img/TeamValor.svg');
+          background-position: -18px -36px;
+          background-size: 95px;
         }
 
         &.Harmony {
-          background-image: url('../img/TeamHarmony.svg');
-          background-position: 18px 2px;
-          background-size: 65px;
-
-          @include tablet {
-            background-position: 10px 0px;
-            background-size: 45px;
-          }
-
-          @include phone {
-            background-position: 10px 0px;
-            background-size: 45px;
-          }
+          background-image: url('../static/img/TeamHarmony.svg');
+          background-position: 10px 0px;
+          background-size: 45px;
         }
       }
     }
@@ -428,37 +351,18 @@
 
   h2 {
     grid-area: name;
-
-    @include tablet {
-      text-align: left;
-      margin: 0;
-      color: #fff;
-    }
-
-    @include phone {
-      text-align: left;
-      margin: 0;
-      color: #fff;
-    }
+    text-align: left;
+    margin: 0;
   }
 
   label {
     grid-area: level;
-    text-align: center;
-
-    @include tablet {
-      text-align: left;
-      color: #fff;
-    }
-
-    @include phone {
-      text-align: left;
-      color: #fff;
-    }
+    text-align: left;
   }
 
   #content {
     grid-area: content;
+    background: #f6f8fa;
   }
 }
 
@@ -489,7 +393,6 @@
   #pokemon-list {
     overflow: hidden;
     margin: 20px;
-    background: #fff;
     border-radius: 4px;
     padding: 10px;
 

@@ -4,15 +4,17 @@
     <div id="user-profile" data-username="{{ user.username }}">
         {% block header %}
             <div id="header">
-                <h1>dex</h1>
+                <div id="logo"><h1>DEX</h1></div>
                 <div class="ui search">
-                    <div class="ui icon input">
-                        <input class="prompt" type="text" placeholder="Search countries...">
+                    <div class="ui fluid small inverted transparent icon input">
+                        <input class="prompt" type="text" placeholder="Search for other trainers...">
                         <i class="search icon"></i>
                     </div>
                     <div class="results"></div>
                 </div>
-                <a href="{{ url_for('auth.logout') }}"><i class="fas fa-sign-out"></i>Logout</a>
+                <div id="menu">
+                    <a href="{{ url_for('auth.logout') }}"><i class="fas fa-sign-out"></i></a>
+                </div>
             </div>
         {% endblock %}
 
