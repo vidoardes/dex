@@ -11,15 +11,17 @@
     <meta name="keywords" content="pokemon,tacker,pokedex,dex">
     {% include 'blocks/icons.html' %}
     {% include 'blocks/fonts.html' %}
-    <link rel="stylesheet" href="{{ url_for('static', filename='main.min.css') }}"
-          type="text/css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.3.3/dist/semantic.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='main.min.css') }}" type="text/css">
 </head>
 
 <body>
 {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
         {% for category, message in messages %}
-            <div class="flashed-message {{ category }}">{{ message }}</div>
+            <div class="flashed-message hidden floating ui message {{ category }}">
+                {{ message }}
+            </div>
         {% endfor %}
     {% endif %}
 {% endwith %}
@@ -33,26 +35,8 @@
 {% endblock %}
 
 <script src="{{ url_for('static', filename='scripts/cookieconsent.min.js') }}"></script>
-<script>
-    window.addEventListener("load", function () {
-        window.cookieconsent.initialise({
-            "palette": {
-                "popup": {
-                    "background": "#383b75"
-                },
-                "button": {
-                    "background": "#f1d600"
-                }
-            },
-            "position": "bottom-right",
-            "type": "opt-out",
-            "content": {
-                "message": "Ironically this site only uses cookies to remember you've read this message about cookies, and to remember your login.",
-                "link": "Privacy Policy",
-                "href": "/app/static/docs/privacy-policy.pdf"
-            }
-        })
-    });
-</script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/semantic-ui@2/dist/semantic.min.js"></script>
+<script src="{{ url_for('static', filename='scripts/auth.js') }}"></script>
 </body>
 </html>
