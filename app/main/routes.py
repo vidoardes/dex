@@ -84,6 +84,23 @@ def update(username):
         return json.dumps({'success': False}), 403, {'ContentType': 'application/json'}
 
 
+@bp.route("/api/users/get", methods=['GET'])
+@login_required
+def fetch_users():
+    users = User.query.filter_by(is_public=True).all()
+    public_users = []
+
+    for u in users:
+        user = u.__dict__['username']
+        public_users.append(user)
+
+    if len(public_users) > 0:
+        print(public_users)
+        return json.dumps({'success': True, 'users': public_users}), 200, {'ContentType': 'application/json'}
+    else:
+        return json.dumps({'success': False}), 403, {'ContentType': 'application/json'}
+
+
 @bp.route('/edit_profile/<username>', methods=['GET', 'POST'])
 @login_required
 def edit_profile(username):
