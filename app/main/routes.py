@@ -65,8 +65,7 @@ def fetch(username):
         return json.dumps({'success': False}), 403, {'ContentType': 'application/json'}
 
 
-
-@bp.route("/api/<username>/pokemon/update", methods=['POST'])
+@bp.route("/api/<username>/pokemon/update", methods=['PUT'])
 @login_required
 def update(username):
     user = User.query.filter_by(username=username).first_or_404()
@@ -87,18 +86,21 @@ def update(username):
 @bp.route("/api/users/get", methods=['GET'])
 @login_required
 def fetch_users():
-    users = User.query.filter_by(is_public=True).all()
+    q = request.args.get('q', '')
+
+    users = User.query.filter_by(is_public=True).filter(User.username.like("%" + str(q) + "%")).all()
     public_users = []
 
     for u in users:
-        user = u.__dict__['username']
-        public_users.append(user)
+        search_result = {}
 
-    if len(public_users) > 0:
-        print(public_users)
-        return json.dumps({'success': True, 'users': public_users}), 200, {'ContentType': 'application/json'}
-    else:
-        return json.dumps({'success': False}), 403, {'ContentType': 'application/json'}
+        search_result['title'] = u.username
+        search_result['description'] = 'L' + str(u.player_level) + ' ' + u.player_team
+        search_result['url'] = '/user/' + u.username
+
+        public_users.append(search_result)
+
+    return json.dumps({'success': True, 'results': public_users}), 200, {'ContentType': 'application/json'}
 
 
 @bp.route('/edit_profile/<username>', methods=['GET', 'POST'])

@@ -90,7 +90,7 @@ $.fn.updatestate = function (statetype) {
     $.ajax({
         url: '/api/' + $('#user-profile').data('username') + '/pokemon/update',
         data: data,
-        type: 'POST',
+        type: 'PUT',
         success: function (response) {
             if (_ownedstate) {
                 _pokemon.addClass('owned');
@@ -124,10 +124,15 @@ $.fn.checkownedstate = function () {
     )
 };
 
+$.fn.api.settings.api = {
+  'search'        : '/api/users/get?q={query}'
+};
+
 let qs = {};
 
 $(function () {
     $('#pokemon-list').renderlist();
+    $('.ui.search').search();
 });
 
 $('#pokemon-list').on('click', 'a.opt.shiny', function () {
