@@ -1,7 +1,7 @@
 from flask import request, json
 from flask_login import login_required
 
-from app.main import bp
+from app.api import bp
 from app.models import User
 
 

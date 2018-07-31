@@ -2,7 +2,7 @@ from flask import request, json
 from flask_login import login_required, current_user
 
 from app import db
-from app.main import bp
+from app.api import bp
 from app.models import User, Pokemon
 
 
