@@ -13,7 +13,7 @@ def fetch_users():
     public_users = []
     users = (
         User.query.filter_by(is_public=True)
-        .filter(User.username.like("%" + str(q) + "%"))
+        .filter(User.username.ilike("%" + str(q) + "%"))
         .all()
     )
 
