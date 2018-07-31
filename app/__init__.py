@@ -53,6 +53,9 @@ def create_app(config_class=Config):
     from app.main import bp as main_bp
     application.register_blueprint(main_bp)
 
+    from app.api import bp as api_bp
+    application.register_blueprint(api_bp, url_prefix='/api')
+
     if not application.debug and not application.testing:
         if not os.path.exists('logs'):
             os.mkdir('logs')
