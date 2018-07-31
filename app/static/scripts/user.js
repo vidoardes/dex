@@ -1,4 +1,21 @@
-$.fn.renderlist = function () {
+$.fn.getpokemon = function () {
+    let _qs = '?' + $.param(qs);
+    let _container = $(this);
+
+    $.ajax({
+        url: '/api/' + $('#user-profile').data('username') + '/pokemon/get' + _qs,
+        type: 'GET',
+        success: function (response) {
+            let _pokemon_list = JSON.parse(response)['pokemon'];
+            $('#pokemon-wrapper').renderpokemon(_pokemon_list);
+        },
+        error: function (error) {
+            console.log(error.status);
+        }
+    });
+};
+
+$.fn.renderpokemon = function (list) {
     function pokemonoptions(type, istype, isowned) {
         let icons = {
             'male': 'fa-mars',
@@ -10,11 +27,11 @@ $.fn.renderlist = function () {
         };
 
         if (istype && type === 'ungendered') {
-            return `<a class="${type} opt ${isowned ? 'owned' : ''}" href="#"><i class="${isowned ? 'fas' : 'far'} ${icons[type]}"></i></a><span class="opt"></span>`;
+            return `<a class="${type} opt ${isowned ? 'owned' : ''}" href="#" data-content="${type}"><i class="${isowned ? 'fas' : 'far'} ${icons[type]}"></i></a><span class="opt"></span>`;
         } else if (istype) {
-            return `<a class="${type} opt ${isowned ? 'owned' : ''}" href="#"><i class="${isowned ? 'fas' : 'far'} ${icons[type]}"></i></a>`;
+            return `<a class="${type} opt ${isowned ? 'owned' : ''}" href="#" data-content="${type}"><i class="${isowned ? 'fas' : 'far'} ${icons[type]}"></i></a>`;
         } else {
-            return `<span class="${type} opt ${isowned ? 'owned' : ''}" href="#"><i class="${isowned ? 'fas' : 'far'} ${icons[type]}"></i></span>`;
+            return `<span class="${type} opt ${isowned ? 'owned' : ''}" href="#" data-content="${type}"><i class="${isowned ? 'fas' : 'far'} ${icons[type]}"></i></span>`;
         }
     }
 
@@ -43,33 +60,18 @@ $.fn.renderlist = function () {
             </div>
     `;
 
-    let _qs = '?' + $.param(qs);
-    let _container = $(this);
-
-    $.ajax({
-        url: '/api/' + $('#user-profile').data('username') + '/pokemon/get' + _qs,
-        type: 'GET',
-        success: function (response) {
-            let _pokemon_list = JSON.parse(response)['pokemon'];
-
-            if (_pokemon_list.length > 0) {
-                $('#pokemon-wrapper').fadeOut('fast', function () {
-                    $('#pokemon-wrapper').html(_pokemon_list.map(Item).join(''));
-                    $('#pokemon-wrapper').fadeIn('fast');
-                });
-
-            } else {
-                $('#pokemon-wrapper').fadeOut('fast', function () {
-                    $('#pokemon-wrapper').html('<p id="no-results">Unfortunatly there are no Pokemon match your criteria. Please select a different option from the choices above.</p>');
-                    $('#pokemon-wrapper').fadeIn('fast');
-                });
+    if (list.length > 0) {
+        $(this).html(list.map(Item).join(''));
+        $('.opt').popup({
+            delay: {
+                show: 500,
+                hide: 0
             }
-        },
-        error: function (error) {
-            console.log(error.status);
-        }
-    });
-};
+        });
+    } else {
+        $(this).html('<p id="no-results">Unfortunatly there are no Pokemon match your criteria. Please select a different option from the choices above.</p>');
+    }
+}
 
 $.fn.updatestate = function (statetype) {
     var _pokemon = $(this).parent().parent();
@@ -97,21 +99,7 @@ $.fn.updatestate = function (statetype) {
         data: data,
         type: 'PUT',
         success: function (response) {
-            if (_ownedstate) {
-                _pokemon.addClass('owned');
-            }
-            else {
-                _pokemon.removeClass('owned');
-            }
-
-            if (_state) {
-                _button.addClass('owned');
-            }
-            else {
-                _button.removeClass('owned');
-            }
-
-            _button.children().toggleClass('far').toggleClass('fas')
+            $('#pokemon-list').getpokemon();
         },
         error: function (error) {
             console.log(error.status);
@@ -134,41 +122,35 @@ $.fn.api.settings.api = {
 let qs = {};
 
 $(function () {
-    $('#pokemon-list').renderlist();
+    $('#pokemon-list').getpokemon();
     $('.ui.search').search();
     $('.ui.dropdown').dropdown();
+
 });
 
 $('#pokemon-list').on('click', 'a.opt.shiny', function () {
     $(this).updatestate('shinyowned');
-    $('#pokemon-list').renderlist();
 }).on('click', 'a.opt.alolan', function () {
     $(this).updatestate('alolanowned');
-    $('#pokemon-list').renderlist();
 }).on('click', '.pokemon a.opt.regional', function () {
     $(this).updatestate('regionalowned');
-    $('#pokemon-list').renderlist();
 }).on('click', 'a.opt.male', function () {
     $(this).updatestate('maleowned');
-    $('#pokemon-list').renderlist();
 }).on('click', '.pokemon a.opt.female', function () {
     $(this).updatestate('femaleowned');
-    $('#pokemon-list').renderlist();
 }).on('click', '.pokemon a.opt.ungendered', function () {
     $(this).updatestate('ungenderedowned');
-    $('#pokemon-list').renderlist();
 }).on('click', '.pokemon a.opt.lucky', function () {
     $(this).updatestate('luckyowned');
-    $('#pokemon-list').renderlist();
 });
 
 $('#pokemon-filters').on('change', '#gen-select', function () {
     qs.gen = $('#gen-select').val();
-    $('#pokemon-list').renderlist();
+    $('#pokemon-list').getpokemon();
 }).on('change', '#cat-select', function () {
     qs.cat = $('#cat-select').val();
-    $('#pokemon-list').renderlist();
+    $('#pokemon-list').getpokemon();
 }).on('change', '#own-select', function () {
     qs.own = $('#own-select').val();
-    $('#pokemon-list').renderlist();
+    $('#pokemon-list').getpokemon();
 });
