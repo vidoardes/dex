@@ -9,7 +9,7 @@ $.fn.renderlist = function () {
             'lucky': 'fa-dice'
         };
 
-        if (istype && type == 'ungendered') {
+        if (istype && type === 'ungendered') {
             return `<a class="${type} opt ${isowned ? 'owned' : ''}" href="#"><i class="${isowned ? 'fas' : 'far'} ${icons[type]}"></i></a><span class="opt"></span>`;
         } else if (istype) {
             return `<a class="${type} opt ${isowned ? 'owned' : ''}" href="#"><i class="${isowned ? 'fas' : 'far'} ${icons[type]}"></i></a>`;
@@ -70,16 +70,6 @@ $.fn.renderlist = function () {
     });
 };
 
-$.fn.checkownedstate = function () {
-    return (
-        this.data('shinyowned')
-        || this.data('alolanowned')
-        || this.data('regionalowned')
-        || this.data('maleowned')
-        || this.data('femaleowned')
-    )
-};
-
 $.fn.updatestate = function (statetype) {
     var _pokemon = $(this).parent().parent();
     var _button = $(this);
@@ -124,10 +114,20 @@ $.fn.updatestate = function (statetype) {
     });
 };
 
+$.fn.checkownedstate = function () {
+    return (
+        this.data('shinyowned')
+        || this.data('alolanowned')
+        || this.data('regionalowned')
+        || this.data('maleowned')
+        || this.data('femaleowned')
+    )
+};
+
 let qs = {};
 
 $(function () {
-    $('#pokemon-list').renderlist('');
+    $('#pokemon-list').renderlist();
 });
 
 $('#pokemon-list').on('click', 'a.opt.shiny', function () {
