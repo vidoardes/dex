@@ -37,19 +37,24 @@
         {% block content %}
             <div id="content" class="dex">
                 <div id="pokemon-filters">
-                    <select id="gen-select">
+                    <select id="gen-select" class="ui dropdown">
                         <option value="all">All Released Generations</option>
                         <option value="1">Gen I (Kanto)</option>
                         <option value="2">Gen II (Johto)</option>
                         <option value="3">Gen III (Hoenn)</option>
                     </select>
-                    <select id="cat-select">
+                    <select id="cat-select" class="ui dropdown">
                         <option value="all">All Released</option>
                         <option value="shiny">Shiny</option>
                         <option value="alolan">Alolan</option>
                         <option value="regional">Regional</option>
                         <option value="legendary">Legendary</option>
                         <option value="mythical">Mythical</option>
+                    </select>
+                    <select id="own-select" class="ui dropdown">
+                        <option value="all">All Pokemon</option>
+                        <option value="owned">Owned</option>
+                        <option value="notowned">Not Owned</option>
                     </select>
                 </div>
                 <div id="pokemon-list">
@@ -63,5 +68,5 @@
 {% block scripts %}
     <script src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2/dist/semantic.min.js"></script>
-    <script src="{{ url_for('static', filename='scripts/main.js') }}"></script>
+    <script src="{{ url_for('static', filename='scripts/user.js') }}"></script>
 {% endblock %}

@@ -26,7 +26,8 @@ $.fn.renderlist = function () {
                 ${shinyowned ? 'data-shinyowned="True"' : ''}
                 ${alolanowned ? 'data-alolanowned="True"' : ''}
                 ${luckyowned ? 'data-luckyowned="True"' : ''}
-                data-key="${name}">
+                data-key="${name}"
+                data-dex="${dex}">
                 
                 <div class="img" style="background-image: url(https://s3-eu-west-1.amazonaws.com/dex-static-img/${dex}.png)"></div>
                 <div class="info">${name}</div>
@@ -77,15 +78,19 @@ $.fn.updatestate = function (statetype) {
     _pokemon.data(statetype, !_pokemon.data(statetype));
 
     var _name = _pokemon.data('key');
+    var _dex = _pokemon.data('dex');
     var _state = _pokemon.data(statetype);
     var _ownedstate = _pokemon.checkownedstate();
 
     var obj = {};
     obj['name'] = _name;
+    obj['dex'] = _dex;
     obj[statetype] = _state;
+    obj['owned'] = _ownedstate;
+
+    console.log(_ownedstate);
 
     var data = {data: JSON.stringify(obj)};
-
 
     $.ajax({
         url: '/api/' + $('#user-profile').data('username') + '/pokemon/update',
@@ -115,17 +120,15 @@ $.fn.updatestate = function (statetype) {
 };
 
 $.fn.checkownedstate = function () {
-    return (
-        this.data('shinyowned')
-        || this.data('alolanowned')
-        || this.data('regionalowned')
-        || this.data('maleowned')
-        || this.data('femaleowned')
-    )
+    if (this.data('shinyowned') || this.data('alolanowned') || this.data('regionalowned') || this.data('maleowned') || this.data('femaleowned')) {
+        return true;
+    } else {
+        return false;
+    }
 };
 
 $.fn.api.settings.api = {
-  'search'        : '/api/users/get?q={query}'
+    'search': '/api/users/get?q={query}'
 };
 
 let qs = {};
@@ -133,22 +136,30 @@ let qs = {};
 $(function () {
     $('#pokemon-list').renderlist();
     $('.ui.search').search();
+    $('.ui.dropdown').dropdown();
 });
 
 $('#pokemon-list').on('click', 'a.opt.shiny', function () {
     $(this).updatestate('shinyowned');
+    $('#pokemon-list').renderlist();
 }).on('click', 'a.opt.alolan', function () {
     $(this).updatestate('alolanowned');
+    $('#pokemon-list').renderlist();
 }).on('click', '.pokemon a.opt.regional', function () {
     $(this).updatestate('regionalowned');
+    $('#pokemon-list').renderlist();
 }).on('click', 'a.opt.male', function () {
     $(this).updatestate('maleowned');
+    $('#pokemon-list').renderlist();
 }).on('click', '.pokemon a.opt.female', function () {
     $(this).updatestate('femaleowned');
+    $('#pokemon-list').renderlist();
 }).on('click', '.pokemon a.opt.ungendered', function () {
     $(this).updatestate('ungenderedowned');
+    $('#pokemon-list').renderlist();
 }).on('click', '.pokemon a.opt.lucky', function () {
     $(this).updatestate('luckyowned');
+    $('#pokemon-list').renderlist();
 });
 
 $('#pokemon-filters').on('change', '#gen-select', function () {
@@ -156,5 +167,8 @@ $('#pokemon-filters').on('change', '#gen-select', function () {
     $('#pokemon-list').renderlist();
 }).on('change', '#cat-select', function () {
     qs.cat = $('#cat-select').val();
+    $('#pokemon-list').renderlist();
+}).on('change', '#own-select', function () {
+    qs.own = $('#own-select').val();
     $('#pokemon-list').renderlist();
 });

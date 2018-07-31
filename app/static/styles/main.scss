@@ -368,7 +368,6 @@
 
 .dex {
   #pokemon-filters {
-    overflow: hidden;
     margin: 20px;
     background: #fff;
     border-radius: 4px;
@@ -394,7 +393,6 @@
     overflow: hidden;
     margin: 20px;
     border-radius: 4px;
-    padding: 10px;
 
     @include tablet {
       padding: 3px;

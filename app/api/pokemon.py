@@ -28,12 +28,15 @@ def merge_dict_lists(key, l1, l2, append=True):
 def fetch(username):
     user = User.query.filter_by(username=username).first_or_404()
 
+    if user is None or not user.is_public:
+        return json.dumps({"success": False}), 403, {"ContentType": "application/json"}
+
     pokemon_list = []
     cat = request.args.get("cat", "all")
     gen = request.args.get("gen", "all")
+    own = request.args.get("own", "all")
 
-    query = Pokemon.query
-    filtered_query = query.filter_by(released=True)
+    filtered_query = Pokemon.query.filter_by(released=True)
 
     if cat != "all":
         filtered_query = filtered_query.filter(getattr(Pokemon, cat), True)
@@ -41,26 +44,32 @@ def fetch(username):
     if gen != "all":
         filtered_query = filtered_query.filter_by(gen=gen)
 
-    if user is not None and user.is_public:
-        for u in filtered_query.all():
-            pokemon_list.append(u.as_dict())
+    for u in filtered_query.all():
+        pokemon_list.append(u.as_dict())
 
-        print(json.loads(user.pokemon_owned))
+    pokemon = sorted(
+        merge_dict_lists(
+            "name", pokemon_list, json.loads(user.pokemon_owned), append=False
+        ),
+        key=lambda k: k["dex"],
+    )
 
-        pokemon = sorted(
-            merge_dict_lists(
-                "name", pokemon_list, json.loads(user.pokemon_owned), append=False
-            ),
-            key=lambda k: k["dex"],
-        )
+    if not own == "all":
+        _pokemon_owned = []
 
-        return (
-            json.dumps({"success": True, "pokemon": pokemon}),
-            200,
-            {"ContentType": "application/json"},
-        )
-    else:
-        return json.dumps({"success": False}), 403, {"ContentType": "application/json"}
+        for p in pokemon:
+            _owned = p.get("owned", False)
+
+            if (own == "owned" and _owned) or (own == "notowned" and not _owned):
+                _pokemon_owned.append(p)
+
+        pokemon = _pokemon_owned
+
+    return (
+        json.dumps({"success": True, "pokemon": pokemon}),
+        200,
+        {"ContentType": "application/json"},
+    )
 
 
 @bp.route("/<username>/pokemon/update", methods=["PUT"])
