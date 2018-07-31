@@ -43,9 +43,7 @@ def fetch(username):
 
     if user is not None:
         for u in filtered_query.all():
-            pokemon = u.__dict__
-            pokemon.pop("_sa_instance_state", None)
-            pokemon_list.append(pokemon)
+            pokemon_list.append(u.as_dict())
 
         print(json.loads(user.pokemon_owned))
 
