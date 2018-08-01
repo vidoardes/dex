@@ -69,7 +69,6 @@ $.fn.renderpokemon = function (list) {
 
 $.fn.updatestate = function (statetype) {
     var _pokemon = $(this).parent().parent();
-    var _button = $(this);
 
     _pokemon.data(statetype, !_pokemon.data(statetype));
 
@@ -102,7 +101,14 @@ $.fn.updatestate = function (statetype) {
 };
 
 $.fn.checkownedstate = function () {
-    if (this.data('shinyowned') || this.data('alolanowned') || this.data('regionalowned') || this.data('maleowned') || this.data('femaleowned')) {
+    if (
+        this.data('shinyowned')
+        || this.data('alolanowned')
+        || this.data('regionalowned')
+        || this.data('maleowned')
+        || this.data('femaleowned')
+        || this.data('ungenderedowned')
+    ) {
         return true;
     } else {
         return false;

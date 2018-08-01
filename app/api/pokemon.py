@@ -58,7 +58,12 @@ def fetch(username):
         _pokemon_owned = []
 
         for p in pokemon:
-            _owned = p.get("owned", False)
+            if cat not in ["shinyowned", "alolanowned"]:
+                _owned = p.get("owned", False)
+            elif cat == "shiny":
+                _owned = p.get("shinyowned", False)
+            elif cat == "alolan":
+                _owned = p.get("alolanowned", False)
 
             if (own == "owned" and _owned) or (own == "notowned" and not _owned):
                 _pokemon_owned.append(p)
