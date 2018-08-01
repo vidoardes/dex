@@ -390,9 +390,9 @@
   }
 
   #pokemon-list {
-    overflow: hidden;
+    overflow-y: scroll;
     margin: 20px;
-    border-radius: 4px;
+    height: calc(100vh - 180px);
 
     @include tablet {
       padding: 3px;
@@ -507,10 +507,6 @@
             float: left;
             color: #333;
 
-            &:hover {
-              background: #a9d5de;
-            }
-
             &:first-child {
               border-radius: 0 0 0 4px;
             }
@@ -530,11 +526,14 @@
             }
           }
 
-          span.opt {
+          div.opt {
             &:hover {
-              background: transparent;
+              background: #a9d5de;
+              cursor: pointer;
             }
+          }
 
+          span.opt {
             i {
               color: #ddd;
             }

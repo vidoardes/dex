@@ -67,6 +67,7 @@ $.fn.checkownedstate = function () {
         || this.data('maleowned')
         || this.data('femaleowned')
         || this.data('ungenderedowned')
+        || this.data('luckyowned')
     ) {
         return true;
     } else {
@@ -86,22 +87,23 @@ $.fn.renderpokemon = function (list, type) {
         };
 
         if (istype && type === 'ungendered') {
-            return `<a class="${type} opt ${isowned ? 'owned' : ''}" href="#" data-content="${type}"><i class="${isowned ? 'fas' : 'far'} ${icons[type]}"></i></a><span class="opt"></span>`;
+            return `<div class="${type} opt ${isowned ? 'owned' : ''}" data-content="${type}"><i class="${isowned ? 'fas' : 'far'} ${icons[type]}"></i></div><span class="opt"></span>`;
         } else if (istype) {
-            return `<a class="${type} opt ${isowned ? 'owned' : ''}" href="#" data-content="${type}"><i class="${isowned ? 'fas' : 'far'} ${icons[type]}"></i></a>`;
+            return `<div class="${type} opt ${isowned ? 'owned' : ''}" data-content="${type}"><i class="${isowned ? 'fas' : 'far'} ${icons[type]}"></i></div>`;
         } else {
-            return `<span class="${type} opt ${isowned ? 'owned' : ''}" href="#" data-content="${type}"><i class="${isowned ? 'fas' : 'far'} ${icons[type]}"></i></span>`;
+            return `<span class="${type} opt ${isowned ? 'owned' : ''}" data-content="${type}"><i class="${isowned ? 'fas' : 'far'} ${icons[type]}"></i></span>`;
         }
     }
 
-    const Item = ({name, dex, shiny, shinyowned, male, maleowned, female, femaleowned, ungendered, ungenderedowned, alolan, alolanowned, luckyowned, regional, legendary}) => `
-        <div class="pokemon ${(shinyowned | maleowned | femaleowned | ungenderedowned | alolanowned | luckyowned) ? 'owned' : ''}"
+    const Item = ({name, dex, owned, shiny, shinyowned, male, maleowned, female, femaleowned, ungendered, ungenderedowned, alolan, alolanowned, luckyowned, regional, legendary}) => `
+        <div class="pokemon ${owned ? 'owned' : ''}"
                 ${maleowned ? 'data-maleowned="True"' : ''}
                 ${femaleowned ? 'data-femaleowned="True"' : ''}
                 ${ungenderedowned ? 'data-ungenderedowned="True"' : ''}
                 ${shinyowned ? 'data-shinyowned="True"' : ''}
                 ${alolanowned ? 'data-alolanowned="True"' : ''}
                 ${luckyowned ? 'data-luckyowned="True"' : ''}
+                ${owned ? 'data-owned="True"' : ''}
                 data-key="${name}"
                 data-dex="${dex}">
                 
@@ -146,19 +148,19 @@ $(function () {
 
 });
 
-$('#pokemon-list').on('click', 'a.opt.shiny', function () {
+$('#pokemon-wrapper').on('click', 'div.opt.shiny', function () {
     $(this).updatestate('shinyowned');
-}).on('click', 'a.opt.alolan', function () {
+}).on('click', 'div.opt.alolan', function () {
     $(this).updatestate('alolanowned');
-}).on('click', '.pokemon a.opt.regional', function () {
+}).on('click', 'div.opt.regional', function () {
     $(this).updatestate('regionalowned');
-}).on('click', 'a.opt.male', function () {
+}).on('click', 'div.opt.male', function () {
     $(this).updatestate('maleowned');
-}).on('click', '.pokemon a.opt.female', function () {
+}).on('click', 'div.opt.female', function () {
     $(this).updatestate('femaleowned');
-}).on('click', '.pokemon a.opt.ungendered', function () {
+}).on('click', 'div.opt.ungendered', function () {
     $(this).updatestate('ungenderedowned');
-}).on('click', '.pokemon a.opt.lucky', function () {
+}).on('click', 'div.opt.lucky', function () {
     $(this).updatestate('luckyowned');
 });
 
