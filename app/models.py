@@ -25,6 +25,7 @@ class User(UserMixin, db.Model):
     is_public = db.Column(db.Boolean, default=True, nullable=False)
     created = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     settings = db.Column(db.Text, nullable=False, default="[]")
+    taken_tour = db.Column(db.Boolean, nullable=False, default=False)
 
     def __repr__(self):
         return "<User {}>".format(self.username)

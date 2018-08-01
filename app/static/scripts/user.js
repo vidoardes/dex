@@ -145,10 +145,56 @@ $(function () {
     $('#pokemon-wrapper').renderallpokemon();
     $('.ui.search').search();
     $('.ui.dropdown').dropdown();
+
+    if($('body').data("take-tour") === 'True') {
+        introJs()
+            .oncomplete(function () {
+                let obj = {}
+                obj['tour'] = true;
+                let data = {data: JSON.stringify(obj)};
+
+                $.ajax({
+                    url: '/api/user/' + $('#user-profile').data('username') + '/update',
+                    data: data,
+                    type: 'PUT',
+                    success: function (response) {
+
+                    },
+                    error: function (error) {
+                        console.log(error.status);
+                    }
+                })
+            })
+            .addStep({
+                element: document.querySelectorAll('#sidebar')[0],
+                intro: "Welcome to DEX! You look new here, let me show you around.<br /><br />This is your player profile, which will show you your stats and allow you to change your settings. <br /><br /> If you are view someone elses profile, it will show you their details. Neat, huh?<br /><br />Speaking of other trainers...",
+            })
+            .addStep({
+                element: document.querySelectorAll('.ui.search .ui')[0],
+                intro: "Here is the search, which you can find other trainers profiles. That way you can see what they need, and make sure you keep them back for trading.<br /><br />If you'd rather not be found in the search, you can set your profile to priavte.",
+            })
+            .addStep({
+                element: document.querySelectorAll('#pokemon-list')[0],
+                intro: "... and here is what you came for, the pokemon! This is a list of every Pokemon currently availible in Pokemon GO, with a picture, name, dex number, and 5 options",
+            })
+            .addStep({
+                element: document.querySelectorAll('.pm-opt')[0],
+                intro: "You can record wether you have caught one of each gender, it's shiny form, alolan form, or have a lucky variant. The options will only be active if they apply to the individual Pokemon; no telling people you have a shiny Mew!",
+            })
+            .addStep({
+                element: document.querySelectorAll('#pokemon-filters')[0],
+                intro: "These filters allow you to narrow down the results. You can pick individual regions (or generations), pick a group such a shiny or legendary, and the pick wether you want to see ones you own or still need.<br /><br />These can be combined to filter to just what you want to see, so you can find out what Kanto Regionals your buddy still needs!",
+            })
+            .addStep({
+                element: document.querySelectorAll('#menu')[0],
+                intro: "..and lastly these options will allow you to get back to your own profile, or to log out if you want to leave (*sniff*)<br /><br />That marks the end of our tour. Hope you find the tool useful, and happy hunting!",
+            })
+            .start();
+    }
 });
 
-$('#sidebartoggle').click(function() {
-  $('#sidebar').toggleClass('show-sidebar')
+$('#sidebartoggle').click(function () {
+    $('#sidebar').toggleClass('show-sidebar')
 });
 
 $('#pokemon-wrapper').on('click', 'div.opt.shiny', function () {

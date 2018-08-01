@@ -12,10 +12,11 @@
     {% include 'blocks/icons.html' %}
     {% include 'blocks/fonts.html' %}
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.3.3/dist/semantic.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intro.js@2/minified/introjs.min.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='main.min.css') }}" type="text/css">
 </head>
 
-<body>
+<body data-take-tour="{{ not current_user.taken_tour }}">
 {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
         {% for category, message in messages %}
