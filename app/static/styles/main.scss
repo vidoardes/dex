@@ -241,8 +241,8 @@
   height: 100vh;
   width: 100%;
   grid-template-areas: "header header" "sidebar content";
-  grid-template-columns: minmax(auto, 350px) 1fr;
-  grid-template-rows: minmax(auto, 62px) 1fr;
+  grid-template-columns: auto 1fr;
+  grid-template-rows: 62px 1fr;
 
   #header {
     grid-area: header;
@@ -252,28 +252,66 @@
     background-color: #215788;
     display: grid;
     grid-template-areas: "logo search menu";
-    grid-template-columns: auto minmax(auto, 350px) 1fr;
+    grid-template-columns: auto 1fr auto;
 
     #logo {
       grid-area: logo;
 
       h1 {
-        padding: 0 32px 0 16px;
+        padding: 0 16px;
+        margin: 0;
         color: rgba(255, 255, 255, 0.8);
+        display: inline-block;
+        float: left;
+      }
+
+      #sidebartoggle {
+        font-size: 25px;
+        line-height: 38px;
+        text-align: center;
+        color: rgba(255, 255, 255, 0.8);
+        padding: 0 0 0 16px;
+        display: none;
+        float: left;
+
+        &:hover {
+          cursor: pointer;
+          color: rgba(255, 255, 255, 0.95);
+        }
+      }
+
+      @include tablet {
+        #sidebartoggle {
+          display: inline-block;
+        }
+      }
+
+      @include phone {
+        h1 {
+          display: none;
+        }
+
+        #sidebartoggle {
+          padding-right: 16px;
+        }
       }
     }
 
     .search {
       grid-area: search;
 
+      & > div {
+        max-width: 350px;
+      }
+
       input {
-        padding: 0 26px 0 5px !important;
+        padding: 0 40px 0 14px !important;
         border-radius: 4px !important;
         background-color: rgba(255, 255, 255, 0.125) !important;
       }
 
-      .icon {
-        right: 5px;
+      i.icon {
+        right: 14px;
       }
     }
 
@@ -291,6 +329,10 @@
         &:hover {
           color: rgba(255, 255, 255, 0.95)
         }
+
+        &:last-child {
+          padding: 0 ;
+        }
       }
     }
   }
@@ -300,11 +342,23 @@
     display: grid;
     grid-template-areas: "body" "footer";
     grid-template-rows: auto 40px;
-    padding: 24px;
     border-right: 1px #e1e4e8 solid;
+    transition: width 1s;
+
+    @include tablet {
+      width: 0;
+      padding: 0;
+      overflow: hidden;
+
+      &.show-sidebar {
+        width: 100vw;
+      }
+    }
 
     #sidebar-body {
       grid-area: body;
+      padding: 24px;
+      width: 302px;
     }
 
     #player-card {
@@ -383,7 +437,6 @@
     }
 
     @include phone {
-      padding: 5px;
       margin: 2px 2px 0 2px;
       border-radius: 4px 4px 0 0;
     }
@@ -397,6 +450,7 @@
     @include tablet {
       padding: 3px;
       margin: 3px;
+      height: calc(100vh - 130px);
     }
 
     @include phone {
@@ -423,11 +477,11 @@
       }
 
       @include tablet {
-        grid-template-columns: repeat(5, 1fr);
+        grid-template-columns: repeat(4, 1fr);
       }
 
       @include phone {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(3, 1fr);
       }
 
       .pokemon {

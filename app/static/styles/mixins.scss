@@ -1,4 +1,5 @@
 /* MEDIA QUERIES */
+$phone-portrait: 420px;
 $tablet-width: 767px;
 $small-desktop-width: 1023px;
 $medium-desktop-width: 1200px;
@@ -33,14 +34,14 @@ $ultrahd-desktop-width: 3839px;
 
 /* Portrait tablet to landscape and desktop */
 @mixin tablet {
-  @media (min-width: $tablet-width) and (max-width: $small-desktop-width) {
+  @media (max-width: $small-desktop-width) {
     @content;
   }
 }
 
 /* Mobile phone to portrait tablet */
 @mixin phone {
-  @media (max-width: $tablet-width) {
+  @media (max-width: $phone-portrait) {
     @content;
   }
 }

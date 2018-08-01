@@ -145,7 +145,10 @@ $(function () {
     $('#pokemon-wrapper').renderallpokemon();
     $('.ui.search').search();
     $('.ui.dropdown').dropdown();
+});
 
+$('#sidebartoggle').click(function() {
+  $('#sidebar').toggleClass('show-sidebar')
 });
 
 $('#pokemon-wrapper').on('click', 'div.opt.shiny', function () {

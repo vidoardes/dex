@@ -4,7 +4,10 @@
     <div id="user-profile" data-username="{{ user.username }}">
         {% block header %}
             <div id="header">
-                <div id="logo"><h1>DEX</h1></div>
+                <div id="logo">
+                    <div id="sidebartoggle"><i class="fas fa-bars"></i></div>
+                    <h1>DEX</h1>
+                </div>
                 <div class="ui search">
                     <div class="ui fluid small inverted transparent icon input">
                         <input class="prompt" type="text" placeholder="Search for other trainers...">
@@ -14,6 +17,7 @@
                 </div>
                 <div id="menu">
                     <a href="{{ url_for('auth.logout') }}"><i class="fas fa-sign-out"></i></a>
+                    <a href="{{ url_for('main.user', username=current_user.username) }}"><i class="fas fa-user-circle"></i></a>
                 </div>
             </div>
         {% endblock %}
@@ -37,13 +41,13 @@
         {% block content %}
             <div id="content" class="dex">
                 <div id="pokemon-filters">
-                    <select id="gen-select" class="ui dropdown">
+                    <select id="gen-select" class="ui dropdown fluid">
                         <option value="all">All Released Generations</option>
                         <option value="1">Gen I (Kanto)</option>
                         <option value="2">Gen II (Johto)</option>
                         <option value="3">Gen III (Hoenn)</option>
                     </select>
-                    <select id="cat-select" class="ui dropdown">
+                    <select id="cat-select" class="ui dropdown fluid">
                         <option value="all">All Released</option>
                         <option value="shiny">Shiny</option>
                         <option value="alolan">Alolan</option>
@@ -51,7 +55,7 @@
                         <option value="legendary">Legendary</option>
                         <option value="mythical">Mythical</option>
                     </select>
-                    <select id="own-select" class="ui dropdown">
+                    <select id="own-select" class="ui dropdown fluid">
                         <option value="all">All Pokemon</option>
                         <option value="owned">Owned</option>
                         <option value="notowned">Not Owned</option>
