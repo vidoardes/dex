@@ -62,12 +62,6 @@ $.fn.renderpokemon = function (list) {
 
     if (list.length > 0) {
         $(this).html(list.map(Item).join(''));
-        $('.opt').popup({
-            delay: {
-                show: 500,
-                hide: 0
-            }
-        });
     } else {
         $(this).html('<p id="no-results">Unfortunatly there are no Pokemon match your criteria. Please select a different option from the choices above.</p>');
     }
