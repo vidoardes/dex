@@ -14,8 +14,8 @@ def fetch_users():
     public_users = []
     users = (
         User.query.filter_by(is_public=True)
-            .filter(User.username.ilike("%" + str(q) + "%"))
-            .all()
+        .filter(User.username.ilike("%" + str(q) + "%"))
+        .all()
     )
 
     for u in users:
@@ -41,8 +41,8 @@ def update_user(username):
 
     if current_user.username == user.username:
         data = json.loads(request.form.get("data"))
-        user.taken_tour = data.get('tour')
+        user.taken_tour = data.get("tour")
         db.session.commit()
-        return json.dumps({"success": True}), 200, {"ContentType": "application/json"},
+        return json.dumps({"success": True}), 200, {"ContentType": "application/json"}
     else:
         return json.dumps({"success": False}), 403, {"ContentType": "application/json"}

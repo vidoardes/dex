@@ -55,7 +55,7 @@ def fetch(username):
         merge_dict_lists(
             "name", pokemon_list, json.loads(user.pokemon_owned), append=False
         ),
-        key=lambda k: k["dex"],
+        key=lambda k: (k["dex"], k["img_suffix"]),
     )
 
     if not own == "all":

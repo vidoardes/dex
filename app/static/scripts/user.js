@@ -95,7 +95,7 @@ $.fn.renderpokemon = function (list, type) {
         }
     }
 
-    const Item = ({name, dex, owned, shiny, shinyowned, male, maleowned, female, femaleowned, ungendered, ungenderedowned, alolan, alolanowned, luckyowned, regional, legendary}) => `
+    const Item = ({name, dex, img_suffix, owned, shiny, shinyowned, male, maleowned, female, femaleowned, ungendered, ungenderedowned, alolan, alolanowned, luckyowned, regional, legendary}) => `
         <div class="pokemon ${owned ? 'owned' : ''}"
                 ${maleowned ? 'data-maleowned="True"' : ''}
                 ${femaleowned ? 'data-femaleowned="True"' : ''}
@@ -107,7 +107,7 @@ $.fn.renderpokemon = function (list, type) {
                 data-key="${name}"
                 data-dex="${dex}">
                 
-                <div class="img" style="background-image: url(https://s3-eu-west-1.amazonaws.com/dex-static-img/${dex}.png)"></div>
+                <div class="img" style="background-image: url(../static/img/sprites/pokemon_icon_${dex.toString().padStart(3, '0')}${qs.cat === 'alolan' ? '_61' : img_suffix}${qs.cat === 'shiny' ? '_shiny' : ''}.png)"></div>
                 <div class="info">${name}</div>
                 <div class="dex-num">#${dex.toString().padStart(3, '0')}</div>
                 ${legendary ? '<div class="dex-special legendary"></div>' : ''}
@@ -121,17 +121,24 @@ $.fn.renderpokemon = function (list, type) {
             </div>
     `;
 
-    if (type === 'generate') {
-        $(this).fadeOut("slow", function () {
-            $(this).html('').append(list.map(Item).join('')).fadeIn("slow")
-        });
-    } else if (type === 'update') {
-        let arrayLength = list.length;
+    if (list.length > 0) {
+        if (type === 'generate') {
+            $(this).fadeOut("slow", function () {
+                $(this).html('').append(list.map(Item).join('')).fadeIn("slow")
+            });
+        } else if (type === 'update') {
+            let arrayLength = list.length;
 
-        for (var i = 0; i < arrayLength; i++) {
-            let _pokemon = list[i];
-            $(this).find('[data-key="' + _pokemon.name + '"]').replaceWith([_pokemon].map(Item).join(''));
+            for (var i = 0; i < arrayLength; i++) {
+                let _pokemon = list[i];
+                $(this).find('[data-key="' + _pokemon.name + '"]').replaceWith([_pokemon].map(Item).join(''));
+            }
         }
+    } else {
+        $(this).fadeOut("slow", function () {
+            $(this).html('<p id="no-results">Unfortunatly there are no Pokemon match your criteria. Please select a different option from the choices above.</p>').fadeIn("slow");
+
+        });
     }
 };
 
@@ -146,7 +153,7 @@ $(function () {
     $('.ui.search').search();
     $('.ui.dropdown').dropdown();
 
-    if($('body').data("take-tour") === 'True') {
+    if ($('body').data("take-tour") === 'True') {
         introJs()
             .oncomplete(function () {
                 let obj = {}

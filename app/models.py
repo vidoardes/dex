@@ -83,6 +83,8 @@ class Pokemon(db.Model):
     released = db.Column(db.Boolean, default=False, nullable=False)
     hatch = db.Column(db.Boolean, default=False, nullable=False)
     raid = db.Column(db.Boolean, default=False, nullable=False)
+    costumed = db.Column(db.Boolean, default=False, nullable=False)
+    img_suffix = db.Column(db.String(6), default="_00", nullable=False)
 
     def __repr__(self):
         return "<Profile {}>".format(self.body)
