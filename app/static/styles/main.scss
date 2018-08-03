@@ -125,7 +125,7 @@
     overflow: hidden;
     margin: 20px;
     background: #fff;
-    border-radius: 4px;
+    border-radius: 3px;
     padding: 20px 40px;
 
     p {
@@ -158,7 +158,7 @@
           display: inline-block;
           padding: 10px 10px 10px 68px;
           border: solid 1px #E1E3DF;
-          border-radius: 4px;
+          border-radius: 3px;
           height: 68px;
           line-height: 48px;
           background-repeat: no-repeat;
@@ -306,7 +306,7 @@
 
       input {
         padding: 0 40px 0 14px !important;
-        border-radius: 4px !important;
+        border-radius: 3px !important;
         background-color: rgba(255, 255, 255, 0.125) !important;
       }
 
@@ -424,7 +424,8 @@
   #pokemon-filters {
     margin: 20px;
     background: #fff;
-    border-radius: 4px;
+    border: 1px solid #d1d5da;
+    border-radius: 3px;
     padding: 10px;
     display: grid;
     grid-column-gap: 10px;
@@ -488,7 +489,7 @@
         height: 195px;
         float: left;
         margin: 5px;
-        border-radius: 4px;
+        border-radius: 3px;
         position: relative;
         box-shadow: 0 0 0 1px #a9d5de inset, 0 0 0 0 transparent;
         background-color: #f8ffff;
@@ -521,7 +522,7 @@
           font-weight: 700;
           background: #a9d5de;
           color: #276f86;
-          border-radius: 0 4px 0 4px;
+          border-radius: 0 3px 0 3px;
         }
 
         .dex-special {
@@ -534,7 +535,7 @@
           background-color: #a9d5de;
           color: #276f86;
           text-align: center;
-          border-radius: 4px 0 4px 0;
+          border-radius: 3px 0 3px 0;
 
           &.legendary {
             background-size: 16px;
@@ -563,11 +564,11 @@
             color: #333;
 
             &:first-child {
-              border-radius: 0 0 0 4px;
+              border-radius: 0 0 0 3px;
             }
 
             &:last-child {
-              border-radius: 0 0 4px 0;
+              border-radius: 0 0 3px 0;
             }
 
             &.owned {

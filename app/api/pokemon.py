@@ -33,20 +33,22 @@ def fetch(username):
 
     pokemon_list = []
     cat = request.args.get("cat", "all")
-    gen = request.args.get("gen", "all")
+    gen = request.args.get("gen")
     own = request.args.get("own", "all")
     name = request.args.get("name", None)
 
     filtered_query = Pokemon.query.filter_by(released=True)
+    if gen == None:
+        gen = "1"
+
 
     if name is not None:
         filtered_query = filtered_query.filter_by(name=name)
     else:
+        filtered_query = filtered_query.filter_by(gen=gen)
+
         if cat != "all":
             filtered_query = filtered_query.filter(getattr(Pokemon, cat), True)
-
-        if gen != "all":
-            filtered_query = filtered_query.filter_by(gen=gen)
 
     for u in filtered_query.all():
         pokemon_list.append(u.as_dict())

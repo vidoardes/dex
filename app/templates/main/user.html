@@ -10,14 +10,16 @@
                 </div>
                 <div class="ui search">
                     <div class="ui fluid small inverted transparent icon input">
-                        <input class="prompt" type="text" placeholder="Search for other trainers...">
+                        <input class="prompt" type="text"
+                               placeholder="Search for other trainers...">
                         <i class="search icon"></i>
                     </div>
                     <div class="results"></div>
                 </div>
                 <div id="menu">
                     <a href="{{ url_for('auth.logout') }}"><i class="fas fa-sign-out"></i></a>
-                    <a href="{{ url_for('main.user', username=current_user.username) }}"><i class="fas fa-user-circle"></i></a>
+                    <a href="{{ url_for('main.user', username=current_user.username) }}"><i
+                            class="fas fa-user-circle"></i></a>
                 </div>
             </div>
         {% endblock %}
@@ -41,26 +43,42 @@
         {% block content %}
             <div id="content" class="dex">
                 <div id="pokemon-filters">
-                    <select id="gen-select" class="ui dropdown fluid">
-                        <option value="all">All Generations</option>
-                        <option value="1">Gen I (Kanto)</option>
-                        <option value="2">Gen II (Johto)</option>
-                        <option value="3">Gen III (Hoenn)</option>
-                    </select>
-                    <select id="cat-select" class="ui dropdown fluid">
-                        <option value="all">All Categories</option>
-                        <option value="shiny">Shiny</option>
-                        <option value="alolan">Alolan</option>
-                        <option value="regional">Regional</option>
-                        <option value="legendary">Legendary</option>
-                        <option value="mythical">Mythical</option>
-                        <option value="costumed">Costumed</option>
-                    </select>
-                    <select id="own-select" class="ui dropdown fluid">
-                        <option value="all">Owned & Need</option>
-                        <option value="owned">Owned</option>
-                        <option value="notowned">Not Owned</option>
-                    </select>
+                    <div class="ui selection fluid dropdown">
+                        <input type="hidden" id="gen-select" value="1">
+                        <i class="dropdown icon"></i>
+                        <div class="default text">Generations</div>
+                        <div class="menu">
+                            <div class="item" data-value="1">Gen I (Kanto)</div>
+                            <div class="item" data-value="2">Gen II (Johto)</div>
+                            <div class="item" data-value="3">Gen III (Hoenn)</div>
+                        </div>
+                    </div>
+
+
+                    <div class="ui selection fluid dropdown">
+                        <input type="hidden" id="cat-select">
+                        <i class="dropdown icon"></i>
+                        <div class="default text">Category</div>
+                        <div class="menu">
+                            <div class="item" data-value="shiny"><i class="icon star"></i> Shiny</div>
+                            <div class="item" data-value="alolan"><i class="icon fas fa-umbrella-beach"></i> Alolan</div>
+                            <div class="item" data-value="regional"><i class="icon fas fa-globe-africa"></i> Regional</div>
+                            <div class="item" data-value="legendary"><i class="icon fab fa-phoenix-squadron"></i> Legendary</div>
+                            <div class="item" data-value="mythical"><i class="icon fas fa-map-marker-question"></i> Mythical</div>
+                            <div class="item" data-value="costumed"><i class="icon fab fa-pied-piper-hat"></i> Costumed</div>
+                        </div>
+                    </div>
+
+                    <div class="ui selection fluid dropdown">
+                        <input type="hidden" id="own-select">
+                        <i class="dropdown icon"></i>
+                        <div class="default text">Owned vs. Need</div>
+                        <div class="menu">
+                            <div class="item" data-value="all">Show All</div>
+                            <div class="item" data-value="owned">Owned</div>
+                            <div class="item" data-value="notowned">Not Owned</div>
+                        </div>
+                    </div>
                 </div>
                 <div id="pokemon-list">
                     <div id="pokemon-wrapper"></div>
