@@ -86,7 +86,7 @@ $.fn.renderpokemon = function (list, type) {
             'lucky': 'fa-dice'
         };
 
-        if(!released) {
+        if (!released) {
             return ``;
         }
 
@@ -157,6 +157,9 @@ $(function () {
     $('#pokemon-wrapper').renderallpokemon();
     $('.ui.search').search();
     $('.ui.dropdown').dropdown();
+    $('#filter-view i').popup();
+
+    $('#filter-view .fa-th-large').hide();
 
     if ($('body').data("take-tour") === 'True') {
         introJs()
@@ -234,4 +237,10 @@ $('#pokemon-filters').on('change', '#gen-select', function () {
 }).on('change', '#own-select', function () {
     qs.own = $('#own-select').val();
     $('#pokemon-list').renderallpokemon();
+});
+
+$('#filter-view i').click(function () {
+    $('#filter-view .fa-th-large').toggle();
+    $('#filter-view .fa-th-list').toggle();
+    $('#pokemon-wrapper').toggleClass('list-view');
 });
