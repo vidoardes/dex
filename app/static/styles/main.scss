@@ -446,7 +446,7 @@
   #pokemon-list {
     overflow-y: scroll;
     margin: 20px;
-    height: calc(100vh - 180px);
+    height: calc(100vh - 182px);
 
     @include tablet {
       padding: 3px;

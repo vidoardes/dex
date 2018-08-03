@@ -76,7 +76,7 @@ $.fn.checkownedstate = function () {
 };
 
 $.fn.renderpokemon = function (list, type) {
-    function pokemonoptions(type, istype, isowned) {
+    function pokemonoptions(type, istype, isowned, released) {
         let icons = {
             'male': 'fa-mars',
             'female': 'fa-venus',
@@ -85,6 +85,10 @@ $.fn.renderpokemon = function (list, type) {
             'alolan': 'fa-umbrella-beach',
             'lucky': 'fa-dice'
         };
+
+        if(!released) {
+            return ``;
+        }
 
         if (istype && type === 'ungendered') {
             return `<div class="${type} opt ${isowned ? 'owned' : ''}" data-content="${type}"><i class="${isowned ? 'fas' : 'far'} ${icons[type]}"></i></div><span class="opt"></span>`;
@@ -95,7 +99,7 @@ $.fn.renderpokemon = function (list, type) {
         }
     }
 
-    const Item = ({name, dex, img_suffix, owned, shiny, shinyowned, male, maleowned, female, femaleowned, ungendered, ungenderedowned, alolan, alolanowned, luckyowned, regional, legendary}) => `
+    const Item = ({name, dex, img_suffix, released, owned, shiny, shinyowned, male, maleowned, female, femaleowned, ungendered, ungenderedowned, alolan, alolanowned, luckyowned, regional, legendary}) => `
         <div class="pokemon ${owned ? 'owned' : ''}"
                 ${maleowned ? 'data-maleowned="True"' : ''}
                 ${femaleowned ? 'data-femaleowned="True"' : ''}
@@ -104,6 +108,7 @@ $.fn.renderpokemon = function (list, type) {
                 ${alolanowned ? 'data-alolanowned="True"' : ''}
                 ${luckyowned ? 'data-luckyowned="True"' : ''}
                 ${owned ? 'data-owned="True"' : ''}
+                ${released ? '' : 'data-unreleased="False"'}
                 data-key="${name}"
                 data-dex="${dex}">
                 
@@ -113,10 +118,10 @@ $.fn.renderpokemon = function (list, type) {
                 ${legendary ? '<div class="dex-special legendary"></div>' : ''}
                 ${regional ? '<div class="dex-special regional"><i class="fas fa-globe-africa"></i></div>' : ''}
                 <div class="pm-opt">
-                    ${ungendered ? pokemonoptions('ungendered', ungendered, ungenderedowned) : pokemonoptions('male', male, maleowned) + pokemonoptions('female', female, femaleowned)}
-                    ${pokemonoptions('shiny', shiny, shinyowned)}
-                    ${pokemonoptions('alolan', alolan, alolanowned)}
-                    ${pokemonoptions('lucky', 'True', luckyowned)}
+                    ${ungendered ? pokemonoptions('ungendered', ungendered, ungenderedowned, released) : pokemonoptions('male', male, maleowned, released) + pokemonoptions('female', female, femaleowned, released)}
+                    ${pokemonoptions('shiny', shiny, shinyowned, released)}
+                    ${pokemonoptions('alolan', alolan, alolanowned, released)}
+                    ${pokemonoptions('lucky', 'True', luckyowned, released)}
                 </div>
             </div>
     `;

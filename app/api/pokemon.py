@@ -37,10 +37,10 @@ def fetch(username):
     own = request.args.get("own", "all")
     name = request.args.get("name", None)
 
-    filtered_query = Pokemon.query.filter_by(released=True)
     if gen == None:
         gen = "1"
 
+    filtered_query = Pokemon.query.filter_by(in_game=True).filter_by(released=True)
 
     if name is not None:
         filtered_query = filtered_query.filter_by(name=name)

@@ -81,6 +81,7 @@ class Pokemon(db.Model):
     mythical = db.Column(db.Boolean, default=False, nullable=False)
     gen = db.Column(db.Integer, default=0, nullable=False)
     released = db.Column(db.Boolean, default=False, nullable=False)
+    in_game = db.Column(db.Boolean, default=False, nullable=False)
     hatch = db.Column(db.Boolean, default=False, nullable=False)
     raid = db.Column(db.Boolean, default=False, nullable=False)
     costumed = db.Column(db.Boolean, default=False, nullable=False)
