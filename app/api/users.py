@@ -15,6 +15,7 @@ def fetch_users():
     users = (
         User.query.filter_by(is_public=True)
         .filter(User.username.ilike("%" + str(q) + "%"))
+        .limit(10)
         .all()
     )
 
