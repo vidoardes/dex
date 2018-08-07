@@ -1,0 +1,25 @@
+{
+  "name": "dex",
+  "version": "1.0.0",
+  "description": "Living dex tracker for Pokemon GO",
+  "main": "gulpfile.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vidoardes/dex.git"
+  },
+  "author": "vidoardes",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/vidoardes/dex/issues"
+  },
+  "homepage": "https://github.com/vidoardes/dex#readme",
+  "dependencies": {
+    "browser-sync": "^2.24.6",
+    "gulp": "^3.9.1",
+    "gulp-rename": "^1.4.0",
+    "gulp-sass": "^4.0.1"
+  }
+}
