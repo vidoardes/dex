@@ -359,6 +359,28 @@
       grid-area: body;
       padding: 24px;
       width: 302px;
+
+      #sidebar-links {
+        margin-top: 30px;
+
+        .sidebar-link {
+          display: grid;
+          grid-template-columns: 35px 1fr 24px;
+          width: 100%;
+          font-family: 'Patua One', cursive;
+          font-size: 20px;
+          font-weight: 400;
+          color: #215788;
+          padding: 25px 10px;
+          text-align: left;
+
+          &:hover {
+            color: lighten(#215788, 10%);
+            cursor: pointer;
+          }
+
+        }
+      }
     }
 
     #player-card {
@@ -417,12 +439,21 @@
   #content {
     grid-area: content;
     background: #f6f8fa;
+    padding: 20px;
+
+    .content-panel {
+      display: none;
+
+      &.active {
+        display: initial;
+      }
+    }
   }
 }
 
 .dex {
   #pokemon-filters {
-    margin: 20px;
+    margin-bottom: 20px;
     background: #fff;
     border: 1px solid #d1d5da;
     border-radius: 3px;
@@ -452,7 +483,6 @@
 
   #pokemon-list {
     overflow-y: scroll;
-    margin: 20px;
     height: calc(100vh - 182px);
 
     @include tablet {

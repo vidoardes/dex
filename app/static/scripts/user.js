@@ -155,6 +155,27 @@ let qs = {};
 
 $(function () {
     $('#pokemon-wrapper').renderallpokemon();
+
+    $('.ui.checkbox').checkbox({
+        onChange: function () {
+            let obj = {};
+            obj['public'] = $('.ui.checkbox').checkbox('is unchecked');
+            let data = {data: JSON.stringify(obj)};
+
+            $.ajax({
+                url: '/api/user/' + $('#user-profile').data('username') + '/update',
+                data: data,
+                type: 'PUT',
+                success: function (response) {
+
+                },
+                error: function (error) {
+                    console.log(error.status);
+                }
+            })
+        }
+    });
+
     $('.ui.search').search();
     $('.ui.dropdown').dropdown();
     $('#filter-view i').popup();
@@ -164,7 +185,7 @@ $(function () {
     if ($('body').data("take-tour") === 'True') {
         introJs()
             .oncomplete(function () {
-                let obj = {}
+                let obj = {};
                 obj['tour'] = true;
                 let data = {data: JSON.stringify(obj)};
 
@@ -243,4 +264,68 @@ $('#filter-view i').click(function () {
     $('#filter-view .fa-th-large').toggle();
     $('#filter-view .fa-th-list').toggle();
     $('#pokemon-wrapper').toggleClass('list-view');
+});
+
+$('.sidebar-link').mouseenter(function () {
+    $(this).children(".icon.right").transition('jiggle')
+});
+
+$('.sidebar-link.living-dex').click(function () {
+    if (!$('.sidebar-link.living-dex').hasClass('active')) {
+        $('.content-panel.active').fadeOut('fast', function () {
+            $('.content-panel.active').removeClass('active');
+            $('.content-panel.dex').addClass('active').fadeIn('fast');
+        })
+    }
+});
+
+$('.sidebar-link.legacy-moves').click(function () {
+    $('.content-panel.active').fadeOut('fast', function () {
+        $('.content-panel.active').removeClass('active');
+        $('.content-panel.legacy-moves').addClass('active').fadeIn('fast');
+    })
+});
+
+$('.sidebar-link.user-settings').click(function () {
+    $('.content-panel.active').fadeOut('fast', function () {
+        $('.content-panel.active').removeClass('active');
+
+        $.ajax({
+            url: '/api/user/' + $('#user-profile').data('username') + '/get?settings=all',
+            type: 'GET',
+            success: function (response) {
+                let _settings = JSON.parse(response)['settings'];
+
+                if (!_settings.public) {
+                    $('.content-panel.user-settings .ui.checkbox').checkbox('set checked');
+                } else {
+                    $('.content-panel.user-settings .ui.checkbox').checkbox('set unchecked');
+                }
+
+                $('.content-panel.user-settings #email').val(_settings.email);
+                $('.content-panel.user-settings').addClass('active').fadeIn('fast');
+            },
+            error: function (error) {
+                console.log(error.status);
+            }
+        });
+    })
+});
+
+$('#update-email').click(function () {
+    let obj = {};
+    obj['email'] = $('#email').val();
+    let data = {data: JSON.stringify(obj)};
+
+    $.ajax({
+        url: '/api/user/' + $('#user-profile').data('username') + '/update',
+        data: data,
+        type: 'PUT',
+        success: function (response) {
+
+        },
+        error: function (error) {
+            console.log(error.status);
+        }
+    })
 });

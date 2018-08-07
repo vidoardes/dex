@@ -34,6 +34,29 @@ def fetch_users():
     )
 
 
+@bp.route("/user/<username>/get", methods=["GET"])
+@login_required
+def get_user_settings(username):
+    user = User.query.filter_by(username=username).first_or_404()
+
+    if current_user.username == user.username:
+        q = request.args.get("settings", "")
+        settings = {}
+
+        if q == "all":
+            settings["config"] = user.settings
+            settings["public"] = user.is_public
+            settings["email"] = user.email
+
+        return (
+            json.dumps({"success": True, "settings": settings}),
+            200,
+            {"ContentType": "application/json"},
+        )
+    else:
+        return json.dumps({"success": False}), 403, {"ContentType": "application/json"}
+
+
 @bp.route("/user/<username>/update", methods=["PUT"])
 @login_required
 def update_user(username):
@@ -41,8 +64,56 @@ def update_user(username):
 
     if current_user.username == user.username:
         data = json.loads(request.form.get("data"))
-        user.taken_tour = data.get("tour")
+
+        if "tour" in data:
+            user.taken_tour = data.get("tour")
+
+        if "public" in data:
+            print(data.get("public"))
+            user.is_public = data.get("public")
+
+        if "email" in data:
+            if user.email == data.get("email"):
+                return (
+                    json.dumps(
+                        {
+                            "success": False,
+                            "message": "Your email address is already set to "
+                            + data.get("email"),
+                        }
+                    ),
+                    403,
+                    {"ContentType": "application/json"},
+                )
+
+            exists = User.query.filter_by(email=data.get("email")).first_or_404()
+
+            if exists:
+                return (
+                    json.dumps(
+                        {
+                            "success": False,
+                            "message": "That email address is already registered"
+                            + data.get("email"),
+                        }
+                    ),
+                    403,
+                    {"ContentType": "application/json"},
+                )
+
+            user.email = data.get("email")
+
         db.session.commit()
-        return json.dumps({"success": True}), 200, {"ContentType": "application/json"}
+
+        settings = {}
+        settings["config"] = user.settings
+        settings["public"] = user.is_public
+        settings["email"] = user.email
+
+        return (
+            json.dumps({"success": True, "settings": settings}),
+            200,
+            {"ContentType": "application/json"},
+        )
     else:
         return json.dumps({"success": False}), 403, {"ContentType": "application/json"}

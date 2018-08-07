@@ -28,7 +28,7 @@ def merge_dict_lists(key, l1, l2, append=True):
 def fetch(username):
     user = User.query.filter_by(username=username).first_or_404()
 
-    if user is None or not user.is_public:
+    if user is None or (current_user.username != user.username and not user.is_public):
         return json.dumps({"success": False}), 403, {"ContentType": "application/json"}
 
     pokemon_list = []
