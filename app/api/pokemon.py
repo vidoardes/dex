@@ -48,7 +48,7 @@ def fetch(username):
     else:
         filtered_query = filtered_query.filter_by(gen=gen)
 
-        if cat != "all":
+        if cat not in ("all", "lucky"):
             filtered_query = filtered_query.filter(getattr(Pokemon, cat), True)
 
     for u in filtered_query.all():
@@ -67,12 +67,14 @@ def fetch(username):
         _pokemon_owned = []
 
         for p in pokemon:
-            if cat not in ["shiny", "alolan"]:
+            if cat not in ["shiny", "alolan", "lucky"]:
                 _owned = p.get("owned", False)
             elif cat == "shiny":
                 _owned = p.get("shinyowned", False)
             elif cat == "alolan":
                 _owned = p.get("alolanowned", False)
+            elif cat == "lucky":
+                _owned = p.get("luckyowned", False)
 
             if (own == "owned" and _owned) or (own == "notowned" and not _owned):
                 _pokemon_owned.append(p)
