@@ -32,6 +32,7 @@ def fetch(username):
         return json.dumps({"success": False}), 403, {"ContentType": "application/json"}
 
     pokemon_list = []
+    list = request.args.get("list", "default")
     cat = request.args.get("cat", "all")
     gen = request.args.get("gen")
     own = request.args.get("own", "all")
@@ -53,9 +54,11 @@ def fetch(username):
     for u in filtered_query.all():
         pokemon_list.append(u.as_dict())
 
+    print(json.loads(user.pokemon_owned))
+
     pokemon = sorted(
         merge_dict_lists(
-            "name", pokemon_list, json.loads(user.pokemon_owned), append=False
+            "name", pokemon_list, json.loads(user.pokemon_owned).get(list, []), append=False
         ),
         key=lambda k: (k["dex"], k["img_suffix"]),
     )
@@ -89,13 +92,15 @@ def update(username):
     user = User.query.filter_by(username=username).first_or_404()
 
     if current_user.username == user.username:
+        list = request.args.get("list", "default")
+
         r = merge_dict_lists(
             "name",
-            json.loads(user.pokemon_owned),
+            json.loads(user.pokemon_owned).get(list, []),
             [json.loads(request.form.get("data"))],
         )
 
-        user.pokemon_owned = json.dumps(r)
+        user.pokemon_owned = json.dumps({list: r})
         db.session.commit()
 
         return json.dumps({"success": True}), 200, {"ContentType": "application/json"}
