@@ -177,7 +177,7 @@ $(function () {
     });
 
     $('.ui.search').search();
-    $('.ui.dropdown').dropdown();
+    $('.ui.dropdown').dropdown('set selected', '1');
     $('#filter-view i').popup();
 
     $('#filter-view .fa-th-large').hide();

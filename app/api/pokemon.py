@@ -34,27 +34,25 @@ def fetch(username):
     pokemon_list = []
     list = request.args.get("list", "default")
     cat = request.args.get("cat", "all")
-    gen = request.args.get("gen")
+    gen = request.args.get("gen", "1")
     own = request.args.get("own", "all")
     name = request.args.get("name", None)
-
-    if gen == None:
-        gen = "1"
 
     filtered_query = Pokemon.query.filter_by(in_game=True).filter_by(released=True)
 
     if name is not None:
         filtered_query = filtered_query.filter_by(name=name)
-    else:
+
+    print(gen)
+
+    if gen not in ("all"):
         filtered_query = filtered_query.filter_by(gen=gen)
 
-        if cat not in ("all", "lucky"):
-            filtered_query = filtered_query.filter(getattr(Pokemon, cat), True)
+    if cat not in ("all", "lucky"):
+        filtered_query = filtered_query.filter(getattr(Pokemon, cat), True)
 
     for u in filtered_query.all():
         pokemon_list.append(u.as_dict())
-
-    print(json.loads(user.pokemon_owned))
 
     pokemon = sorted(
         merge_dict_lists(
