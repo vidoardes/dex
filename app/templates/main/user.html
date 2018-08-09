@@ -1,203 +1,224 @@
 {% extends "main/base.html" %}
 
 {% block container %}
-    <div id="user-profile" data-username="{{ user.username }}">
-        {% block header %}
-            <div id="header">
-                <div id="logo">
-                    <div id="sidebartoggle"><i class="fas fa-bars"></i></div>
-                    <h1>DEX</h1>
-                </div>
-                <div class="ui search">
-                    <div class="ui fluid small inverted transparent icon input">
-                        <input class="prompt" type="text"
-                               placeholder="Search for other trainers...">
-                        <i class="search icon"></i>
-                    </div>
-                    <div class="results"></div>
-                </div>
-                <div id="menu">
-                    <a href="{{ url_for('auth.logout') }}"><i class="fas fa-sign-out"></i></a>
-                    <a href="{{ url_for('main.user', username=current_user.username) }}"><i
-                            class="fas fa-user-circle"></i></a>
-                </div>
+<div id="user-profile" data-username="{{ user.username }}">
+    {% block header %}
+    <div id="header">
+        <div id="logo">
+            <div id="sidebartoggle"><i class="fas fa-bars"></i></div>
+            <h1>DEX</h1>
+        </div>
+        <div class="ui search">
+            <div class="ui fluid small inverted transparent icon input">
+                <input class="prompt" type="text"
+                       placeholder="Search for other trainers...">
+                <i class="search icon"></i>
             </div>
-        {% endblock %}
-
-        {% block sidebar %}
-            <div id="sidebar">
-                <div id="sidebar-body">
-                    <div id="player-card">
-                        <div id="player-team-logo" class="{{ user.player_team }}"></div>
-                        <h2>{{ user.username }}</h2>
-                        <label>Level {{ user.player_level }}</label>
-                    </div>
-                    <div id="sidebar-links">
-                        <div class="sidebar-link living-dex">
-                            <i class="icon book"></i>
-                            <span>Living DEX</span>
-                            <i class="icon right angle"></i>
-                        </div>
-                        <div class="sidebar-link legacy-moves">
-                            <i class="bolt icon"></i>
-                            <span>Legacy Moves</span>
-                            <i class="icon right angle"></i>
-                        </div>
-
-                        {% if user.username==current_user.username %}
-                        <div class="sidebar-link user-settings">
-                            <i class="cog icon"></i>
-                            <span>Settings</span>
-                            <i class="icon right angle"></i>
-                        </div>
-                        {% endif %}
-                    </div>
-
-                    <div id="footer-links">
-
-                    </div>
-                </div>
-            </div>
-        {% endblock %}
-
-        {% block content %}
-            <div id="content">
-                <div class="dex content-panel active">
-                    <div id="pokemon-filters">
-                        <div class="ui selection fluid dropdown">
-                            <input type="hidden" id="gen-select" value="1">
-                            <i class="dropdown icon"></i>
-                            <div class="default text">Generations</div>
-                            <div class="menu">
-                                <div class="item" data-value="all">All Released Generations</div>
-                                <div class="item" data-value="1">Gen I (Kanto)</div>
-                                <div class="item" data-value="2">Gen II (Johto)</div>
-                                <div class="item" data-value="3">Gen III (Hoenn)</div>
-                            </div>
-                        </div>
-
-
-                        <div class="ui selection fluid dropdown">
-                            <input type="hidden" id="cat-select">
-                            <i class="dropdown icon"></i>
-                            <div class="default text">Category</div>
-                            <div class="menu">
-                                <div class="item" data-value="all"><i class="icon book"></i> All
-                                    Pokemon
-                                </div>
-                                <div class="item" data-value="shiny"><i class="icon star"></i>
-                                    Shiny
-                                </div>
-                                <div class="item" data-value="alolan"><i
-                                        class="icon fas fa-umbrella-beach"></i> Alolan
-                                </div>
-                                <div class="item" data-value="regional"><i
-                                        class="icon fas fa-globe-africa"></i> Regional
-                                </div>
-                                <div class="item" data-value="legendary"><i
-                                        class="icon fab fa-phoenix-squadron"></i> Legendary
-                                </div>
-                                <div class="item" data-value="mythical"><i
-                                        class="icon fas fa-map-marker-question"></i> Mythical
-                                </div>
-                                <div class="item" data-value="costumed"><i
-                                        class="icon fab fa-pied-piper-hat"></i> Costumed
-                                </div>
-                                <div class="item" data-value="lucky"><i
-                                        class="icon fas fa-dice"></i> Lucky
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="ui selection fluid dropdown">
-                            <input type="hidden" id="own-select">
-                            <i class="dropdown icon"></i>
-                            <div class="default text">Owned vs. Need</div>
-                            <div class="menu">
-                                <div class="item" data-value="all"><i
-                                        class="icon far fa-clipboard-list"></i>Show All
-                                </div>
-                                <div class="item" data-value="owned"><i
-                                        class="icon far fa-check-square"></i> Owned
-                                </div>
-                                <div class="item" data-value="notowned"><i
-                                        class="icon far fa-square"></i> Not Owned
-                                </div>
-                            </div>
-                        </div>
-
-                        <div id="filter-view">
-                            <i class="fa fa-th-list" data-content="Toggle to List View"></i>
-                            <i class="fa fa-th-large" data-content="Toggle to Card View"></i>
-                        </div>
-                    </div>
-                    <div id="pokemon-list">
-                        <div id="pokemon-wrapper"></div>
-                    </div>
-                </div>
-
-                <div class="legacy-moves content-panel">
-                    <h1>Legacy moves coming soon!</h1>
-                </div>
-
-                <div class="user-settings content-panel">
-                    <h1 class="ui center aligned icon header">
-                        <i class="circular cogs icon"></i>
-                        User Settings
-                    </h1>
-
-                    <div class="ui segment">
-                        <div class="ui medium header">
-                            <i class="icon far fa-envelope-open"></i>
-                            <div class="content">Change Your Email Address</div>
-                        </div>
-                        <form class="ui form">
-                            <div class="field disabled">
-                                <input type="email" name="email" id="email" placeholder="Email Address">
-                            </div>
-                            <button class="ui button disabled" id="update-email">Change your email</button>
-                        </form>
-                    </div>
-
-                    <div class="ui segment">
-                        <div class="ui medium header">
-                            <i class="icon fas fa-user-secret"></i>
-                            <div class="content">Update Your Privacy Settings</div>
-                        </div>
-                        <form class="ui form">
-                            <div class="inline field">
-                                <div class="ui toggle checkbox">
-                                    <input type="checkbox" name="private-profile" id="private-profile" tabindex="0" class="hidden">
-                                    <label>Make my profile private</label>
-                                </div>
-                            </div>
-
-                            <div class="ui visible error message">
-                                <div class="header">
-                                    This will hide your profile from other users
-                                </div>
-                                <p>You will no longer appear in search results, and your direct link will no longer work for other users</p>
-                            </div>
-                        </form>
-                    </div>
-
-                    <div class="ui segment">
-                        <div class="ui medium header">
-                            <i class="icon fas fa-coffee"></i>
-                            <div class="content">Like what I do?</div>
-                        </div>
-                        <p>This is a fun pet project, but if you have any ideas, suggestions, or just want to see how it all works <a href="https://github.com/vidoardes/dex" target="_blank">you can check out the GitHub repo here.</a></p>
-                        <p>Although this isn't for profit, it does cost money to run, so if you'd like a donation to keep the server up I'd very much appreciate it. <a href="https://ko-fi.com/vidoardes" target="_blank">You can find my ko-fi page here.</a></p>
-                    </div>
-                </div>
-            </div>
-        {% endblock %}
+            <div class="results"></div>
+        </div>
+        <div id="menu">
+            <a href="{{ url_for('auth.logout') }}"><i class="fas fa-sign-out"></i></a>
+            <a href="{{ url_for('main.user', username=current_user.username) }}"><i
+                    class="fas fa-user-circle"></i></a>
+        </div>
     </div>
+    {% endblock %}
+
+    {% block sidebar %}
+    <div id="sidebar">
+        <div id="sidebar-body">
+            <div id="player-card">
+                <div id="player-team-logo" class="{{ user.player_team }}"></div>
+                <h2>{{ user.username }}</h2>
+                <label>Level {{ user.player_level }}</label>
+            </div>
+            <div id="sidebar-links">
+                <div class="sidebar-link living-dex">
+                    <i class="icon book"></i>
+                    <span>Living DEX</span>
+                    <i class="icon right angle"></i>
+                </div>
+                <div class="sidebar-link legacy-moves">
+                    <i class="bolt icon"></i>
+                    <span>Legacy Moves</span>
+                    <i class="icon right angle"></i>
+                </div>
+
+                {% if user.username==current_user.username %}
+                <div class="sidebar-link user-settings">
+                    <i class="cog icon"></i>
+                    <span>Settings</span>
+                    <i class="icon right angle"></i>
+                </div>
+                {% endif %}
+            </div>
+
+            <div id="footer-links">
+
+            </div>
+        </div>
+    </div>
+    {% endblock %}
+
+    {% block content %}
+    <div id="content">
+        <div class="dex content-panel active">
+            <div id="pokemon-filters">
+                <div class="ui selection fluid dropdown">
+                    <input type="hidden" id="gen-select" value="1">
+                    <i class="dropdown icon"></i>
+                    <div class="default text">Generations</div>
+                    <div class="menu">
+                        <div class="item" data-value="all">All Released Generations</div>
+                        <div class="item" data-value="1">Gen I (Kanto)</div>
+                        <div class="item" data-value="2">Gen II (Johto)</div>
+                        <div class="item" data-value="3">Gen III (Hoenn)</div>
+                    </div>
+                </div>
+
+
+                <div class="ui selection fluid dropdown">
+                    <input type="hidden" id="cat-select">
+                    <i class="dropdown icon"></i>
+                    <div class="default text">Category</div>
+                    <div class="menu">
+                        <div class="item" data-value="all"><i class="icon book"></i> All
+                            Pokemon
+                        </div>
+                        <div class="item" data-value="shiny"><i class="icon star"></i>
+                            Shiny
+                        </div>
+                        <div class="item" data-value="alolan"><i
+                                class="icon fas fa-umbrella-beach"></i> Alolan
+                        </div>
+                        <div class="item" data-value="regional"><i
+                                class="icon fas fa-globe-africa"></i> Regional
+                        </div>
+                        <div class="item" data-value="legendary"><i
+                                class="icon fab fa-phoenix-squadron"></i> Legendary
+                        </div>
+                        <div class="item" data-value="mythical"><i
+                                class="icon fas fa-map-marker-question"></i> Mythical
+                        </div>
+                        <div class="item" data-value="costumed"><i
+                                class="icon fab fa-pied-piper-hat"></i> Costumed
+                        </div>
+                        <div class="item" data-value="lucky"><i
+                                class="icon fas fa-dice"></i> Lucky
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ui selection fluid dropdown">
+                    <input type="hidden" id="own-select">
+                    <i class="dropdown icon"></i>
+                    <div class="default text">Owned vs. Need</div>
+                    <div class="menu">
+                        <div class="item" data-value="all"><i
+                                class="icon far fa-clipboard-list"></i>Show All
+                        </div>
+                        <div class="item" data-value="owned"><i
+                                class="icon far fa-check-square"></i> Owned
+                        </div>
+                        <div class="item" data-value="notowned"><i
+                                class="icon far fa-square"></i> Not Owned
+                        </div>
+                    </div>
+                </div>
+
+                <div id="filter-view">
+                    <i class="fa fa-th-list" data-content="Toggle to List View"></i>
+                    <i class="fa fa-th-large" data-content="Toggle to Card View"></i>
+                </div>
+            </div>
+            <div id="pokemon-list">
+                <div id="pokemon-wrapper"></div>
+            </div>
+        </div>
+
+        <div class="legacy-moves content-panel">
+            <h1>Legacy moves coming soon!</h1>
+        </div>
+
+        <div class="user-settings content-panel">
+            <h1 class="ui center aligned icon header">
+                <i class="circular cogs icon"></i>
+                User Settings
+            </h1>
+            <div class="ui horizontal padded segments">
+                <div class="ui segment padded">
+                    <div class="ui medium header">
+                        <i class="icon far fa-envelope-open"></i>
+                        <div class="content">Change Your Email Address</div>
+                    </div>
+                    <form class="ui form">
+                        <div class="field disabled">
+                            <input type="email" name="email" id="email" placeholder="Email Address">
+                        </div>
+                        <button class="ui primary button disabled right floated" id="update-email">Change your email
+                        </button>
+                    </form>
+                </div>
+                <div class="ui segment padded">
+                    <div class="ui medium header">
+                        <i class="icon fas fa-medal"></i>
+                        <div class="content">Update Your Trainer Level</div>
+                    </div>
+                    <div class="ui form">
+                        <div class="field">
+                            <input type="number" name="level" min="1" max="40" id="level" placeholder="Player Level">
+                        </div>
+                        <button class="ui primary button right floated" id="update-player-level"><i class='fas fa-fw fa-hand-point-up'></i> Level Up!</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="ui segment padded">
+                <div class="ui medium header">
+                    <i class="icon fas fa-user-secret"></i>
+                    <div class="content">Update Your Privacy Settings</div>
+                </div>
+                <form class="ui form">
+                    <div class="inline field">
+                        <div class="ui toggle checkbox">
+                            <input type="checkbox" name="private-profile" id="private-profile" tabindex="0"
+                                   class="hidden">
+                            <label>Make my profile private</label>
+                        </div>
+                    </div>
+
+                    <div class="ui visible error message">
+                        <div class="header">
+                            This will hide your profile from other users
+                        </div>
+                        <p>You will no longer appear in search results, and your direct link will no longer work for
+                            other users</p>
+                    </div>
+                </form>
+            </div>
+
+
+            <div class="ui segment">
+                <div class="ui medium header">
+                    <i class="icon fas fa-coffee"></i>
+                    <div class="content">Like what I do?</div>
+                </div>
+                <p>This is a fun pet project, but if you have any ideas, suggestions, or just want to see how it all
+                    works <a href="https://github.com/vidoardes/dex" target="_blank">you can check out the GitHub repo
+                        here.</a></p>
+                <p>Although this isn't for profit, it does cost money to run, so if you'd like a donation to keep the
+                    server up I'd very much appreciate it. <a href="https://ko-fi.com/vidoardes" target="_blank">You can
+                        find my ko-fi page here.</a></p>
+            </div>
+        </div>
+    </div>
+    {% endblock %}
+</div>
 {% endblock %}
 
 {% block scripts %}
-    <script src="https://cdn.jsdelivr.net/npm/intro.js@2/minified/intro.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2/dist/semantic.min.js"></script>
-    <script src="{{ url_for('static', filename='bundle.js') }}"></script>
+<script src="https://cdn.jsdelivr.net/npm/intro.js@2/minified/intro.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/semantic-ui@2/dist/semantic.min.js"></script>
+<script src="{{ url_for('static', filename='bundle.js') }}"></script>
 {% endblock %}

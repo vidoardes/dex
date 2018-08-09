@@ -1,6 +1,7 @@
+import re
+
 from flask import request, json
 from flask_login import login_required, current_user
-
 from app import db
 from app.api import bp
 from app.models import User
@@ -42,12 +43,14 @@ def get_user_settings(username):
 
     if current_user.username == user.username:
         q = request.args.get("settings", "")
-        settings = {}
 
         if q == "all":
-            settings["config"] = user.settings
-            settings["public"] = user.is_public
-            settings["email"] = user.email
+            settings = {
+                "config": user.settings,
+                "public": user.is_public,
+                "email": user.email,
+                "player_level": user.player_level,
+            }
 
         return (
             json.dumps({"success": True, "settings": settings}),
@@ -70,8 +73,17 @@ def update_user(username):
             user.taken_tour = data.get("tour")
 
         if "public" in data:
-            print(data.get("public"))
             user.is_public = data.get("public")
+
+        if "player_level" in data:
+            if re.match("^([1-9]|3[0-9]|40)$", data.get("player_level")):
+                user.player_level = data.get("player_level")
+            else:
+                return (
+                    json.dumps({"success": False}),
+                    500,
+                    {"ContentType": "application/json"},
+                )
 
         if "email" in data:
             if user.email == data.get("email"):
@@ -106,10 +118,12 @@ def update_user(username):
 
         db.session.commit()
 
-        settings = {}
-        settings["config"] = user.settings
-        settings["public"] = user.is_public
-        settings["email"] = user.email
+        settings = {
+            "config": user.settings,
+            "public": user.is_public,
+            "email": user.email,
+            "player_level": user.player_level,
+        }
 
         return (
             json.dumps({"success": True, "settings": settings}),

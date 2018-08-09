@@ -309,6 +309,7 @@ $('.sidebar-link.user-settings').click(function () {
                 }
 
                 $('.content-panel.user-settings #email').val(_settings.email)
+                $('.content-panel.user-settings #level').val(_settings.player_level)
                 $('.content-panel.user-settings').addClass('active').fadeIn('fast')
                 $('#sidebar').removeClass('show-sidebar')
             },
@@ -333,6 +334,31 @@ $('#update-email').click(function () {
         },
         error: function (error) {
             console.log(error.status)
+        }
+    })
+})
+
+$('#update-player-level').click(function () {
+    let obj = {}
+    obj['player_level'] = $('#level').val()
+    let data = {data: JSON.stringify(obj)}
+
+    $.ajax({
+        url: '/api/user/' + $('#user-profile').data('username') + '/update',
+        data: data,
+        type: 'PUT',
+        success: function (response) {
+            $('#update-player-level').removeClass("primary").addClass("positive").html("<i class='fas fa-fw fa-check'></i> Leveled Up!").transition('pulse')
+            setTimeout(function(){
+                $('#update-player-level').transition('pulse').removeClass("positive").addClass("primary").html("<i class='fas fa-fw fa-hand-point-up'></i> Level Up!")
+            }, 3000)
+        },
+        error: function (error) {
+            console.log(error.status)
+            $('#update-player-level').removeClass("primary").addClass("negative").html("<i class='fas fa-fw fa-times'></i> Invalid Level!").transition('shake')
+            setTimeout(function(){
+                $('#update-player-level').transition('pulse').removeClass("negative").addClass("primary").html("<i class='fas fa-fw fa-hand-point-up'></i> Level Up!")
+            }, 3000)
         }
     })
 })
