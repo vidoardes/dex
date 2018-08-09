@@ -151,6 +151,10 @@ $.fn.renderpokemon = function (list, type) {
     }
 }
 
+$.fn.api.settings.api = {
+    'search': '/api/users/get?q={query}'
+}
+
 let qs = {}
 
 $(function () {
