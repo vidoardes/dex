@@ -162,9 +162,9 @@ $(function () {
 
     $('.ui.checkbox').checkbox({
         onChange: function () {
-            let obj = {}
-            obj['public'] = $('.ui.checkbox').checkbox('is unchecked')
-            let data = {data: JSON.stringify(obj)}
+            let _obj = {}
+            _obj['public'] = $('.ui.checkbox').checkbox('is unchecked')
+            let data = {data: JSON.stringify(_obj)}
 
             $.ajax({
                 url: '/api/user/' + $('#user-profile').data('username') + '/update',
@@ -321,27 +321,34 @@ $('.sidebar-link.user-settings').click(function () {
 })
 
 $('#update-email').click(function () {
-    let obj = {}
-    obj['email'] = $('#email').val()
-    let data = {data: JSON.stringify(obj)}
+    let _obj = {}
+    _obj['email'] = $('#email').val()
+    let data = {data: JSON.stringify(_obj)}
 
     $.ajax({
         url: '/api/user/' + $('#user-profile').data('username') + '/update',
         data: data,
         type: 'PUT',
         success: function (response) {
-
+            $('#update-email').removeClass("primary").addClass("positive").html("<i class='fas fa-fw fa-check'></i> Email Saved!").transition('pulse')
+            setTimeout(function(){
+                $('#update-email').transition('pulse').removeClass("positive").addClass("primary").html("<i class='fas fa-fw fa-envelope'></i> Update Email")
+            }, 3000)
         },
         error: function (error) {
             console.log(error.status)
+            $('#update-email').removeClass("primary").addClass("negative").html("<i class='fas fa-fw fa-times'></i> Already Taken!").transition('shake')
+            setTimeout(function(){
+                $('#update-email').transition('pulse').removeClass("negative").addClass("primary").html("<i class='fas fa-fw fa-envelope'></i> Update Email")
+            }, 3000)
         }
     })
 })
 
 $('#update-player-level').click(function () {
-    let obj = {}
-    obj['player_level'] = $('#level').val()
-    let data = {data: JSON.stringify(obj)}
+    let _obj = {}
+    _obj['player_level'] = $('#level').val()
+    let data = {data: JSON.stringify(_obj)}
 
     $.ajax({
         url: '/api/user/' + $('#user-profile').data('username') + '/update',

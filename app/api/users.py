@@ -68,53 +68,54 @@ def update_user(username):
 
     if current_user.username == user.username:
         data = json.loads(request.form.get("data"))
+        email = data.get("email")
+        tour = data.get("tour")
+        public = data.get("public")
+        player_level = data.get("player_level")
 
-        if "tour" in data:
-            user.taken_tour = data.get("tour")
-
-        if "public" in data:
-            user.is_public = data.get("public")
-
-        if "player_level" in data:
-            if re.match("^([1-9]|3[0-9]|40)$", data.get("player_level")):
-                user.player_level = data.get("player_level")
+        if tour is not None:
+            if isinstance(tour, bool):
+                user.taken_tour = tour
             else:
                 return (
                     json.dumps({"success": False}),
-                    500,
+                    422,
                     {"ContentType": "application/json"},
                 )
 
-        if "email" in data:
-            if user.email == data.get("email"):
+        if public is not None:
+            if isinstance(public, bool):
+                user.is_public = public
+            else:
                 return (
-                    json.dumps(
-                        {
-                            "success": False,
-                            "message": "Your email address is already set to "
-                            + data.get("email"),
-                        }
-                    ),
-                    403,
+                    json.dumps({"success": False}),
+                    422,
                     {"ContentType": "application/json"},
                 )
 
-            exists = User.query.filter_by(email=data.get("email")).first_or_404()
-
-            if exists:
+        if player_level is not None:
+            if (
+                player_level.isdigit() and re.match("^([1-9]|3[0-9]|40)$", player_level)
+            ) or player_level is None:
+                user.player_level = player_level
+            else:
                 return (
-                    json.dumps(
-                        {
-                            "success": False,
-                            "message": "That email address is already registered"
-                            + data.get("email"),
-                        }
-                    ),
-                    403,
+                    json.dumps({"success": False}),
+                    422,
                     {"ContentType": "application/json"},
                 )
 
-            user.email = data.get("email")
+        if email is not None:
+            exists = User.query.filter_by(email=email).all()
+
+            if len(exists) > 0 or not re.match("^[^@]+@[^@]+\.[^@]+$", email):
+                return (
+                    json.dumps({"success": False}),
+                    422,
+                    {"ContentType": "application/json"},
+                )
+            else:
+                user.email = email
 
         db.session.commit()
 
