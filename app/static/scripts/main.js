@@ -279,6 +279,7 @@ $('.sidebar-link.living-dex').click(function () {
         $('.content-panel.active').fadeOut('fast', function () {
             $('.content-panel.active').removeClass('active')
             $('.content-panel.dex').addClass('active').fadeIn('fast')
+            $('#sidebar').removeClass('show-sidebar')
         })
     }
 })
@@ -287,6 +288,7 @@ $('.sidebar-link.legacy-moves').click(function () {
     $('.content-panel.active').fadeOut('fast', function () {
         $('.content-panel.active').removeClass('active')
         $('.content-panel.legacy-moves').addClass('active').fadeIn('fast')
+        $('#sidebar').removeClass('show-sidebar')
     })
 })
 
@@ -308,6 +310,7 @@ $('.sidebar-link.user-settings').click(function () {
 
                 $('.content-panel.user-settings #email').val(_settings.email)
                 $('.content-panel.user-settings').addClass('active').fadeIn('fast')
+                $('#sidebar').removeClass('show-sidebar')
             },
             error: function (error) {
                 console.log(error.status)

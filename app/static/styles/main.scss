@@ -344,15 +344,21 @@
     grid-template-areas: "body" "footer";
     grid-template-rows: auto 40px;
     border-right: 1px #e1e4e8 solid;
-    transition: width 1s;
+    transition: all 0.3s ease-out;
 
     @include tablet {
-      width: 0;
+      position: absolute;
+      left: -100vw;
       padding: 0;
       overflow: hidden;
+      width: 100vw;
+      height: calc(100vh - 62px);
+      top: 62px;
+      background: #fff;
+      z-index: 3;
 
       &.show-sidebar {
-        width: 100vw;
+        left: 0;
       }
     }
 
@@ -360,6 +366,10 @@
       grid-area: body;
       padding: 24px;
       width: 302px;
+
+      @include tablet {
+        width: 100vw;
+      }
 
       #sidebar-links {
         margin-top: 30px;
@@ -442,6 +452,10 @@
     background: #f6f8fa;
     padding: 20px;
 
+    @include phone {
+      padding: 5px;
+    }
+
     .content-panel {
       display: none;
 
@@ -461,6 +475,7 @@
     padding: 10px;
     display: grid;
     grid-column-gap: 10px;
+    grid-template-areas: "dd dd dd view";
     grid-template-rows: auto;
     grid-template-columns: 1fr 1fr 1fr 40px;
 
@@ -470,8 +485,13 @@
     }
 
     @include phone {
-      margin: 2px 2px 0 2px;
-      border-radius: 4px 4px 0 0;
+      margin: 2px 8px 7px;
+      grid-gap: 5px;
+      grid-template-areas: "dd view"
+                           "dd view"
+                           "dd view";
+      grid-template-rows: 1fr 1fr 1fr;
+      grid-template-columns: 1fr 40px;
     }
 
     #filter-view {
@@ -479,6 +499,7 @@
       text-align: center;
       line-height: 38px;
       color: #276f86;
+      grid-area: view;
     }
   }
 
@@ -493,9 +514,10 @@
     }
 
     @include phone {
-      padding: 2px;
-      margin: 0 2px;
+      padding: 0;
+      margin: 0;
       border-radius: 0;
+      height: calc(100vh - 217px);
     }
 
     #pokemon-wrapper {
