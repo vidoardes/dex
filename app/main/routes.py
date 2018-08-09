@@ -16,4 +16,3 @@ def user(username):
         abort(404)
     else:
         return render_template("main/user.html", user=user)
-

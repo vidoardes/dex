@@ -56,7 +56,10 @@ def fetch(username):
 
     pokemon = sorted(
         merge_dict_lists(
-            "name", pokemon_list, json.loads(user.pokemon_owned).get(list, []), append=False
+            "name",
+            pokemon_list,
+            json.loads(user.pokemon_owned).get(list, []),
+            append=False,
         ),
         key=lambda k: (k["dex"], k["img_suffix"]),
     )
