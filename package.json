@@ -19,8 +19,13 @@
   "dependencies": {
     "browser-sync": "^2.24.6",
     "gulp": "^3.9.1",
+    "gulp-clean": "^0.4.0",
     "gulp-rename": "^1.4.0",
     "gulp-sass": "^4.0.1",
+    "run-sequence": "^2.2.1",
     "webpack-stream": "^5.1.1"
+  },
+  "devDependencies": {
+    "gulp-zip": "^4.2.0"
   }
 }
