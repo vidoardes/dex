@@ -68,12 +68,10 @@ def fetch(username):
         _pokemon_owned = []
 
         for p in pokemon:
-            if cat not in ["shiny", "alolan", "lucky"]:
+            if cat not in ["shiny", "lucky"]:
                 _owned = p.get("owned", False)
             elif cat == "shiny":
                 _owned = p.get("shinyowned", False)
-            elif cat == "alolan":
-                _owned = p.get("alolanowned", False)
             elif cat == "lucky":
                 _owned = p.get("luckyowned", False)
 

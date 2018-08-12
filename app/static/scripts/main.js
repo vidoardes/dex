@@ -98,20 +98,19 @@ $.fn.renderpokemon = function (list, type) {
         }
     }
 
-    const Pokemon = ({name, dex, img_suffix, released, owned, shiny, shinyowned, male, maleowned, female, femaleowned, ungendered, ungenderedowned, alolan, alolanowned, luckyowned, regional, legendary}) => `
+    const Pokemon = ({name, dex, img_suffix, released, owned, shiny, shinyowned, male, maleowned, female, femaleowned, ungendered, ungenderedowned, luckyowned, regional, legendary}) => `
         <div class="pokemon ${owned ? 'owned' : ''}"
             ${maleowned ? 'data-maleowned="True"' : ''}
             ${femaleowned ? 'data-femaleowned="True"' : ''}
             ${ungenderedowned ? 'data-ungenderedowned="True"' : ''}
             ${shinyowned ? 'data-shinyowned="True"' : ''}
-            ${alolanowned ? 'data-alolanowned="True"' : ''}
             ${luckyowned ? 'data-luckyowned="True"' : ''}
             ${owned ? 'data-owned="True"' : ''}
             ${released ? '' : 'data-unreleased="False"'}
             data-key="${name}"
             data-dex="${dex}">
             
-            <div class="img" style="background-image: url('../static/img/sprites/pokemon_icon_${dex.toString().padStart(3, '0')}${qs.cat === 'alolan' ? '_61' : img_suffix}${qs.cat === 'shiny' ? '_shiny' : ''}.png')"></div>
+            <div class="img" style="background-image: url('../static/img/sprites/pokemon_icon_${dex.toString().padStart(3, '0')}${img_suffix}${qs.cat === 'shiny' ? '_shiny' : ''}.png')"></div>
             <div class="info">${name}</div>
             <div class="dex-num">#${dex.toString().padStart(3, '0')}</div>
             ${legendary ? '<div class="dex-special legendary"></div>' : ''}
@@ -119,7 +118,6 @@ $.fn.renderpokemon = function (list, type) {
             <div class="pm-opt">
                 ${ungendered ? pokemonoptions('ungendered', ungendered, ungenderedowned, released) : pokemonoptions('male', male, maleowned, released) + pokemonoptions('female', female, femaleowned, released)}
                 ${pokemonoptions('shiny', shiny, shinyowned, released)}
-                ${pokemonoptions('alolan', alolan, alolanowned, released)}
                 ${pokemonoptions('lucky', 'True', luckyowned, released)}
             </div>
         </div>

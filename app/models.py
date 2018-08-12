@@ -81,11 +81,14 @@ class Pokemon(db.Model):
     mythical = db.Column(db.Boolean, default=False, nullable=False)
     gen = db.Column(db.Integer, default=0, nullable=False)
     released = db.Column(db.Boolean, default=False, nullable=False)
-    hatch = db.Column(db.Boolean, default=False, nullable=False)
-    raid = db.Column(db.Boolean, default=False, nullable=False)
+    hatch = db.Column(db.Integer, nullable=True)
+    raid = db.Column(db.Integer, nullable=True)
     costumed = db.Column(db.Boolean, default=False, nullable=False)
     img_suffix = db.Column(db.String(6), default="_00", nullable=False)
     in_game = db.Column(db.Boolean, default=False, nullable=False)
+    base_attack = db.Column(db.Integer, default=1, nullable=False)
+    base_defense = db.Column(db.Integer, default=1, nullable=False)
+    base_stamina = db.Column(db.Integer, default=1, nullable=False)
 
     def __repr__(self):
         return "<Profile {}>".format(self.body)
