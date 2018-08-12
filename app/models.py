@@ -3,6 +3,7 @@ from hashlib import md5
 from time import time
 
 import jwt
+import math
 from flask import current_app, url_for
 from flask_login import UserMixin
 
@@ -89,6 +90,32 @@ class Pokemon(db.Model):
     base_attack = db.Column(db.Integer, default=1, nullable=False)
     base_defense = db.Column(db.Integer, default=1, nullable=False)
     base_stamina = db.Column(db.Integer, default=1, nullable=False)
+
+    def __repr__(self):
+        return "<Profile {}>".format(self.body)
+
+    def as_dict(self):
+        return {c.name: getattr(self, c.name) for c in self.__table__.columns}
+
+    def calc_cp(self, level=40, atk_iv=15, defense_iv=15, stamina_iv=15):
+        base_atk = self.base_attack
+        base_defense = self.base_defense
+        base_stamina = self.base_stamina
+
+        cp_multiplier = CPMultipliers.query.filter_by(level=float(level)).first_or_404()
+
+        atk = (base_atk + atk_iv)
+        defense = (base_defense + defense_iv)**0.5
+        stamina = (base_stamina + stamina_iv)**0.5
+
+        return max(10, math.floor((atk * defense * stamina * (cp_multiplier.cp_multiplier**2)) / 10))
+
+
+class CPMultipliers(db.Model):
+    __tablename__ = "cp_multiplier"
+
+    level = db.Column(db.Float, unique=True, primary_key=True)
+    cp_multiplier = db.Column(db.Float)
 
     def __repr__(self):
         return "<Profile {}>".format(self.body)
