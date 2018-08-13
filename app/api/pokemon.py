@@ -110,8 +110,13 @@ def update_pokemon(username):
 @bp.route("/pokemon/raidbosses/get", methods=["GET"])
 @login_required
 def fetch_raid_bosses():
-    rb_list = Pokemon.query.filter_by(in_game=True).filter_by(released=True).filter(Pokemon.raid > 0).all()
-    raid_bosses = {5: [], 4: [], 3: [], 2: [], 1: [],}
+    rb_list = (
+        Pokemon.query.filter_by(in_game=True)
+        .filter_by(released=True)
+        .filter(Pokemon.raid > 0)
+        .all()
+    )
+    raid_bosses = {5: [], 4: [], 3: [], 2: [], 1: []}
 
     for rb in rb_list:
         raid_boss = rb.as_dict()
@@ -123,4 +128,8 @@ def fetch_raid_bosses():
 
         raid_bosses[rb.raid].append(raid_boss)
 
-    return json.dumps({"success": True, "raidbosses": raid_bosses}), 200, {"ContentType": "application/json"}
+    return (
+        json.dumps({"success": True, "raidbosses": raid_bosses}),
+        200,
+        {"ContentType": "application/json"},
+    )

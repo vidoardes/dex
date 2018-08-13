@@ -108,19 +108,24 @@ class Pokemon(db.Model):
 
         cp_multiplier = CPMultipliers.query.filter_by(level=float(level)).first_or_404()
 
-        atk = (base_atk + atk_iv)
-        defense = (base_defense + defense_iv)**0.5
-        stamina = (base_stamina + stamina_iv)**0.5
+        atk = base_atk + atk_iv
+        defense = (base_defense + defense_iv) ** 0.5
+        stamina = (base_stamina + stamina_iv) ** 0.5
 
-        return max(10, math.floor((atk * defense * stamina * (cp_multiplier.cp_multiplier**2)) / 10))
+        return max(
+            10,
+            math.floor(
+                (atk * defense * stamina * (cp_multiplier.cp_multiplier ** 2)) / 10
+            ),
+        )
 
     def calc_raid_cp(self):
-        raid_stamina = {1:600, 2:1800, 3:3000, 4:7500, 5:12500,}
+        raid_stamina = {1: 600, 2: 1800, 3: 3000, 4: 7500, 5: 12500}
         atk = self.base_attack + 15
-        defense = (self.base_defense + 15)**0.5
-        stamina = (raid_stamina.get(self.raid) + 15)**0.5
+        defense = (self.base_defense + 15) ** 0.5
+        stamina = (raid_stamina.get(self.raid) + 15) ** 0.5
 
-        return math.floor((atk * defense * stamina ) / 10)
+        return math.floor((atk * defense * stamina) / 10)
 
 
 class CPMultipliers(db.Model):

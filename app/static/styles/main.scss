@@ -390,12 +390,17 @@
           color: #215788;
           padding: 25px 10px;
           text-align: left;
+          border-radius: 3px;
 
           &:hover {
             color: lighten(#215788, 10%);
             cursor: pointer;
           }
 
+          &.active {
+            background: lighten(#215788, 60%);
+
+          }
         }
       }
     }
@@ -741,10 +746,15 @@
             background-size: contain;
           }
 
+          .type {
+            display: none;
+          }
+
           .info {
             grid-area: name;
             text-align: left;
             line-height: 40px;
+            height: 40px;
             padding-right: 10px;
             white-space: nowrap;
             overflow: hidden;
@@ -810,6 +820,10 @@
 }
 
 #raid-bosses-list {
+  overflow-y: scroll;
+  height: calc(100vh - 102px);
+  padding-right: 10px;
+
   .raid-boss-tier {
     &.t1 .raid-boss {
       background-color: #e5a1b0;
@@ -873,12 +887,12 @@
 
         .shiny {
           position: absolute;
-          top: 3px;
-          right: 3px;
+          top: 0px;
+          left: -20px;
           color: #fff8db;
 
           i {
-            text-shadow: -1px 0 #b58105, 0 1px #b58105, 1px 0 #b58105, 0 -1px #b58105;
+            text-shadow: -2px 0 #b58105, 0 2px #b58105, 2px 0 #b58105, 0 -2px #b58105;
           }
         }
       }

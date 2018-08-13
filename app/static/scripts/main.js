@@ -278,7 +278,21 @@ $('.sidebar-link.living-dex').click(function () {
     if (!$('.sidebar-link.living-dex').hasClass('active')) {
         $('.content-panel.active').fadeOut('fast', function () {
             $('.content-panel.active').removeClass('active')
+            $('.sidebar-link.active').removeClass('active')
+            $('.sidebar-link.living-dex').addClass('active')
             $('.content-panel.dex').addClass('active').fadeIn('fast')
+            $('#sidebar').removeClass('show-sidebar')
+        })
+    }
+})
+
+$('.sidebar-link.legacy-moves').click(function () {
+    if (!$('.sidebar-link.legacy-moves').hasClass('active')) {
+        $('.content-panel.active').fadeOut('fast', function () {
+            $('.content-panel.active').removeClass('active')
+            $('.sidebar-link.active').removeClass('active')
+            $('.sidebar-link.legacy-moves').addClass('active')
+            $('.content-panel.legacy-moves').addClass('active').fadeIn('fast')
             $('#sidebar').removeClass('show-sidebar')
         })
     }
@@ -288,6 +302,8 @@ $('.sidebar-link.living-dex').click(function () {
 $('.sidebar-link.raid-bosses').click(function () {
     $('.content-panel.active').fadeOut('fast', function () {
         $('.content-panel.active').removeClass('active')
+        $('.sidebar-link.active').removeClass('active')
+        $('.sidebar-link.raid-bosses').addClass('active')
         $('.content-panel.raid-bosses').addClass('active').fadeIn('fast')
         $('#sidebar').removeClass('show-sidebar')
 
@@ -335,8 +351,6 @@ $('.sidebar-link.raid-bosses').click(function () {
 
 $('.sidebar-link.user-settings').click(function () {
     $('.content-panel.active').fadeOut('fast', function () {
-        $('.content-panel.active').removeClass('active')
-
         $.ajax({
             url: '/api/user/' + $('#user-profile').data('username') + '/get?settings=all',
             type: 'GET',
@@ -349,6 +363,9 @@ $('.sidebar-link.user-settings').click(function () {
                     $('.content-panel.user-settings .ui.checkbox').checkbox('set unchecked')
                 }
 
+                $('.content-panel.active').removeClass('active')
+                $('.sidebar-link.active').removeClass('active')
+                $('.sidebar-link.user-settings').addClass('active')
                 $('.content-panel.user-settings #email').val(_settings.email)
                 $('.content-panel.user-settings #level').val(_settings.player_level)
                 $('.content-panel.user-settings').addClass('active').fadeIn('fast')
