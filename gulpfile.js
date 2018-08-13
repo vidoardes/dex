@@ -18,6 +18,7 @@ function swallowError(error) {
 gulp.task("js", function () {
     return gulp.src("app/static/scripts/main.js")
         .pipe(webpack({output: {filename: "bundle.js"}, mode: "production"}))
+        .on("error", swallowError)
         .pipe(gulp.dest("app/static/"))
 })
 
