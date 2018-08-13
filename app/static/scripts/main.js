@@ -98,7 +98,7 @@ $.fn.renderpokemon = function (list, type) {
         }
     }
 
-    const Pokemon = ({name, dex, img_suffix, released, owned, shiny, shinyowned, male, maleowned, female, femaleowned, ungendered, ungenderedowned, luckyowned,}) => `
+    const Pokemon = ({name, dex, img_suffix, released, owned, shiny, shinyowned, male, maleowned, female, femaleowned, ungendered, ungenderedowned, luckyowned, type1, type2,}) => `
         <div class="pokemon ${owned ? 'owned' : ''}"
             ${maleowned ? 'data-maleowned="True"' : ''}
             ${femaleowned ? 'data-femaleowned="True"' : ''}
@@ -112,6 +112,10 @@ $.fn.renderpokemon = function (list, type) {
             
             <div class="img" style="background-image: url('../static/img/sprites/pokemon_icon_${dex.toString().padStart(3, '0')}${img_suffix}${qs.cat === 'shiny' ? '_shiny' : ''}.png')"></div>
             <div class="info">${name}</div>
+            <div class="type">
+                ${type1 !== null ? '<img src="../static/img/types/icon_' + type1 + '.png" />' : ''}
+                ${type2 !== null ? '<img src="../static/img/types/icon_' + type2 + '.png" />' : ''}
+            </div>
             <div class="dex-num">#${dex.toString().padStart(3, '0')}</div>
             <div class="pm-opt">
                 ${ungendered ? pokemonoptions('ungendered', ungendered, ungenderedowned, released) : pokemonoptions('male', male, maleowned, released) + pokemonoptions('female', female, femaleowned, released)}
@@ -291,15 +295,18 @@ $('.sidebar-link.raid-bosses').click(function () {
             url: '/api/pokemon/raidbosses/get',
             type: 'GET',
             success: function (response) {
-                const RaidBoss = ({name, dex, img_suffix, shiny, raid, battle_cp, max_cp, max_cp_weather, min_cp, min_cp_weather}) => `
+                const RaidBoss = ({name, dex, img_suffix, shiny, raid, battle_cp, max_cp, max_cp_weather, min_cp, min_cp_weather, type1, type2}) => `
                     <div class="raid-boss">
                         <div class="tier">T${raid}</div>
                         <div class="img">
                             <img src="../static/img/sprites/pokemon_icon_${dex.toString().padStart(3, '0')}${img_suffix}${shiny ? '_shiny' : ''}.png" />
                             ${shiny ? "<div class='shiny'><i class='icon star'></i></div>": "" }
                         </div>
-                        <div class="name">#${dex.toString().padStart(3, '0')} ${name}</div>
-                        <div class="type"></div>
+                        <div class="name">${name}</div>
+                        <div class="type">
+                            ${type1 !== null ? '<img src="../static/img/types/icon_' + type1 + '.png" />' : ''}
+                            ${type2 !== null ? '<img src="../static/img/types/icon_' + type2 + '.png" />' : ''}
+                        </div>
                         <div class="battle_cp">${battle_cp.toLocaleString('en')}CP</div>
                         <div class="cp">
                             <div class="cp_range">${min_cp.toLocaleString('en')} - ${max_cp.toLocaleString('en')}</div>
@@ -310,8 +317,6 @@ $('.sidebar-link.raid-bosses').click(function () {
                 `
 
                 let _raid_bosses = JSON.parse(response)['raidbosses']
-
-                console.log(_raid_bosses)
 
                 for (const [key, value] of Object.entries(_raid_bosses)) {
                     let _raid_bosses_tier = value

@@ -90,6 +90,10 @@ class Pokemon(db.Model):
     base_attack = db.Column(db.Integer, default=1, nullable=False)
     base_defense = db.Column(db.Integer, default=1, nullable=False)
     base_stamina = db.Column(db.Integer, default=1, nullable=False)
+    classification = db.Column(db.String(120))
+    japanese_name = db.Column(db.String(120))
+    type1 = db.Column(db.String(20))
+    type2 = db.Column(db.String(20))
 
     def __repr__(self):
         return "<Profile {}>".format(self.body)
