@@ -110,6 +110,14 @@ class Pokemon(db.Model):
 
         return max(10, math.floor((atk * defense * stamina * (cp_multiplier.cp_multiplier**2)) / 10))
 
+    def calc_raid_cp(self):
+        raid_stamina = {1:600, 2:1800, 3:3000, 4:7500, 5:12500,}
+        atk = self.base_attack + 15
+        defense = (self.base_defense + 15)**0.5
+        stamina = (raid_stamina.get(self.raid) + 15)**0.5
+
+        return math.floor((atk * defense * stamina ) / 10)
+
 
 class CPMultipliers(db.Model):
     __tablename__ = "cp_multiplier"

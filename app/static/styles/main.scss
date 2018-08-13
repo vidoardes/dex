@@ -355,7 +355,7 @@
       top: 62px;
       background: #fff;
       z-index: 3;
-      box-shadow: 10px 10px 20px -10px rgba(0,0,0,0.43);
+      box-shadow: 10px 10px 20px -10px rgba(0, 0, 0, 0.43);
 
       &.show-sidebar {
         left: 0;
@@ -485,6 +485,10 @@
     grid-template-rows: auto;
     grid-template-columns: 1fr 1fr 1fr 40px;
 
+    i {
+      color: #215788;
+    }
+
     @include tablet {
       padding: 5px;
       margin: 3px;
@@ -493,9 +497,7 @@
     @include phone {
       margin: 2px 8px 7px;
       grid-gap: 5px;
-      grid-template-areas: "dd view"
-                           "dd view"
-                           "dd view";
+      grid-template-areas: "dd view" "dd view" "dd view";
       grid-template-rows: 1fr 1fr 1fr;
       grid-template-columns: 1fr 40px;
     }
@@ -607,7 +609,7 @@
             background-size: 16px;
             background-repeat: no-repeat;
             background-position: 2px 3px;
-            background-image: url('../static/img/legendary-icon.png');
+            background-image: url('../static/img/icon_legendary.png');
           }
 
           &.regional {
@@ -741,7 +743,6 @@
             margin: 0px;
 
             .opt {
-              width: 20%;
               height: 40px;
               line-height: 40px;
               border-radius: 0;
@@ -785,6 +786,111 @@
         font-weight: 400;
         margin-bottom: 20px;
         color: #215788;
+      }
+    }
+  }
+}
+
+#raid-bosses-list {
+  .raid-boss-tier {
+    &.t1 .raid-boss {
+      background-color: #e5a1b0;
+    }
+
+    &.t2 .raid-boss {
+      background-color: #eb6385;
+    }
+
+    &.t3 .raid-boss {
+      background-color: #fccc6d;
+    }
+
+    &.t4 .raid-boss {
+      background-color: #e3b346;
+    }
+
+    &.t5 .raid-boss {
+      background-color: #c9a0e2;
+    }
+
+    .raid-boss {
+      position: relative;
+      margin: 10px 0;
+      background: #2aabd2;
+      border-radius: 4px;
+      display: grid;
+      grid-template-areas: "tier img name type battlecp cp";
+      grid-template-columns: 50px 50px auto 100px 100px 120px;
+      grid-template-rows: 50px;
+      grid-gap: 5px;
+
+      .tier {
+        grid-area: tier;
+        text-align: center;
+        font-weight: 600;
+        font-size: 16px;
+        line-height: 50px;
+      }
+
+      .img {
+        grid-area: img;
+        position: relative;
+
+        img {
+          position: absolute;
+          width: 70px;
+          bottom: -5px;
+          right: 0;
+        }
+
+        .shiny {
+          position: absolute;
+          top: 3px;
+          right: 3px;
+          color: #fff8db;
+
+          i {
+            text-shadow: -1px 0 #b58105, 0 1px #b58105, 1px 0 #b58105, 0 -1px #b58105;
+          }
+        }
+      }
+
+      .name {
+        grid-area: name;
+        font-weight: 600;
+        font-size: 16px;
+        line-height: 50px;
+      }
+
+      .type {
+        grid-area: type;
+      }
+
+      .battle_cp {
+        grid-area: battlecp;
+        font-weight: 600;
+        font-size: 16px;
+        line-height: 26px;
+        color: #333;
+        margin: 12px 0;
+        background: rgba(255, 255, 255, 0.4);
+        border-radius: 4px;
+        text-align: center;
+      }
+
+      .cp {
+        grid-area: cp;
+
+        div {
+          text-align: center;
+          line-height: 25px;
+          font-weight: 600;
+          color: #555;
+
+          &.cp_range_weather {
+            color: #333;
+          }
+        }
       }
     }
   }

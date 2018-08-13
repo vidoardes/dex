@@ -43,6 +43,11 @@
                     <span>Legacy Moves</span>
                     <i class="icon right angle"></i>
                 </div>
+                <div class="sidebar-link raid-bosses">
+                    <i class="legendary icon"></i>
+                    <span>Raid Bosses</span>
+                    <i class="icon right angle"></i>
+                </div>
 
                 {% if user.username==current_user.username %}
                 <div class="sidebar-link user-settings">
@@ -85,7 +90,7 @@
                         <div class="item" data-value="all"><i class="icon book"></i> All
                             Pokemon
                         </div>
-                        <div class="item" data-value="shiny"><i class="icon star"></i>
+                        <div class="item" data-value="shiny"><i class="icon shiny"></i>
                             Shiny
                         </div>
                         <div class="item" data-value="alolan"><i
@@ -95,7 +100,7 @@
                                 class="icon fas fa-globe-africa"></i> Regional
                         </div>
                         <div class="item" data-value="legendary"><i
-                                class="icon fab fa-phoenix-squadron"></i> Legendary
+                                class="icon legendary"></i> Legendary
                         </div>
                         <div class="item" data-value="mythical"><i
                                 class="icon fas fa-map-marker-question"></i> Mythical
@@ -138,6 +143,11 @@
 
         <div class="legacy-moves content-panel">
             <h1>Legacy moves coming soon!</h1>
+        </div>
+
+        <div class="raid-bosses content-panel">
+            <h1>Raid Bosses</h1>
+            <div id="raid-bosses-list"></div>
         </div>
 
         <div class="user-settings content-panel">

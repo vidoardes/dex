@@ -25,7 +25,7 @@ def merge_dict_lists(key, l1, l2, append=True):
 
 @bp.route("/<username>/pokemon/get", methods=["GET"])
 @login_required
-def fetch(username):
+def fetch_pokemon(username):
     user = User.query.filter_by(username=username).first_or_404()
 
     if user is None or (current_user.username != user.username and not user.is_public):
@@ -42,8 +42,6 @@ def fetch(username):
 
     if name is not None:
         filtered_query = filtered_query.filter_by(name=name)
-
-    print(gen)
 
     if gen not in ("all"):
         filtered_query = filtered_query.filter_by(gen=gen)
@@ -89,7 +87,7 @@ def fetch(username):
 
 @bp.route("/<username>/pokemon/update", methods=["PUT"])
 @login_required
-def update(username):
+def update_pokemon(username):
     user = User.query.filter_by(username=username).first_or_404()
 
     if current_user.username == user.username:
@@ -107,3 +105,22 @@ def update(username):
         return json.dumps({"success": True}), 200, {"ContentType": "application/json"}
     else:
         return json.dumps({"success": False}), 403, {"ContentType": "application/json"}
+
+
+@bp.route("/pokemon/raidbosses/get", methods=["GET"])
+@login_required
+def fetch_raid_bosses():
+    rb_list = Pokemon.query.filter_by(in_game=True).filter_by(released=True).filter(Pokemon.raid > 0).all()
+    raid_bosses = {5: [], 4: [], 3: [], 2: [], 1: [],}
+
+    for rb in rb_list:
+        raid_boss = rb.as_dict()
+        raid_boss["battle_cp"] = rb.calc_raid_cp()
+        raid_boss["max_cp"] = rb.calc_cp(20)
+        raid_boss["max_cp_weather"] = rb.calc_cp(25)
+        raid_boss["min_cp"] = rb.calc_cp(20, 10, 10, 10)
+        raid_boss["min_cp_weather"] = rb.calc_cp(25, 10, 10, 10)
+
+        raid_bosses[rb.raid].append(raid_boss)
+
+    return json.dumps({"success": True, "raidbosses": raid_bosses}), 200, {"ContentType": "application/json"}

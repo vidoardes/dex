@@ -98,7 +98,7 @@ $.fn.renderpokemon = function (list, type) {
         }
     }
 
-    const Pokemon = ({name, dex, img_suffix, released, owned, shiny, shinyowned, male, maleowned, female, femaleowned, ungendered, ungenderedowned, luckyowned, regional, legendary}) => `
+    const Pokemon = ({name, dex, img_suffix, released, owned, shiny, shinyowned, male, maleowned, female, femaleowned, ungendered, ungenderedowned, luckyowned,}) => `
         <div class="pokemon ${owned ? 'owned' : ''}"
             ${maleowned ? 'data-maleowned="True"' : ''}
             ${femaleowned ? 'data-femaleowned="True"' : ''}
@@ -113,8 +113,6 @@ $.fn.renderpokemon = function (list, type) {
             <div class="img" style="background-image: url('../static/img/sprites/pokemon_icon_${dex.toString().padStart(3, '0')}${img_suffix}${qs.cat === 'shiny' ? '_shiny' : ''}.png')"></div>
             <div class="info">${name}</div>
             <div class="dex-num">#${dex.toString().padStart(3, '0')}</div>
-            ${legendary ? '<div class="dex-special legendary"></div>' : ''}
-            ${regional ? '<div class="dex-special regional"><i class="fas fa-globe-africa"></i></div>' : ''}
             <div class="pm-opt">
                 ${ungendered ? pokemonoptions('ungendered', ungendered, ungenderedowned, released) : pokemonoptions('male', male, maleowned, released) + pokemonoptions('female', female, femaleowned, released)}
                 ${pokemonoptions('shiny', shiny, shinyowned, released)}
@@ -282,11 +280,51 @@ $('.sidebar-link.living-dex').click(function () {
     }
 })
 
-$('.sidebar-link.legacy-moves').click(function () {
+
+$('.sidebar-link.raid-bosses').click(function () {
     $('.content-panel.active').fadeOut('fast', function () {
         $('.content-panel.active').removeClass('active')
-        $('.content-panel.legacy-moves').addClass('active').fadeIn('fast')
+        $('.content-panel.raid-bosses').addClass('active').fadeIn('fast')
         $('#sidebar').removeClass('show-sidebar')
+
+        $.ajax({
+            url: '/api/pokemon/raidbosses/get',
+            type: 'GET',
+            success: function (response) {
+                const RaidBoss = ({name, dex, img_suffix, shiny, raid, battle_cp, max_cp, max_cp_weather, min_cp, min_cp_weather}) => `
+                    <div class="raid-boss">
+                        <div class="tier">T${raid}</div>
+                        <div class="img">
+                            <img src="../static/img/sprites/pokemon_icon_${dex.toString().padStart(3, '0')}${img_suffix}${shiny ? '_shiny' : ''}.png" />
+                            ${shiny ? "<div class='shiny'><i class='icon star'></i></div>": "" }
+                        </div>
+                        <div class="name">#${dex.toString().padStart(3, '0')} ${name}</div>
+                        <div class="type"></div>
+                        <div class="battle_cp">${battle_cp.toLocaleString('en')}CP</div>
+                        <div class="cp">
+                            <div class="cp_range">${min_cp.toLocaleString('en')} - ${max_cp.toLocaleString('en')}</div>
+                            <div class="cp_range_weather">${min_cp_weather.toLocaleString('en')} - ${max_cp_weather.toLocaleString('en')}</div>
+                        </div>
+                        
+                    </div>
+                `
+
+                let _raid_bosses = JSON.parse(response)['raidbosses']
+
+                console.log(_raid_bosses)
+
+                for (const [key, value] of Object.entries(_raid_bosses)) {
+                    let _raid_bosses_tier = value
+
+                    $("#raid-bosses-list")
+                        .append('<div class="raid-boss-tier t' + key + '">' + _raid_bosses_tier.map(RaidBoss).join('') +'</div>')
+                        .fadeIn("slow")
+                }
+            },
+            error: function (error) {
+                console.log(error.status)
+            }
+        })
     })
 })
 
@@ -329,14 +367,14 @@ $('#update-email').click(function () {
         type: 'PUT',
         success: function (response) {
             $('#update-email').removeClass("primary").addClass("positive").html("<i class='fas fa-fw fa-check'></i> Email Saved!").transition('pulse')
-            setTimeout(function(){
+            setTimeout(function () {
                 $('#update-email').transition('pulse').removeClass("positive").addClass("primary").html("<i class='fas fa-fw fa-envelope'></i> Update Email")
             }, 3000)
         },
         error: function (error) {
             console.log(error.status)
             $('#update-email').removeClass("primary").addClass("negative").html("<i class='fas fa-fw fa-times'></i> Already Taken!").transition('shake')
-            setTimeout(function(){
+            setTimeout(function () {
                 $('#update-email').transition('pulse').removeClass("negative").addClass("primary").html("<i class='fas fa-fw fa-envelope'></i> Update Email")
             }, 3000)
         }
@@ -354,14 +392,14 @@ $('#update-player-level').click(function () {
         type: 'PUT',
         success: function (response) {
             $('#update-player-level').removeClass("primary").addClass("positive").html("<i class='fas fa-fw fa-check'></i> Leveled Up!").transition('pulse')
-            setTimeout(function(){
+            setTimeout(function () {
                 $('#update-player-level').transition('pulse').removeClass("positive").addClass("primary").html("<i class='fas fa-fw fa-hand-point-up'></i> Level Up!")
             }, 3000)
         },
         error: function (error) {
             console.log(error.status)
             $('#update-player-level').removeClass("primary").addClass("negative").html("<i class='fas fa-fw fa-times'></i> Invalid Level!").transition('shake')
-            setTimeout(function(){
+            setTimeout(function () {
                 $('#update-player-level').transition('pulse').removeClass("negative").addClass("primary").html("<i class='fas fa-fw fa-hand-point-up'></i> Level Up!")
             }, 3000)
         }

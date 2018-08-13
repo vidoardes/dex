@@ -97,6 +97,22 @@ input[type=checkbox] {
   margin: 0;
 }
 
+i.icon.legendary {
+  background: url(../static/img/icon_legendary.png) center/100% no-repeat !important;
+
+  &:before {
+    content: "";
+  }
+}
+
+i.icon.shiny {
+  background: url(../static/img/icon_shiny.png) center/100% no-repeat !important;
+
+  &:before {
+    content: "";
+  }
+}
+
 i.icon.fa, i.icon.far, i.icon.fas, i.icon.fab {
   font-family: "Font Awesome 5 Pro";
 }
