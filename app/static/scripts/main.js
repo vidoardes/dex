@@ -38,7 +38,7 @@ $.fn.updatestate = function (statetype) {
         data: data,
         type: 'PUT',
         success: function (response) {
-            let _qs = '?name=' + obj['name']
+            let _qs = '?' + $.param(qs)
 
             $.ajax({
                 url: '/api/' + $('#user-profile').data('username') + '/pokemon/get' + _qs,
