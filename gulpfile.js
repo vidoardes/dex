@@ -37,6 +37,7 @@ gulp.task("compile", ["clean:tmp"], function () {
     gulp.src(["dist"], {read: false}).pipe(clean())
     gulp.src("prod.env").pipe(rename(".env")).pipe(gulp.dest("tmp"))
     gulp.src(["*.py"]).pipe(gulp.dest("tmp"))
+    gulp.src(["requirements.txt"]).pipe(gulp.dest("tmp"))
     gulp.src([".ebextensions/*"]).pipe(gulp.dest("tmp/.ebextensions"))
     gulp.src(["app/**/*.py", "app/**/*.html", "app/**/*.txt"]).pipe(gulp.dest("tmp/app"))
     gulp.src(["app/static/*.css", "app/static/*.js"]).pipe(gulp.dest("tmp/app/static"))
