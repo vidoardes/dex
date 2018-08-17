@@ -123,7 +123,7 @@ class Pokemon(db.Model):
         raid_stamina = {1: 600, 2: 1800, 3: 3000, 4: 7500, 5: 12500}
         atk = self.base_attack + 15
         defense = (self.base_defense + 15) ** 0.5
-        stamina = (raid_stamina.get(self.raid) + 15) ** 0.5
+        stamina = (raid_stamina.get(self.raid)) ** 0.5
 
         return math.floor((atk * defense * stamina) / 10)
 
