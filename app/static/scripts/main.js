@@ -81,7 +81,6 @@ $.fn.renderpokemon = function (list, type) {
             'female': 'fa-venus',
             'ungendered': 'fa-circle',
             'shiny': 'fa-star',
-            'alolan': 'fa-umbrella-beach',
             'lucky': 'fa-dice'
         }
 
@@ -328,7 +327,6 @@ $('.sidebar-link.raid-bosses').click(function () {
                             <div class="cp_range">${min_cp.toLocaleString('en')} - ${max_cp.toLocaleString('en')}</div>
                             <div class="cp_range_weather">${min_cp_weather.toLocaleString('en')} - ${max_cp_weather.toLocaleString('en')}</div>
                         </div>
-                        
                     </div>
                 `
 

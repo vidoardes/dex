@@ -97,6 +97,10 @@ input[type=checkbox] {
   margin: 0;
 }
 
+#sidebar i.icon {
+  height: auto;
+}
+
 i.icon.legendary {
   background: url(../static/img/icon_legendary.png) center/100% no-repeat !important;
 
@@ -105,8 +109,32 @@ i.icon.legendary {
   }
 }
 
+i.icon.raid {
+  background: url(../static/img/icon_raid.png) center/100% no-repeat !important;
+
+  &:before {
+    content: "";
+  }
+}
+
+i.icon.alolan {
+  background: url(../static/img/icon_alolan.png) center/100% no-repeat !important;
+
+  &:before {
+    content: "";
+  }
+}
+
 i.icon.shiny {
   background: url(../static/img/icon_shiny.png) center/100% no-repeat !important;
+
+  &:before {
+    content: "";
+  }
+}
+
+i.icon.egg {
+  background: url(../static/img/icon_egg.png) center/100% no-repeat !important;
 
   &:before {
     content: "";

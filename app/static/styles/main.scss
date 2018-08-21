@@ -388,9 +388,10 @@
           font-size: 20px;
           font-weight: 400;
           color: #215788;
-          padding: 25px 10px;
+          padding: 10px 10px;
           text-align: left;
           border-radius: 3px;
+          line-height: 30px;
 
           &:hover {
             color: lighten(#215788, 10%);
