@@ -847,6 +847,19 @@
       background-color: #c9a0e2;
     }
 
+    &.t6 .raid-boss {
+      background-color: #000;
+      color: #fff;
+
+      .cp div.cp_range_weather {
+        color: #aaa;
+      }
+
+      .battle_cp {
+        background: rgba(255, 255, 255, 0.8);
+      }
+    }
+
     .raid-boss {
       position: relative;
       margin: 10px 0;

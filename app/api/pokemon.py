@@ -116,7 +116,7 @@ def fetch_raid_bosses():
         .filter(Pokemon.raid > 0)
         .all()
     )
-    raid_bosses = {5: [], 4: [], 3: [], 2: [], 1: []}
+    raid_bosses = {6: [], 5: [], 4: [], 3: [], 2: [], 1: []}
 
     for rb in rb_list:
         raid_boss = rb.as_dict()
