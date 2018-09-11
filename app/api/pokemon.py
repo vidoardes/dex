@@ -133,3 +133,26 @@ def fetch_raid_bosses():
         200,
         {"ContentType": "application/json"},
     )
+
+
+@bp.route("/pokemon/egghatches/get", methods=["GET"])
+@login_required
+def fetch_egg_hatches():
+    eh_list = (
+        Pokemon.query.filter_by(in_game=True)
+        .filter_by(released=True)
+        .filter(Pokemon.hatch > 0)
+        .all()
+    )
+    egg_hatches = {10: [], 7: [], 5: [], 2: [],}
+
+    for eh in eh_list:
+        egg_hatch = eh.as_dict()
+
+        egg_hatches[eh.hatch].append(egg_hatch)
+
+    return (
+        json.dumps({"success": True, "egghatches": egg_hatches}),
+        200,
+        {"ContentType": "application/json"},
+    )

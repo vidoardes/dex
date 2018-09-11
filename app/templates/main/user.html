@@ -49,6 +49,12 @@
                     <i class="icon right angle"></i>
                 </div>
 
+                <div class="sidebar-link egg-hatches">
+                    <i class="egg icon"></i>
+                    <span>Egg Hatches</span>
+                    <i class="icon right angle"></i>
+                </div>
+
                 {% if user.username==current_user.username %}
                 <div class="sidebar-link user-settings">
                     <i class="cog icon"></i>
@@ -147,6 +153,10 @@
 
         <div class="raid-bosses content-panel">
             <div id="raid-bosses-list"></div>
+        </div>
+
+        <div class="egg-hatches content-panel">
+            <div id="egg-hatches-list"></div>
         </div>
 
         <div class="user-settings content-panel">

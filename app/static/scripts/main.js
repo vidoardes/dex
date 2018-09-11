@@ -347,6 +347,45 @@ $('.sidebar-link.raid-bosses').click(function () {
     })
 })
 
+$('.sidebar-link.egg-hatches').click(function () {
+    $('.content-panel.active').fadeOut('fast', function () {
+        $.ajax({
+            url: '/api/pokemon/egghatches/get',
+            type: 'GET',
+            success: function (response) {
+                const EggHatch = ({name, dex, img_suffix, shiny}) => `
+                    <div class="egg-hatch">
+                        <div class="img">
+                            <img src="../static/img/sprites/pokemon_icon_${dex.toString().padStart(3, '0')}${img_suffix}${shiny ? '_shiny' : ''}.png" />
+                            ${shiny ? "<div class='shiny'><i class='icon star'></i></div>": "" }
+                        </div>
+                        <div class="name">${name}</div>
+                    </div>
+                `
+
+                let _egg_hatches = JSON.parse(response)['egghatches']
+
+                $('.content-panel.active').removeClass('active')
+                $('.sidebar-link.active').removeClass('active')
+                $('.sidebar-link.egg-hatches').addClass('active')
+                $('.content-panel.egg-hatches').addClass('active').fadeIn('fast')
+                $('#sidebar').removeClass('show-sidebar')
+
+                for (const [key, value] of Object.entries(_egg_hatches)) {
+                    let _egg_hatches_group = value
+
+                    $("#egg-hatches-list")
+                        .append('<div class="egg-hatch-tier tier-' + key + 'km"><div class="tier-header"><img src="../static/img/egg_' + key + 'km.png" />' + key + 'km Eggs</div><div class="pokemon_list">' + _egg_hatches_group.map(EggHatch).join('') +'</div></div>')
+                        .fadeIn("slow")
+                }
+            },
+            error: function (error) {
+                console.log(error.status)
+            }
+        })
+    })
+})
+
 $('.sidebar-link.user-settings').click(function () {
     $('.content-panel.active').fadeOut('fast', function () {
         $.ajax({
