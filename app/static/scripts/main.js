@@ -166,7 +166,7 @@ $(function () {
             let data = {data: JSON.stringify(_obj)}
 
             $.ajax({
-                url: '/api/user/' + $('#user-profile').data('username') + '/update',
+                url: '/api/user/' + $('#user-profile').data('username') + '/settings/update',
                 data: data,
                 type: 'PUT',
                 success: function (response) {
@@ -392,7 +392,7 @@ $('.sidebar-link.egg-hatches').click(function () {
 $('.sidebar-link.user-settings').click(function () {
     $('.content-panel.active').fadeOut('fast', function () {
         $.ajax({
-            url: '/api/user/' + $('#user-profile').data('username') + '/get?settings=all',
+            url: '/api/user/' + $('#user-profile').data('username') + '/settings/get',
             type: 'GET',
             success: function (response) {
                 let _settings = JSON.parse(response)['settings']
@@ -424,7 +424,7 @@ $('#update-email').click(function () {
     let data = {data: JSON.stringify(_obj)}
 
     $.ajax({
-        url: '/api/user/' + $('#user-profile').data('username') + '/update',
+        url: '/api/user/' + $('#user-profile').data('username') + '/settings/update',
         data: data,
         type: 'PUT',
         success: function (response) {
@@ -449,7 +449,7 @@ $('#update-player-level').click(function () {
     let data = {data: JSON.stringify(_obj)}
 
     $.ajax({
-        url: '/api/user/' + $('#user-profile').data('username') + '/update',
+        url: '/api/user/' + $('#user-profile').data('username') + '/settings/update',
         data: data,
         type: 'PUT',
         success: function (response) {

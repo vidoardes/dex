@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}" type="text/css">
 </head>
 
-<body data-take-tour="{{ not current_user.taken_tour }}">
+<body data-take-tour="{{ 'False' if not current_user.is_authenticated else not current_user.taken_tour }}">
 {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
         {% for category, message in messages %}

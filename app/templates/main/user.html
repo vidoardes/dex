@@ -6,7 +6,7 @@
     <div id="header">
         <div id="logo">
             <div id="sidebartoggle"><i class="fas fa-bars"></i></div>
-            <h1>DEX</h1>
+            <a href="/"><h1>DEX</h1></a>
         </div>
         <div class="ui search">
             <div class="ui fluid small inverted transparent icon input">
@@ -16,11 +16,13 @@
             </div>
             <div class="results"></div>
         </div>
-        <div id="menu">
-            <a href="{{ url_for('auth.logout') }}"><i class="fas fa-sign-out"></i></a>
-            <a href="{{ url_for('main.user', username=current_user.username) }}"><i
-                    class="fas fa-user-circle"></i></a>
-        </div>
+        {% if current_user.is_authenticated %}
+            <div id="menu">
+                <a href="{{ url_for('auth.logout') }}"><i class="fas fa-sign-out"></i></a>
+                <a href="{{ url_for('main.show_user', username=current_user.username) }}"><i
+                        class="fas fa-user-circle"></i></a>
+            </div>
+        {% endif %}
     </div>
     {% endblock %}
 

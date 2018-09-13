@@ -24,11 +24,10 @@ def merge_dict_lists(key, l1, l2, append=True):
 
 
 @bp.route("/<username>/pokemon/get", methods=["GET"])
-@login_required
 def fetch_pokemon(username):
     user = User.query.filter_by(username=username).first_or_404()
 
-    if user is None or (current_user.username != user.username and not user.is_public):
+    if user is None or (not user.is_public and current_user.username != user.username):
         return json.dumps({"success": False}), 403, {"ContentType": "application/json"}
 
     pokemon_list = []
@@ -144,7 +143,7 @@ def fetch_egg_hatches():
         .filter(Pokemon.hatch > 0)
         .all()
     )
-    egg_hatches = {10: [], 7: [], 5: [], 2: [],}
+    egg_hatches = {10: [], 7: [], 5: [], 2: []}
 
     for eh in eh_list:
         egg_hatch = eh.as_dict()

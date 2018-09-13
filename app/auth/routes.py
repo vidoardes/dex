@@ -21,7 +21,7 @@ from app.models import User
 @bp.route("/login", methods=["GET", "POST"])
 def login():
     if current_user.is_authenticated:
-        return redirect(url_for("main.user", username=current_user.username))
+        return redirect(url_for("main.show_user", username=current_user.username))
 
     form = LoginForm()
 
@@ -43,7 +43,7 @@ def login():
         next_page = request.args.get("next")
 
         if not next_page or url_parse(next_page).netloc != "":
-            next_page = url_for("main.user", username=current_user.username)
+            next_page = url_for("main.show_user", username=current_user.username)
 
         return redirect(next_page)
 
@@ -60,7 +60,7 @@ def logout():
 @bp.route("/register", methods=["GET", "POST"])
 def register():
     if current_user.is_authenticated:
-        return redirect(url_for("main.user", username=current_user.username))
+        return redirect(url_for("main.show_user", username=current_user.username))
 
     form = RegistrationForm()
 

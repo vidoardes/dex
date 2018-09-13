@@ -1,10 +1,19 @@
 import re
 
 from flask import request, json
-from flask_login import login_required, current_user
+from flask_login import login_manager, login_required, current_user, mixins
+
 from app import db
 from app.api import bp
 from app.models import User
+
+
+class Anonymous(mixins.AnonymousUserMixin):
+    def __init__(self):
+        self.username = "Guest"
+
+
+login_manager.anonymous_user = Anonymous
 
 
 @bp.route("/users/get", methods=["GET"])
@@ -36,21 +45,18 @@ def fetch_users():
     )
 
 
-@bp.route("/user/<username>/get", methods=["GET"])
+@bp.route("/user/<username>/settings/get", methods=["GET"])
 @login_required
 def get_user_settings(username):
     user = User.query.filter_by(username=username).first_or_404()
 
     if current_user.username == user.username:
-        q = request.args.get("settings", "")
-
-        if q == "all":
-            settings = {
-                "config": user.settings,
-                "public": user.is_public,
-                "email": user.email,
-                "player_level": user.player_level,
-            }
+        settings = {
+            "config": user.settings,
+            "public": user.is_public,
+            "email": user.email,
+            "player_level": user.player_level,
+        }
 
         return (
             json.dumps({"success": True, "settings": settings}),
@@ -61,7 +67,7 @@ def get_user_settings(username):
         return json.dumps({"success": False}), 403, {"ContentType": "application/json"}
 
 
-@bp.route("/user/<username>/update", methods=["PUT"])
+@bp.route("/user/<username>/settings/update", methods=["PUT"])
 @login_required
 def update_user(username):
     user = User.query.filter_by(username=username).first_or_404()
