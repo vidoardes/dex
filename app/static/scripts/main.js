@@ -291,6 +291,7 @@ $('.sidebar-link.legacy-moves').click(function () {
             $('.content-panel.active').removeClass('active')
             $('.sidebar-link.active').removeClass('active')
             $('.sidebar-link.legacy-moves').addClass('active')
+            $('.content-panel.legacy-moves #legacy-moves-list').html('')
             $('.content-panel.legacy-moves').addClass('active').fadeIn('fast')
             $('#sidebar').removeClass('show-sidebar')
         })
@@ -303,6 +304,7 @@ $('.sidebar-link.raid-bosses').click(function () {
         $('.content-panel.active').removeClass('active')
         $('.sidebar-link.active').removeClass('active')
         $('.sidebar-link.raid-bosses').addClass('active')
+        $('.content-panel.raid-bosses #raid-bosses-list').html('')
         $('.content-panel.raid-bosses').addClass('active').fadeIn('fast')
         $('#sidebar').removeClass('show-sidebar')
 
@@ -368,6 +370,7 @@ $('.sidebar-link.egg-hatches').click(function () {
                 $('.content-panel.active').removeClass('active')
                 $('.sidebar-link.active').removeClass('active')
                 $('.sidebar-link.egg-hatches').addClass('active')
+                $('.content-panel.egg-hatches #egg-hatches-list').html('')
                 $('.content-panel.egg-hatches').addClass('active').fadeIn('fast')
                 $('#sidebar').removeClass('show-sidebar')
 
