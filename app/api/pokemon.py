@@ -103,13 +103,20 @@ def update_pokemon(username):
         user.pokemon_owned = json.dumps({list: ul})
         db.session.commit()
 
-        updated_pokemon = merge_dict_lists(
+        updated_pokemon = pokemon
+
+        for p in json.loads(user.pokemon_owned).get(list, []):
+            if p["name"] == pokemon["name"]:
+                updated_pokemon = p
+                break
+
+        updated_pokemon_list = merge_dict_lists(
             "name",
+            [updated_pokemon],
             [Pokemon.query.filter_by(name=pokemon["name"]).first().as_dict()],
-            [pokemon],
         )
 
-        r = json.dumps({"success": True, "updated_pokemon": updated_pokemon})
+        r = json.dumps({"success": True, "updated_pokemon": updated_pokemon_list})
         return Response(r, status=200, mimetype="application/json")
     else:
         r = json.dumps({"success": False})
