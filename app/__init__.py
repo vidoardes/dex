@@ -4,17 +4,24 @@ from logging.handlers import RotatingFileHandler
 
 from flask import Flask, render_template
 from flask_bcrypt import Bcrypt
-from flask_login import LoginManager
+from flask_login import LoginManager, mixins
 from flask_mail import Mail
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 
 from config import Config
 
+
+class Anonymous(mixins.AnonymousUserMixin):
+    def __init__(self):
+        self.username = "Guest"
+
+
 db = SQLAlchemy()
 migrate = Migrate()
 login = LoginManager()
 login.login_view = "auth.login"
+login.anonymous_user = Anonymous
 mail = Mail()
 bcrypt = Bcrypt()
 
