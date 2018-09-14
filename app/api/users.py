@@ -1,19 +1,11 @@
 import re
 
-from flask import request, json
-from flask_login import login_manager, login_required, current_user, mixins
+from flask import request, json, Response
+from flask_login import login_required, current_user
 
 from app import db
 from app.api import bp
 from app.models import User
-
-
-class Anonymous(mixins.AnonymousUserMixin):
-    def __init__(self):
-        self.username = "Guest"
-
-
-login_manager.anonymous_user = Anonymous
 
 
 @bp.route("/users/get", methods=["GET"])
@@ -38,11 +30,8 @@ def fetch_users():
 
         public_users.append(user)
 
-    return (
-        json.dumps({"success": True, "results": public_users}),
-        200,
-        {"ContentType": "application/json"},
-    )
+    r = json.dumps({"success": True, "results": public_users})
+    return Response(r, status=200, mimetype="application/json")
 
 
 @bp.route("/user/<username>/settings/get", methods=["GET"])
@@ -58,13 +47,11 @@ def get_user_settings(username):
             "player_level": user.player_level,
         }
 
-        return (
-            json.dumps({"success": True, "settings": settings}),
-            200,
-            {"ContentType": "application/json"},
-        )
+        r = json.dumps({"success": True, "settings": settings})
+        return Response(r, status=200, mimetype="application/json")
     else:
-        return json.dumps({"success": False}), 403, {"ContentType": "application/json"}
+        r = json.dumps({"success": False})
+        return Response(r, status=403, mimetype="application/json")
 
 
 @bp.route("/user/<username>/settings/update", methods=["PUT"])
@@ -83,21 +70,15 @@ def update_user(username):
             if isinstance(tour, bool):
                 user.taken_tour = tour
             else:
-                return (
-                    json.dumps({"success": False}),
-                    422,
-                    {"ContentType": "application/json"},
-                )
+                r = json.dumps({"success": False})
+                return Response(r, status=422, mimetype="application/json")
 
         if public is not None:
             if isinstance(public, bool):
                 user.is_public = public
             else:
-                return (
-                    json.dumps({"success": False}),
-                    422,
-                    {"ContentType": "application/json"},
-                )
+                r = json.dumps({"success": False})
+                return Response(r, status=422, mimetype="application/json")
 
         if player_level is not None:
             if (
@@ -105,21 +86,15 @@ def update_user(username):
             ) or player_level is None:
                 user.player_level = player_level
             else:
-                return (
-                    json.dumps({"success": False}),
-                    422,
-                    {"ContentType": "application/json"},
-                )
+                r = json.dumps({"success": False})
+                return Response(r, status=422, mimetype="application/json")
 
         if email is not None:
             exists = User.query.filter_by(email=email).all()
 
             if len(exists) > 0 or not re.match("^[^@]+@[^@]+\.[^@]+$", email):
-                return (
-                    json.dumps({"success": False}),
-                    422,
-                    {"ContentType": "application/json"},
-                )
+                r = json.dumps({"success": False})
+                return Response(r, status=422, mimetype="application/json")
             else:
                 user.email = email
 
@@ -132,10 +107,8 @@ def update_user(username):
             "player_level": user.player_level,
         }
 
-        return (
-            json.dumps({"success": True, "settings": settings}),
-            200,
-            {"ContentType": "application/json"},
-        )
+        r = json.dumps({"success": True, "settings": settings})
+        return Response(r, status=200, mimetype="application/json")
     else:
-        return json.dumps({"success": False}), 403, {"ContentType": "application/json"}
+        r = json.dumps({"success": False})
+        return Response(r, status=403, mimetype="application/json")

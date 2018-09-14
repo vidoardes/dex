@@ -1,4 +1,4 @@
-from flask import request, json
+from flask import request, json, Response
 from flask_login import login_required, current_user
 
 from app import db
@@ -28,7 +28,8 @@ def fetch_pokemon(username):
     user = User.query.filter_by(username=username).first_or_404()
 
     if user is None or (not user.is_public and current_user.username != user.username):
-        return json.dumps({"success": False}), 403, {"ContentType": "application/json"}
+        r = json.dumps({"success": False})
+        return Response(r, status=403, mimetype="application/json")
 
     pokemon_list = []
     list = request.args.get("list", "default")
@@ -77,11 +78,8 @@ def fetch_pokemon(username):
 
         pokemon = _pokemon_owned
 
-    return (
-        json.dumps({"success": True, "pokemon": pokemon}),
-        200,
-        {"ContentType": "application/json"},
-    )
+    r = json.dumps({"success": True, "pokemon": pokemon})
+    return Response(r, status=200, mimetype="application/json")
 
 
 @bp.route("/<username>/pokemon/update", methods=["PUT"])
@@ -101,9 +99,11 @@ def update_pokemon(username):
         user.pokemon_owned = json.dumps({list: r})
         db.session.commit()
 
-        return json.dumps({"success": True}), 200, {"ContentType": "application/json"}
+        r = json.dumps({"success": True})
+        return Response(r, status=200, mimetype="application/json")
     else:
-        return json.dumps({"success": False}), 403, {"ContentType": "application/json"}
+        r = json.dumps({"success": False})
+        return Response(r, status=403, mimetype="application/json")
 
 
 @bp.route("/pokemon/raidbosses/get", methods=["GET"])
@@ -127,11 +127,8 @@ def fetch_raid_bosses():
 
         raid_bosses[rb.raid].append(raid_boss)
 
-    return (
-        json.dumps({"success": True, "raidbosses": raid_bosses}),
-        200,
-        {"ContentType": "application/json"},
-    )
+    r = json.dumps({"success": True, "raidbosses": raid_bosses})
+    return Response(r, status=200, mimetype="application/json")
 
 
 @bp.route("/pokemon/egghatches/get", methods=["GET"])
@@ -150,8 +147,5 @@ def fetch_egg_hatches():
 
         egg_hatches[eh.hatch].append(egg_hatch)
 
-    return (
-        json.dumps({"success": True, "egghatches": egg_hatches}),
-        200,
-        {"ContentType": "application/json"},
-    )
+    r = json.dumps({"success": True, "egghatches": egg_hatches})
+    return Response(r, status=200, mimetype="application/json")

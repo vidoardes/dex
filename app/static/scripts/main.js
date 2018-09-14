@@ -5,12 +5,12 @@ $.fn.renderallpokemon = function () {
     $.ajax({
         url: '/api/' + $('#user-profile').data('username') + '/pokemon/get' + _qs,
         type: 'GET',
-        success: function (response) {
-            let _pokemon_list = JSON.parse(response)['pokemon']
+        success: function (r) {
+            let _pokemon_list = r['pokemon']
             $('#pokemon-wrapper').renderpokemon(_pokemon_list, 'generate')
         },
-        error: function (error) {
-            console.log(error.status)
+        error: function (e) {
+            console.log(e.status)
         }
     })
 }
@@ -37,23 +37,24 @@ $.fn.updatestate = function (statetype) {
         url: '/api/' + $('#user-profile').data('username') + '/pokemon/update',
         data: data,
         type: 'PUT',
-        success: function (response) {
+        success: function (r) {
             let _qs = '?' + $.param(qs)
 
             $.ajax({
                 url: '/api/' + $('#user-profile').data('username') + '/pokemon/get' + _qs,
                 type: 'GET',
-                success: function (response) {
-                    let _pokemon_list = JSON.parse(response)['pokemon']
+                success: function (r) {
+                    let _pokemon_list = r['pokemon']
+                    console.log(_pokemon)
                     $('#pokemon-wrapper').renderpokemon(_pokemon_list, 'update')
                 },
-                error: function (error) {
-                    console.log(error.status)
+                error: function (e) {
+                    console.log(e.status)
                 }
             })
         },
-        error: function (error) {
-            console.log(error.status)
+        error: function (e) {
+            console.log(e.status)
         }
     })
 }
@@ -151,7 +152,7 @@ $.fn.renderpokemon = function (list, type) {
 }
 
 $.fn.api.settings.api = {
-    'search': '/api/users/get?q={query}'
+    'search': '/api/users/get?q={query}',
 }
 
 let qs = {}
@@ -169,11 +170,11 @@ $(function () {
                 url: '/api/user/' + $('#user-profile').data('username') + '/settings/update',
                 data: data,
                 type: 'PUT',
-                success: function (response) {
+                success: function (r) {
 
                 },
-                error: function (error) {
-                    console.log(error.status)
+                error: function (e) {
+                    console.log(e.status)
                 }
             })
         }
@@ -196,11 +197,11 @@ $(function () {
                     url: '/api/user/' + $('#user-profile').data('username') + '/update',
                     data: data,
                     type: 'PUT',
-                    success: function (response) {
+                    success: function (r) {
 
                     },
-                    error: function (error) {
-                        console.log(error.status)
+                    error: function (e) {
+                        console.log(e.status)
                     }
                 })
             })
@@ -311,7 +312,7 @@ $('.sidebar-link.raid-bosses').click(function () {
         $.ajax({
             url: '/api/pokemon/raidbosses/get',
             type: 'GET',
-            success: function (response) {
+            success: function (r) {
                 const RaidBoss = ({name, dex, img_suffix, shiny, raid, battle_cp, max_cp, max_cp_weather, min_cp, min_cp_weather, type1, type2}) => `
                     <div class="raid-boss">
                         <div class="tier">${raid === 6 ? 'EX' : 'T'+ raid}</div>
@@ -332,7 +333,7 @@ $('.sidebar-link.raid-bosses').click(function () {
                     </div>
                 `
 
-                let _raid_bosses = JSON.parse(response)['raidbosses']
+                let _raid_bosses = r['raidbosses']
 
                 for (const [key, value] of Object.entries(_raid_bosses)) {
                     let _raid_bosses_tier = value
@@ -342,8 +343,8 @@ $('.sidebar-link.raid-bosses').click(function () {
                         .fadeIn("slow")
                 }
             },
-            error: function (error) {
-                console.log(error.status)
+            error: function (e) {
+                console.log(e.status)
             }
         })
     })
@@ -354,7 +355,7 @@ $('.sidebar-link.egg-hatches').click(function () {
         $.ajax({
             url: '/api/pokemon/egghatches/get',
             type: 'GET',
-            success: function (response) {
+            success: function (r) {
                 const EggHatch = ({name, dex, img_suffix, shiny}) => `
                     <div class="egg-hatch">
                         <div class="img">
@@ -365,7 +366,7 @@ $('.sidebar-link.egg-hatches').click(function () {
                     </div>
                 `
 
-                let _egg_hatches = JSON.parse(response)['egghatches']
+                let _egg_hatches = r['egghatches']
 
                 $('.content-panel.active').removeClass('active')
                 $('.sidebar-link.active').removeClass('active')
@@ -382,8 +383,8 @@ $('.sidebar-link.egg-hatches').click(function () {
                         .fadeIn("slow")
                 }
             },
-            error: function (error) {
-                console.log(error.status)
+            error: function (e) {
+                console.log(e.status)
             }
         })
     })
@@ -394,8 +395,8 @@ $('.sidebar-link.user-settings').click(function () {
         $.ajax({
             url: '/api/user/' + $('#user-profile').data('username') + '/settings/get',
             type: 'GET',
-            success: function (response) {
-                let _settings = JSON.parse(response)['settings']
+            success: function (r) {
+                let _settings = r['settings']
 
                 if (!_settings.public) {
                     $('.content-panel.user-settings .ui.checkbox').checkbox('set checked')
@@ -411,8 +412,8 @@ $('.sidebar-link.user-settings').click(function () {
                 $('.content-panel.user-settings').addClass('active').fadeIn('fast')
                 $('#sidebar').removeClass('show-sidebar')
             },
-            error: function (error) {
-                console.log(error.status)
+            error: function (e) {
+                console.log(e.status)
             }
         })
     })
@@ -427,14 +428,14 @@ $('#update-email').click(function () {
         url: '/api/user/' + $('#user-profile').data('username') + '/settings/update',
         data: data,
         type: 'PUT',
-        success: function (response) {
+        success: function (r) {
             $('#update-email').removeClass("primary").addClass("positive").html("<i class='fas fa-fw fa-check'></i> Email Saved!").transition('pulse')
             setTimeout(function () {
                 $('#update-email').transition('pulse').removeClass("positive").addClass("primary").html("<i class='fas fa-fw fa-envelope'></i> Update Email")
             }, 3000)
         },
-        error: function (error) {
-            console.log(error.status)
+        error: function (e) {
+            console.log(e.status)
             $('#update-email').removeClass("primary").addClass("negative").html("<i class='fas fa-fw fa-times'></i> Already Taken!").transition('shake')
             setTimeout(function () {
                 $('#update-email').transition('pulse').removeClass("negative").addClass("primary").html("<i class='fas fa-fw fa-envelope'></i> Update Email")
@@ -452,14 +453,14 @@ $('#update-player-level').click(function () {
         url: '/api/user/' + $('#user-profile').data('username') + '/settings/update',
         data: data,
         type: 'PUT',
-        success: function (response) {
+        success: function (r) {
             $('#update-player-level').removeClass("primary").addClass("positive").html("<i class='fas fa-fw fa-check'></i> Leveled Up!").transition('pulse')
             setTimeout(function () {
                 $('#update-player-level').transition('pulse').removeClass("positive").addClass("primary").html("<i class='fas fa-fw fa-hand-point-up'></i> Level Up!")
             }, 3000)
         },
-        error: function (error) {
-            console.log(error.status)
+        error: function (e) {
+            console.log(e.status)
             $('#update-player-level').removeClass("primary").addClass("negative").html("<i class='fas fa-fw fa-times'></i> Invalid Level!").transition('shake')
             setTimeout(function () {
                 $('#update-player-level').transition('pulse').removeClass("negative").addClass("primary").html("<i class='fas fa-fw fa-hand-point-up'></i> Level Up!")
