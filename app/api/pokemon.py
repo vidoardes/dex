@@ -1,5 +1,6 @@
 from flask import request, json, Response
 from flask_login import login_required, current_user
+from sqlalchemy import func
 
 from app import db
 from app.api import bp
@@ -25,7 +26,9 @@ def merge_dict_lists(key, l1, l2, append=True):
 
 @bp.route("/<username>/pokemon/get", methods=["GET"])
 def fetch_pokemon(username):
-    user = User.query.filter_by(username=username).first_or_404()
+    user = User.query.filter(
+        func.lower(User.username) == func.lower(username)
+    ).first_or_404()
 
     if user is None or (not user.is_public and current_user.username != user.username):
         r = json.dumps({"success": False})
@@ -85,7 +88,9 @@ def fetch_pokemon(username):
 @bp.route("/<username>/pokemon/update", methods=["PUT"])
 @login_required
 def update_pokemon(username):
-    user = User.query.filter_by(username=username).first_or_404()
+    user = User.query.filter(
+        func.lower(User.username) == func.lower(username)
+    ).first_or_404()
 
     if current_user.username == user.username:
         list = request.args.get("list", "default")

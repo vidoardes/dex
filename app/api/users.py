@@ -2,6 +2,7 @@ import re
 
 from flask import request, json, Response
 from flask_login import login_required, current_user
+from sqlalchemy import func
 
 from app import db
 from app.api import bp
@@ -37,7 +38,9 @@ def fetch_users():
 @bp.route("/user/<username>/settings/get", methods=["GET"])
 @login_required
 def get_user_settings(username):
-    user = User.query.filter_by(username=username).first_or_404()
+    user = User.query.filter(
+        func.lower(User.username) == func.lower(username)
+    ).first_or_404()
 
     if current_user.username == user.username:
         settings = {
@@ -57,7 +60,9 @@ def get_user_settings(username):
 @bp.route("/user/<username>/settings/update", methods=["PUT"])
 @login_required
 def update_user(username):
-    user = User.query.filter_by(username=username).first_or_404()
+    user = User.query.filter(
+        func.lower(User.username) == func.lower(username)
+    ).first_or_404()
 
     if current_user.username == user.username:
         data = json.loads(request.form.get("data"))
