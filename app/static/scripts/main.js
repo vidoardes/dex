@@ -45,7 +45,6 @@ $.fn.updatestate = function (statetype) {
                 type: 'GET',
                 success: function (r) {
                     let _pokemon_list = r['pokemon']
-                    console.log(_pokemon)
                     $('#pokemon-wrapper').renderpokemon(_pokemon_list, 'update')
                 },
                 error: function (e) {
@@ -127,11 +126,11 @@ $.fn.renderpokemon = function (list, type) {
 
     if (list.length > 0) {
         if (type === 'generate') {
-            $(this).fadeOut("slow", function () {
+            $(this).fadeOut('fast', function () {
                 $(this)
                     .html('')
                     .append(list.map(Pokemon).join(''))
-                    .fadeIn("slow")
+                    .fadeIn()
             })
         } else if (type === 'update') {
             let arrayLength = list.length
@@ -145,7 +144,7 @@ $.fn.renderpokemon = function (list, type) {
         }
     } else {
         $(this).fadeOut("slow", function () {
-            $(this).html('<p id="no-results">Unfortunatly there are no Pokemon match your criteria. Please select a different option from the choices above.</p>').fadeIn("slow")
+            $(this).html('<p id="no-results">Unfortunatly there are no Pokemon match your criteria. Please select a different option from the choices above.</p>').fadeIn()
 
         })
     }
@@ -280,7 +279,7 @@ $('.sidebar-link.living-dex').click(function () {
             $('.content-panel.active').removeClass('active')
             $('.sidebar-link.active').removeClass('active')
             $('.sidebar-link.living-dex').addClass('active')
-            $('.content-panel.dex').addClass('active').fadeIn('fast')
+            $('.content-panel.dex').addClass('active').fadeIn()
             $('#sidebar').removeClass('show-sidebar')
         })
     }
@@ -293,7 +292,7 @@ $('.sidebar-link.legacy-moves').click(function () {
             $('.sidebar-link.active').removeClass('active')
             $('.sidebar-link.legacy-moves').addClass('active')
             $('.content-panel.legacy-moves #legacy-moves-list').html('')
-            $('.content-panel.legacy-moves').addClass('active').fadeIn('fast')
+            $('.content-panel.legacy-moves').addClass('active').fadeIn()
             $('#sidebar').removeClass('show-sidebar')
         })
     }
@@ -306,7 +305,7 @@ $('.sidebar-link.raid-bosses').click(function () {
         $('.sidebar-link.active').removeClass('active')
         $('.sidebar-link.raid-bosses').addClass('active')
         $('.content-panel.raid-bosses #raid-bosses-list').html('')
-        $('.content-panel.raid-bosses').addClass('active').fadeIn('fast')
+        $('.content-panel.raid-bosses').addClass('active').fadeIn()
         $('#sidebar').removeClass('show-sidebar')
 
         $.ajax({
@@ -340,7 +339,7 @@ $('.sidebar-link.raid-bosses').click(function () {
 
                     $("#raid-bosses-list")
                         .append('<div class="raid-boss-tier t' + key + '">' + _raid_bosses_tier.map(RaidBoss).join('') +'</div>')
-                        .fadeIn("slow")
+                        .fadeIn()
                 }
             },
             error: function (e) {
@@ -372,7 +371,7 @@ $('.sidebar-link.egg-hatches').click(function () {
                 $('.sidebar-link.active').removeClass('active')
                 $('.sidebar-link.egg-hatches').addClass('active')
                 $('.content-panel.egg-hatches #egg-hatches-list').html('')
-                $('.content-panel.egg-hatches').addClass('active').fadeIn('fast')
+                $('.content-panel.egg-hatches').addClass('active').fadeIn()
                 $('#sidebar').removeClass('show-sidebar')
 
                 for (const [key, value] of Object.entries(_egg_hatches)) {
@@ -380,7 +379,7 @@ $('.sidebar-link.egg-hatches').click(function () {
 
                     $("#egg-hatches-list")
                         .append('<div class="egg-hatch-tier tier-' + key + 'km"><div class="tier-header"><img src="../static/img/egg_' + key + 'km.png" />' + key + 'km Eggs</div><div class="pokemon_list">' + _egg_hatches_group.map(EggHatch).join('') +'</div></div>')
-                        .fadeIn("slow")
+                        .fadeIn()
                 }
             },
             error: function (e) {
@@ -409,7 +408,7 @@ $('.sidebar-link.user-settings').click(function () {
                 $('.sidebar-link.user-settings').addClass('active')
                 $('.content-panel.user-settings #email').val(_settings.email)
                 $('.content-panel.user-settings #level').val(_settings.player_level)
-                $('.content-panel.user-settings').addClass('active').fadeIn('fast')
+                $('.content-panel.user-settings').addClass('active').fadeIn()
                 $('#sidebar').removeClass('show-sidebar')
             },
             error: function (e) {
