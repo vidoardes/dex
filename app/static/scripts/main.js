@@ -314,12 +314,21 @@ $('.sidebar-link.raid-bosses').click(function () {
             success: function (r) {
                 const RaidBoss = ({name, dex, img_suffix, shiny, raid, battle_cp, max_cp, max_cp_weather, min_cp, min_cp_weather, type1, type2}) => `
                     <div class="raid-boss">
-                        <div class="tier">${raid === 6 ? 'EX' : 'T' + raid}</div>
+                        <div class="tier">
+                            ${raid === 6 ? 'EX' : ''}
+                            ${raid === 5 ? 'V' : ''}
+                            ${raid === 4 ? 'IV' : ''}
+                            ${raid === 3 ? 'III' : ''}
+                            ${raid === 2 ? 'II' : ''}
+                            ${raid === 1 ? 'I' : ''}
+                        </div>
                         <div class="img">
                             <img src="../static/img/sprites/pokemon_icon_${dex.toString().padStart(3, '0')}${img_suffix}${shiny ? '_shiny' : ''}.png" />
+                        </div>
+                        <div class="name">
+                            ${name}
                             ${shiny ? "<div class='shiny'><i class='icon star'></i></div>" : "" }
                         </div>
-                        <div class="name">${name}</div>
                         <div class="type">
                             ${type1 !== null ? '<img src="../static/img/types/icon_' + type1 + '.png" />' : ''}
                             ${type2 !== null ? '<img src="../static/img/types/icon_' + type2 + '.png" />' : ''}

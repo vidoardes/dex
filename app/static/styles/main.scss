@@ -826,30 +826,61 @@
   height: calc(100vh - 102px);
   padding-right: 10px;
 
+  @include phone {
+    height: calc(100vh - 73px);
+    padding-right: 5px;
+  }
+
   .raid-boss-tier {
+    margin-bottom: 10px;
+
     &.t1 .raid-boss {
       background-color: #e5a1b0;
+
+      &:hover {
+        background-color: lighten(#e5a1b0, 10%);
+      }
     }
 
     &.t2 .raid-boss {
       background-color: #eb6385;
+
+      &:hover {
+        background-color: lighten(#eb6385, 10%);
+      }
     }
 
     &.t3 .raid-boss {
       background-color: #fccc6d;
+
+      &:hover {
+        background-color: lighten(#fccc6d, 10%);
+      }
     }
 
     &.t4 .raid-boss {
       background-color: #e3b346;
+
+      &:hover {
+        background-color: lighten(#e3b346, 10%);
+      }
     }
 
     &.t5 .raid-boss {
       background-color: #c9a0e2;
+
+      &:hover {
+        background-color: lighten(#c9a0e2, 10%);
+      }
     }
 
     &.t6 .raid-boss {
       background-color: #000;
       color: #fff;
+
+      &:hover {
+        background-color: lighten(#000, 10%);
+      }
 
       .cp div.cp_range_weather {
         color: #aaa;
@@ -860,21 +891,34 @@
       }
     }
 
+    &:last-child {
+      margin-bottom: 0;
+    }
+
     .raid-boss {
-      position: relative;
-      margin: 10px 0;
       background: #2aabd2;
-      border-radius: 4px;
       max-width: 800px;
       display: grid;
       grid-template-areas: "tier img name type battlecp cp";
-      grid-template-columns: 50px 30px auto 55px 100px 120px;
+      grid-template-columns: 40px 40px auto 55px 100px 120px;
       grid-template-rows: 50px;
       grid-gap: 5px;
 
+      &:first-child {
+        border-radius: 4px 4px 0 0;
+      }
+
+      &:last-child {
+        border-radius: 0 0 4px 4px;
+      }
+
+      &:only-child {
+        border-radius: 4px;
+      }
+
       @include phone {
         grid-template-areas: "tier img name type cp";
-        grid-template-columns: 50px 30px auto 55px 100px;
+        grid-template-columns: 40px 40px auto 55px 100px;
 
         .battle_cp {
           display: none;
@@ -897,26 +941,31 @@
           position: absolute;
           width: 70px;
           bottom: -5px;
-          right: -15px;
-        }
-
-        .shiny {
-          position: absolute;
-          top: 0px;
-          left: -20px;
-          color: #fff8db;
-
-          i {
-            text-shadow: -2px 0 #b58105, 0 2px #b58105, 2px 0 #b58105, 0 -2px #b58105;
-          }
+          right: -5px;
         }
       }
 
       .name {
         grid-area: name;
-        font-weight: 600;
-        font-size: 16px;
+        font-family: "Patua One";
+        font-weight: 400;
+        font-size: 20px;
         line-height: 50px;
+        z-index: 1;
+
+        .shiny {
+          display: inline;
+          color: #fff8db;
+          margin-left: 10px;
+
+          i {
+            text-shadow: -2px 0 #b58105, 0 2px #b58105, 2px 0 #b58105, 0 -2px #b58105;
+          }
+        }
+
+        @include phone {
+          font-size: 16px;
+        }
       }
 
       .type {
