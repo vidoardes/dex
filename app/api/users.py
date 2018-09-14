@@ -10,7 +10,6 @@ from app.models import User
 
 
 @bp.route("/users/get", methods=["GET"])
-@login_required
 def fetch_users():
     q = request.args.get("q", "")
 
