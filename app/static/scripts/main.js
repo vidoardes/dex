@@ -38,19 +38,8 @@ $.fn.updatestate = function (statetype) {
         data: data,
         type: 'PUT',
         success: function (r) {
-            let _qs = '?' + $.param(qs)
-
-            $.ajax({
-                url: '/api/' + $('#user-profile').data('username') + '/pokemon/get' + _qs,
-                type: 'GET',
-                success: function (r) {
-                    let _pokemon_list = r['pokemon']
-                    $('#pokemon-wrapper').renderpokemon(_pokemon_list, 'update')
-                },
-                error: function (e) {
-                    console.log(e.status)
-                }
-            })
+            let _pokemon_list = r['updated_pokemon']
+            $('#pokemon-wrapper').renderpokemon(_pokemon_list, 'update')
         },
         error: function (e) {
             console.log(e.status)
@@ -135,7 +124,7 @@ $.fn.renderpokemon = function (list, type) {
         } else if (type === 'update') {
             let arrayLength = list.length
 
-            for (var i = 0; i < arrayLength; i++) {
+            for (let i = 0; i < arrayLength; i++) {
                 let _pokemon = list[i]
                 $(this)
                     .find('[data-key="' + _pokemon.name + '"]')
