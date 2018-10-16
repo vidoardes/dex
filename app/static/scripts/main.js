@@ -201,7 +201,7 @@ $(function () {
             })
             .addStep({
                 element: document.querySelectorAll('.ui.search .ui')[0],
-                intro: "Here is the search, which you can find other trainers profiles. That way you can see what they need, and make sure you keep them back for trading.<br /><br />If you'd rather not be found in the search, you can set your profile to priavte.",
+                intro: "Here is the search, which you can find other trainers profiles. That way you can see what they need, and make sure you keep them back for trading.<br /><br />If you'd rather not be found in the search, you can set your profile to private.",
             })
             .addStep({
                 element: document.querySelectorAll('#pokemon-list')[0],

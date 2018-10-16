@@ -1047,9 +1047,11 @@
 
     .tier-header {
       grid-area: header;
+      font-family: "Patua One";
+      font-weight: 400;
       font-size: 20px;
-      font-weight: 600;
       line-height: 30px;
+      margin-bottom: 10px;
 
       img {
         height: 30px;
