@@ -480,7 +480,6 @@
 
 .dex {
   #pokemon-filters {
-    margin-bottom: 20px;
     background: #fff;
     border: 1px solid #d1d5da;
     border-radius: 3px;
@@ -516,6 +515,12 @@
       color: #276f86;
       grid-area: view;
     }
+  }
+
+  .pokemon-result-count {
+    padding: 10px;
+    font-weight: bold;
+    font-size: 12px;
   }
 
   #pokemon-list {
