@@ -49,6 +49,9 @@ def fetch_pokemon(username):
     if gen not in ("all"):
         filtered_query = filtered_query.filter_by(gen=gen)
 
+    if cat in ("lucky"):
+        filtered_query = filtered_query.filter_by(mythical=False)
+
     if cat not in ("all", "lucky"):
         filtered_query = filtered_query.filter(getattr(Pokemon, cat), True)
 
