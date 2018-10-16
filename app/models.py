@@ -87,6 +87,7 @@ class Pokemon(db.Model):
     costumed = db.Column(db.Boolean, default=False, nullable=False)
     img_suffix = db.Column(db.String(6), default="_00", nullable=False)
     in_game = db.Column(db.Boolean, default=False, nullable=False)
+    level_1 = db.Column(db.Boolean, default=True, nullable=False)
     base_attack = db.Column(db.Integer, default=1, nullable=False)
     base_defense = db.Column(db.Integer, default=1, nullable=False)
     base_stamina = db.Column(db.Integer, default=1, nullable=False)
