@@ -183,7 +183,7 @@ $(function () {
                 let data = {data: JSON.stringify(obj)}
 
                 $.ajax({
-                    url: '/api/user/' + $('#user-profile').data('username') + '/update',
+                    url: '/api/user/' + $('#user-profile').data('username') + '/settings/update',
                     data: data,
                     type: 'PUT',
                     success: function (r) {
