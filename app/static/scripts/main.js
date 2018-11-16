@@ -20,13 +20,13 @@ $.fn.updatestate = function (statetype) {
 
     _pokemon.data(statetype, !_pokemon.data(statetype))
 
-    var _name = _pokemon.data('key')
+    var _forme = _pokemon.data('key')
     var _dex = _pokemon.data('dex')
     var _state = _pokemon.data(statetype)
     var _ownedstate = _pokemon.checkownedstate()
 
     var obj = {}
-    obj['name'] = _name
+    obj['forme'] = _forme
     obj['dex'] = _dex
     obj[statetype] = _state
     obj['owned'] = _ownedstate
@@ -86,7 +86,7 @@ $.fn.renderpokemon = function (list, type) {
         }
     }
 
-    const Pokemon = ({name, dex, img_suffix, released, owned, shiny, shinyowned, male, maleowned, female, femaleowned, ungendered, ungenderedowned, luckyowned, type1, type2,}) => `
+    const Pokemon = ({name, forme, dex, img_suffix, released, owned, shiny, shinyowned, male, maleowned, female, femaleowned, ungendered, ungenderedowned, luckyowned, type1, type2, max_cp, base_attack, base_defense, base_stamina}) => `
         <div class="pokemon ${owned ? 'owned' : ''}"
             ${maleowned ? 'data-maleowned="True"' : ''}
             ${femaleowned ? 'data-femaleowned="True"' : ''}
@@ -95,7 +95,7 @@ $.fn.renderpokemon = function (list, type) {
             ${luckyowned ? 'data-luckyowned="True"' : ''}
             ${owned ? 'data-owned="True"' : ''}
             ${released ? '' : 'data-unreleased="False"'}
-            data-key="${name}"
+            data-key="${forme}"
             data-dex="${dex}">
             
             <div class="img" style="background-image: url('../static/img/sprites/pokemon_icon_${dex.toString().padStart(3, '0')}${img_suffix}${qs.cat === 'shiny' ? '_shiny' : ''}.png')"></div>
@@ -115,6 +115,8 @@ $.fn.renderpokemon = function (list, type) {
 
     if (list.length > 0) {
         if (type === 'generate') {
+            console.log(list)
+
             $('.pokemon-result-count').fadeOut("fast", function() { $(this).html(list.length + ' pokemon found').fadeIn("fast")})
             $(this).fadeOut("fast", function () {
                 $(this)
@@ -128,7 +130,7 @@ $.fn.renderpokemon = function (list, type) {
             for (let i = 0; i < arrayLength; i++) {
                 let _pokemon = list[i]
                 $(this)
-                    .find('[data-key="' + _pokemon.name + '"]')
+                    .find('[data-key="' + _pokemon.forme + '"]')
                     .replaceWith([_pokemon].map(Pokemon).join(''))
             }
         }
@@ -303,7 +305,7 @@ $('.sidebar-link.raid-bosses').click(function () {
             url: '/api/pokemon/raidbosses/get',
             type: 'GET',
             success: function (r) {
-                const RaidBoss = ({name, dex, img_suffix, shiny, raid, battle_cp, max_cp, max_cp_weather, min_cp, min_cp_weather, type1, type2}) => `
+                const RaidBoss = ({name, forme, dex, img_suffix, shiny, raid, battle_cp, max_cp, max_cp_weather, min_cp, min_cp_weather, type1, type2}) => `
                     <div class="raid-boss">
                         <div class="tier">
                             ${raid === 6 ? 'EX' : ''}
@@ -317,7 +319,7 @@ $('.sidebar-link.raid-bosses').click(function () {
                             <img src="../static/img/sprites/pokemon_icon_${dex.toString().padStart(3, '0')}${img_suffix}${shiny ? '_shiny' : ''}.png" />
                         </div>
                         <div class="name">
-                            ${name}
+                            ${forme}
                             ${shiny ? "<div class='shiny'><i class='icon star'></i></div>" : "" }
                         </div>
                         <div class="type">
@@ -363,13 +365,13 @@ $('.sidebar-link.egg-hatches').click(function () {
             url: '/api/pokemon/egghatches/get',
             type: 'GET',
             success: function (r) {
-                const EggHatch = ({name, dex, img_suffix, shiny}) => `
+                const EggHatch = ({forme, dex, img_suffix, shiny}) => `
                     <div class="egg-hatch">
                         <div class="img">
                             <img src="../static/img/sprites/pokemon_icon_${dex.toString().padStart(3, '0')}${img_suffix}${shiny ? '_shiny' : ''}.png" />
                             ${shiny ? "<div class='shiny'><i class='icon star'></i></div>" : "" }
                         </div>
-                        <div class="name">${name}</div>
+                        <div class="name">${forme}</div>
                     </div>
                 `
 

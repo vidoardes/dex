@@ -4,10 +4,13 @@ from time import time
 
 import jwt
 import math
-from flask import current_app, url_for
+import decimal
+from flask import current_app
 from flask_login import UserMixin
 
 from app import db, login, bcrypt
+
+from sqlalchemy.ext.hybrid import hybrid_property
 
 
 class User(UserMixin, db.Model):
@@ -68,50 +71,100 @@ class User(UserMixin, db.Model):
 class Pokemon(db.Model):
     __tablename__ = "pokemon"
 
-    name = db.Column(
-        db.String(120), unique=True, default="", primary_key=True, nullable=False
-    )
     dex = db.Column(db.Integer, nullable=False)
-    shiny = db.Column(db.Boolean, default=False, nullable=False)
-    alolan = db.Column(db.Boolean, default=False, nullable=False)
-    regional = db.Column(db.Boolean, default=False, nullable=False)
+    name = db.Column(db.String(120), unique=False, default="", nullable=False)
+    forme = db.Column(db.String(120), unique=True, default="", primary_key=True, nullable=False)
+    img_suffix = db.Column(db.String(6), default="_00", nullable=False)
     male = db.Column(db.Boolean, default=False, nullable=False)
     female = db.Column(db.Boolean, default=False, nullable=False)
     ungendered = db.Column(db.Boolean, default=False, nullable=False)
     legendary = db.Column(db.Boolean, default=False, nullable=False)
     mythical = db.Column(db.Boolean, default=False, nullable=False)
+    baby = db.Column(db.Boolean, default=False, nullable=False)
     gen = db.Column(db.Integer, default=0, nullable=False)
-    released = db.Column(db.Boolean, default=False, nullable=False)
     hatch = db.Column(db.Integer, nullable=True)
     raid = db.Column(db.Integer, nullable=True)
+    buddy = db.Column(db.Integer, nullable=False)
+    evolve = db.Column(db.Integer, nullable=True)
+    evolve_into = db.Column(db.Integer, nullable=True)
+    shiny = db.Column(db.Boolean, default=False, nullable=False)
+    regional = db.Column(db.Boolean, default=False, nullable=False)
+    alolan = db.Column(db.Boolean, default=False, nullable=False)
     costumed = db.Column(db.Boolean, default=False, nullable=False)
-    img_suffix = db.Column(db.String(6), default="_00", nullable=False)
+    mega = db.Column(db.Boolean, default=False, nullable=False)
+    released = db.Column(db.Boolean, default=False, nullable=False)
     in_game = db.Column(db.Boolean, default=False, nullable=False)
     level_1 = db.Column(db.Boolean, default=True, nullable=False)
-    base_attack = db.Column(db.Integer, default=1, nullable=False)
-    base_defense = db.Column(db.Integer, default=1, nullable=False)
-    base_stamina = db.Column(db.Integer, default=1, nullable=False)
     classification = db.Column(db.String(120))
+    japanese_name_romaji = db.Column(db.String(120))
     japanese_name = db.Column(db.String(120))
     type1 = db.Column(db.String(20))
     type2 = db.Column(db.String(20))
+    hp = db.Column(db.Integer, default=1, nullable=False)
+    attack = db.Column(db.Integer, default=1, nullable=False)
+    defense = db.Column(db.Integer, default=1, nullable=False)
+    sp_attack = db.Column(db.Integer, default=1, nullable=False)
+    sp_defense = db.Column(db.Integer, default=1, nullable=False)
+    speed = db.Column(db.Integer, default=1, nullable=False)
+    stat_nerf = db.Column(db.Integer, default=1, nullable=False)
+
+    @hybrid_property
+    def speed_mod(self):
+        return 1 + ((self.speed - 75) / 500)
+
+    @hybrid_property
+    def stat_nerf_mod(self):
+        return (100 - self.stat_nerf) / 100
+
+    @hybrid_property
+    def scaled_attack(self):
+        sa = 2 * (max(self.attack, self.sp_attack) * 0.875 + min(self.attack, self.sp_attack) * 0.125)
+        rsa = decimal.Decimal(sa).quantize(0,rounding=decimal.ROUND_HALF_UP)
+        return float(rsa)
+
+    @hybrid_property
+    def scaled_defense(self):
+        sd = 2 * (max(self.defense, self.sp_defense) * 0.625 + min(self.defense, self.sp_defense) * 0.375)
+        rsd = decimal.Decimal(sd).quantize(0,rounding=decimal.ROUND_HALF_UP)
+        return float(rsd)
+
+    @hybrid_property
+    def base_attack(self):
+        ba= self.scaled_attack * self.speed_mod * self.stat_nerf_mod
+        rba = decimal.Decimal(ba).quantize(0,rounding=decimal.ROUND_HALF_UP)
+        return float(rba)
+
+    @hybrid_property
+    def base_defense(self):
+        return round(self.scaled_defense * self.speed_mod * self.stat_nerf_mod)
+
+    @hybrid_property
+    def base_stamina(self):
+        hp = self.hp * 1.75 + 50
+        return math.floor(self.hp * 1.75 * self.stat_nerf_mod)
+
+    @hybrid_property
+    def max_cp(self):
+        return self.calc_cp(40, 15, 15, 15)
 
     def __repr__(self):
         return "<Profile {}>".format(self.body)
 
     def as_dict(self):
-        return {c.name: getattr(self, c.name) for c in self.__table__.columns}
+        _dict = {c.name: getattr(self, c.name) for c in self.__table__.columns}
+        _dict['max_cp'] = self.max_cp
+        _dict['base_attack'] = self.base_attack
+        _dict['base_defense'] = self.base_defense
+        _dict['base_stamina'] = self.base_stamina
+
+        return _dict
 
     def calc_cp(self, level=40, atk_iv=15, defense_iv=15, stamina_iv=15):
-        base_atk = self.base_attack
-        base_defense = self.base_defense
-        base_stamina = self.base_stamina
-
         cp_multiplier = CPMultipliers.query.filter_by(level=float(level)).first_or_404()
 
-        atk = base_atk + atk_iv
-        defense = (base_defense + defense_iv) ** 0.5
-        stamina = (base_stamina + stamina_iv) ** 0.5
+        atk = self.base_attack + atk_iv
+        defense = (self.base_defense + defense_iv) ** 0.5
+        stamina = (self.base_stamina + stamina_iv) ** 0.5
 
         return max(
             10,

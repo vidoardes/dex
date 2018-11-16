@@ -60,7 +60,7 @@ def fetch_pokemon(username):
 
     pokemon = sorted(
         merge_dict_lists(
-            "name",
+            "forme",
             pokemon_list,
             json.loads(user.pokemon_owned).get(list, []),
             append=False,
@@ -100,7 +100,7 @@ def update_pokemon(username):
         pokemon = json.loads(request.form.get("data"))
 
         ul = merge_dict_lists(
-            "name", json.loads(user.pokemon_owned).get(list, []), [pokemon]
+            "forme", json.loads(user.pokemon_owned).get(list, []), [pokemon]
         )
 
         user.pokemon_owned = json.dumps({list: ul})
@@ -109,14 +109,14 @@ def update_pokemon(username):
         updated_pokemon = pokemon
 
         for p in json.loads(user.pokemon_owned).get(list, []):
-            if p["name"] == pokemon["name"]:
+            if p["forme"] == pokemon["forme"]:
                 updated_pokemon = p
                 break
 
         updated_pokemon_list = merge_dict_lists(
-            "name",
+            "forme",
             [updated_pokemon],
-            [Pokemon.query.filter_by(name=pokemon["name"]).first().as_dict()],
+            [Pokemon.query.filter_by(forme=pokemon["forme"]).first().as_dict()],
         )
 
         r = json.dumps({"success": True, "updated_pokemon": updated_pokemon_list})
