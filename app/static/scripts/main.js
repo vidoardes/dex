@@ -204,11 +204,11 @@ $(function () {
             })
             .addStep({
                 element: document.querySelectorAll('#pokemon-list')[0],
-                intro: "... and here is what you came for, the pokemon! This is a list of every Pokemon currently availible in Pokemon GO, with a picture, name, dex number, and 5 options",
+                intro: "... and here is what you came for, the pokemon! This is a list of every Pokemon currently availible in Pokemon GO, with a picture, name, dex number, and 4 options",
             })
             .addStep({
                 element: document.querySelectorAll('.pm-opt')[0],
-                intro: "You can record wether you have caught one of each gender, it's shiny form, alolan form, or have a lucky variant. The options will only be active if they apply to the individual Pokemon no telling people you have a shiny Mew!",
+                intro: "You can record wether you have caught one of each gender, it's shiny form, or have a lucky variant. The options will only be active if they apply to the individual Pokemon no telling people you have a shiny Mew!",
             })
             .addStep({
                 element: document.querySelectorAll('#pokemon-filters')[0],
@@ -508,5 +508,3 @@ $('#update-player-level').click(function () {
         }
     })
 })
-
-$()

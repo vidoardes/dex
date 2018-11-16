@@ -14,4 +14,6 @@ def show_user(username):
     if not user.is_public and current_user.username != user.username:
         abort(403)
 
-    return render_template("main/user.html", user=user, settings=json.loads(user.settings)["view-settings"])
+    return render_template(
+        "main/user.html", user=user, settings=json.loads(user.settings)["view-settings"]
+    )

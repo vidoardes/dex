@@ -116,7 +116,11 @@ def fetch_pokemon(username):
         if key == "show-deoxys" and not value:
             filtered_query = filtered_query.filter(
                 Pokemon.forme.notin_(
-                    ["Deoxys (Attack Forme)", "Deoxys (Defense Forme)", "Deoxys (Speed Forme)"]
+                    [
+                        "Deoxys (Attack Forme)",
+                        "Deoxys (Defense Forme)",
+                        "Deoxys (Speed Forme)",
+                    ]
                 )
             )
 
