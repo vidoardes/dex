@@ -55,6 +55,77 @@ def fetch_pokemon(username):
     if cat not in ("all", "lucky"):
         filtered_query = filtered_query.filter(getattr(Pokemon, cat), True)
 
+    for key, value in json.loads(user.settings)["view-settings"].items():
+        if key == "show-spinda" and not value:
+            filtered_query = filtered_query.filter(
+                Pokemon.forme.notin_(
+                    [
+                        "Spinda #2",
+                        "Spinda #3",
+                        "Spinda #4",
+                        "Spinda #5",
+                        "Spinda #6",
+                        "Spinda #7",
+                        "Spinda #8",
+                    ]
+                )
+            )
+
+        if key == "show-unown" and not value:
+            filtered_query = filtered_query.filter(
+                Pokemon.forme.notin_(
+                    [
+                        "Unown (A)",
+                        "Unown (B)",
+                        "Unown (C)",
+                        "Unown (D)",
+                        "Unown (E)",
+                        "Unown (G)",
+                        "Unown (H)",
+                        "Unown (I)",
+                        "Unown (J)",
+                        "Unown (K)",
+                        "Unown (L)",
+                        "Unown (M)",
+                        "Unown (N)",
+                        "Unown (O)",
+                        "Unown (P)",
+                        "Unown (Q)",
+                        "Unown (R)",
+                        "Unown (S)",
+                        "Unown (T)",
+                        "Unown (U)",
+                        "Unown (V)",
+                        "Unown (W)",
+                        "Unown (X)",
+                        "Unown (Y)",
+                        "Unown (Z)",
+                        "Unown (!)",
+                        "Unown (?)",
+                    ]
+                )
+            )
+
+        if key == "show-castform" and not value:
+            filtered_query = filtered_query.filter(
+                Pokemon.forme.notin_(
+                    ["Sunny Castform", "Rainy Castform", "Snowy Castform"]
+                )
+            )
+
+        if key == "show-deoxys" and not value:
+            filtered_query = filtered_query.filter(
+                Pokemon.forme.notin_(
+                    ["Deoxys (Attack Forme)", "Deoxys (Defense Forme)", "Deoxys (Speed Forme)"]
+                )
+            )
+
+        if key == "show-alolan" and not value:
+            filtered_query = filtered_query.filter_by(alolan=False)
+
+        if key == "show-costumed" and not value:
+            filtered_query = filtered_query.filter_by(costumed=False)
+
     for u in filtered_query.all():
         pokemon_list.append(u.as_dict())
 
@@ -67,6 +138,18 @@ def fetch_pokemon(username):
         ),
         key=lambda k: (k["dex"], k["img_suffix"]),
     )
+
+    if "show-spinda" in json.loads(user.settings)["view-settings"]:
+        if not json.loads(user.settings)["view-settings"]["show-spinda"]:
+            for p in pokemon:
+                if p["forme"] == "Spinda #1":
+                    p["forme"] = p["name"]
+
+    if "show-unown" in json.loads(user.settings)["view-settings"]:
+        if not json.loads(user.settings)["view-settings"]["show-unown"]:
+            for p in pokemon:
+                if p["forme"] == "Unown (F)":
+                    p["forme"] = p["name"]
 
     if not own == "all":
         _pokemon_owned = []
@@ -99,6 +182,12 @@ def update_pokemon(username):
         list = request.args.get("list", "default")
         pokemon = json.loads(request.form.get("data"))
 
+        if pokemon["forme"] == "Spinda":
+            pokemon["forme"] = "Spinda #1"
+
+        if pokemon["forme"] == "Unown":
+            pokemon["forme"] = "Unown (F)"
+
         ul = merge_dict_lists(
             "forme", json.loads(user.pokemon_owned).get(list, []), [pokemon]
         )
@@ -116,8 +205,17 @@ def update_pokemon(username):
         updated_pokemon_list = merge_dict_lists(
             "forme",
             [updated_pokemon],
-            [Pokemon.query.filter_by(forme=pokemon["forme"]).first().as_dict()],
+            [Pokemon.query.filter_by(forme=pokemon["forme"]).first_or_404().as_dict()],
         )
+
+        for p in updated_pokemon_list:
+            view_settings = json.loads(user.settings)["view-settings"]
+
+            if not view_settings["show-spinda"] and p["forme"] == "Spinda #1":
+                p["forme"] = "Spinda"
+
+            if not view_settings["show-unown"] and p["forme"] == "Unown (F)":
+                p["forme"] = "Unown"
 
         r = json.dumps({"success": True, "updated_pokemon": updated_pokemon_list})
         return Response(r, status=200, mimetype="application/json")

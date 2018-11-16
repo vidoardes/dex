@@ -73,7 +73,9 @@ class Pokemon(db.Model):
 
     dex = db.Column(db.Integer, nullable=False)
     name = db.Column(db.String(120), unique=False, default="", nullable=False)
-    forme = db.Column(db.String(120), unique=True, default="", primary_key=True, nullable=False)
+    forme = db.Column(
+        db.String(120), unique=True, default="", primary_key=True, nullable=False
+    )
     img_suffix = db.Column(db.String(6), default="_00", nullable=False)
     male = db.Column(db.Boolean, default=False, nullable=False)
     female = db.Column(db.Boolean, default=False, nullable=False)
@@ -118,20 +120,26 @@ class Pokemon(db.Model):
 
     @hybrid_property
     def scaled_attack(self):
-        sa = 2 * (max(self.attack, self.sp_attack) * 0.875 + min(self.attack, self.sp_attack) * 0.125)
-        rsa = decimal.Decimal(sa).quantize(0,rounding=decimal.ROUND_HALF_UP)
+        sa = 2 * (
+            max(self.attack, self.sp_attack) * 0.875
+            + min(self.attack, self.sp_attack) * 0.125
+        )
+        rsa = decimal.Decimal(sa).quantize(0, rounding=decimal.ROUND_HALF_UP)
         return float(rsa)
 
     @hybrid_property
     def scaled_defense(self):
-        sd = 2 * (max(self.defense, self.sp_defense) * 0.625 + min(self.defense, self.sp_defense) * 0.375)
-        rsd = decimal.Decimal(sd).quantize(0,rounding=decimal.ROUND_HALF_UP)
+        sd = 2 * (
+            max(self.defense, self.sp_defense) * 0.625
+            + min(self.defense, self.sp_defense) * 0.375
+        )
+        rsd = decimal.Decimal(sd).quantize(0, rounding=decimal.ROUND_HALF_UP)
         return float(rsd)
 
     @hybrid_property
     def base_attack(self):
-        ba= self.scaled_attack * self.speed_mod * self.stat_nerf_mod
-        rba = decimal.Decimal(ba).quantize(0,rounding=decimal.ROUND_HALF_UP)
+        ba = self.scaled_attack * self.speed_mod * self.stat_nerf_mod
+        rba = decimal.Decimal(ba).quantize(0, rounding=decimal.ROUND_HALF_UP)
         return float(rba)
 
     @hybrid_property
@@ -152,10 +160,10 @@ class Pokemon(db.Model):
 
     def as_dict(self):
         _dict = {c.name: getattr(self, c.name) for c in self.__table__.columns}
-        _dict['max_cp'] = self.max_cp
-        _dict['base_attack'] = self.base_attack
-        _dict['base_defense'] = self.base_defense
-        _dict['base_stamina'] = self.base_stamina
+        _dict["max_cp"] = self.max_cp
+        _dict["base_attack"] = self.base_attack
+        _dict["base_defense"] = self.base_defense
+        _dict["base_stamina"] = self.base_stamina
 
         return _dict
 

@@ -99,7 +99,7 @@ $.fn.renderpokemon = function (list, type) {
             data-dex="${dex}">
             
             <div class="img" style="background-image: url('../static/img/sprites/pokemon_icon_${dex.toString().padStart(3, '0')}${img_suffix}${qs.cat === 'shiny' ? '_shiny' : ''}.png')"></div>
-            <div class="info">${name}</div>
+            <div class="info">${forme}</div>
             <div class="type">
                 ${type1 !== null ? '<img src="../static/img/types/icon_' + type1 + '.png" />' : ''}
                 ${type2 !== null ? '<img src="../static/img/types/icon_' + type2 + '.png" />' : ''}
@@ -112,11 +112,10 @@ $.fn.renderpokemon = function (list, type) {
             </div>
         </div>
     `
-
     if (list.length > 0) {
-        if (type === 'generate') {
-            console.log(list)
+        let arrayLength = list.length
 
+        if (type === 'generate') {
             $('.pokemon-result-count').fadeOut("fast", function() { $(this).html(list.length + ' pokemon found').fadeIn("fast")})
             $(this).fadeOut("fast", function () {
                 $(this)
@@ -125,8 +124,6 @@ $.fn.renderpokemon = function (list, type) {
                     .fadeIn()
             })
         } else if (type === 'update') {
-            let arrayLength = list.length
-
             for (let i = 0; i < arrayLength; i++) {
                 let _pokemon = list[i]
                 $(this)
@@ -152,10 +149,10 @@ let qs = {}
 $(function () {
     $('#pokemon-wrapper').renderallpokemon()
 
-    $('.ui.checkbox').checkbox({
+    $('.ui.checkbox.private-profile').checkbox({
         onChange: function () {
             let _obj = {}
-            _obj['public'] = $('.ui.checkbox').checkbox('is unchecked')
+            _obj['public'] = $('.ui.checkbox.private-profile').checkbox('is unchecked')
             let data = {data: JSON.stringify(_obj)}
 
             $.ajax({
@@ -272,6 +269,7 @@ $('.sidebar-link.living-dex').click(function () {
             $('.content-panel.active').removeClass('active')
             $('.sidebar-link.active').removeClass('active')
             $('.sidebar-link.living-dex').addClass('active')
+            $('#pokemon-wrapper').renderallpokemon()
             $('.content-panel.dex').addClass('active').fadeIn()
             $('#sidebar').removeClass('show-sidebar')
         })
@@ -407,10 +405,20 @@ $('.sidebar-link.user-settings').click(function () {
             success: function (r) {
                 let _settings = r['settings']
 
+                $('.view-settings .ui.checkbox').checkbox('set checked')
+
+                for(const [key, value] of Object.entries(_settings.config["view-settings"])) {
+                    if (value == false) {
+                        $('.view-settings .ui.checkbox.' + key).checkbox('set unchecked')
+                    } else {
+                        $('.view-settings .ui.checkbox.' + key).checkbox('set checked')
+                    }
+                }
+
                 if (!_settings.public) {
-                    $('.content-panel.user-settings .ui.checkbox').checkbox('set checked')
+                    $('.content-panel.user-settings .ui.checkbox.private-profile').checkbox('set checked')
                 } else {
-                    $('.content-panel.user-settings .ui.checkbox').checkbox('set unchecked')
+                    $('.content-panel.user-settings .ui.checkbox.private-profile').checkbox('set unchecked')
                 }
 
                 $('.content-panel.active').removeClass('active')
@@ -426,6 +434,29 @@ $('.sidebar-link.user-settings').click(function () {
             }
         })
     })
+})
+
+$('.view-settings .ui.checkbox').checkbox({
+    onChange: function () {
+        let _obj = {}
+        let _setting_changed = $(this).attr('name')
+
+        _obj['view-settings'] = {[_setting_changed]: $('.ui.checkbox.' + _setting_changed).checkbox('is checked')}
+
+        let data = {data: JSON.stringify(_obj)}
+
+        $.ajax({
+            url: '/api/user/' + $('#user-profile').data('username') + '/settings/update',
+            data: data,
+            type: 'PUT',
+            success: function (r) {
+
+            },
+            error: function (e) {
+                console.log(e.status)
+            }
+        })
+    }
 })
 
 $('#update-email').click(function () {
@@ -477,3 +508,5 @@ $('#update-player-level').click(function () {
         }
     })
 })
+
+$()

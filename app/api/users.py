@@ -43,7 +43,7 @@ def get_user_settings(username):
 
     if current_user.username == user.username:
         settings = {
-            "config": user.settings,
+            "config": json.loads(user.settings),
             "public": user.is_public,
             "email": user.email,
             "player_level": user.player_level,
@@ -69,6 +69,7 @@ def update_user(username):
         tour = data.get("tour")
         public = data.get("public")
         player_level = data.get("player_level")
+        view_settings = data.get("view-settings")
 
         if tour is not None:
             if isinstance(tour, bool):
@@ -102,10 +103,17 @@ def update_user(username):
             else:
                 user.email = email
 
+        if view_settings is not None:
+            old_settings = json.loads(user.settings)
+            old_settings["view-settings"] = dict(
+                old_settings["view-settings"], **data["view-settings"]
+            )
+            user.settings = json.dumps(old_settings)
+
         db.session.commit()
 
         settings = {
-            "config": user.settings,
+            "config": json.loads(user.settings),
             "public": user.is_public,
             "email": user.email,
             "player_level": user.player_level,
