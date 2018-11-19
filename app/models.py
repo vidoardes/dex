@@ -144,7 +144,9 @@ class Pokemon(db.Model):
 
     @hybrid_property
     def base_defense(self):
-        return round(self.scaled_defense * self.speed_mod * self.stat_nerf_mod)
+        bd = self.scaled_defense * self.speed_mod * self.stat_nerf_mod
+        rda = decimal.Decimal(bd).quantize(0, rounding=decimal.ROUND_HALF_UP)
+        return float(rda)
 
     @hybrid_property
     def base_stamina(self):
