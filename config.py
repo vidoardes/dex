@@ -29,6 +29,9 @@ class Config(object):
     LOG_MAXBYTES = 1024
     LOG_BACKUPS = 2
 
+    # Maintenance Mode
+    MAINTENANCE = os.environ.get('MAINTENANCE')
+
     @staticmethod
     def init_app(app):
         pass

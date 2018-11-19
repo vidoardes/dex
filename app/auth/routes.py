@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from flask import render_template, flash, redirect, url_for, request
+from flask import render_template, flash, redirect, url_for, request, current_app
 from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
 
@@ -15,6 +15,20 @@ from app.auth.forms import (
     ConfirmEmailForm,
 )
 from app.models import User
+
+
+@bp.before_request
+def check_for_maintenance():
+    if current_app.config["MAINTENANCE"]=="TRUE" and request.path != url_for("auth.maintenance"):
+        return redirect(url_for("auth.maintenance"))
+
+
+@bp.route("/maintenance", methods=["GET"])
+def maintenance():
+    if current_app.config["MAINTENANCE"]=="TRUE":
+        return render_template("auth/maintenance.html", title="Maintenance")
+    else:
+        return redirect(url_for("auth.login"))
 
 
 @bp.route("/", methods=["GET", "POST"])
