@@ -108,7 +108,10 @@ class Pokemon(db.Model):
     sp_attack = db.Column(db.Integer, default=1, nullable=False)
     sp_defense = db.Column(db.Integer, default=1, nullable=False)
     speed = db.Column(db.Integer, default=1, nullable=False)
-    stat_nerf = db.Column(db.Integer, default=1, nullable=False)
+    stat_nerf = db.Column(db.Integer, default=0, nullable=False)
+    base_attack_override = db.Column(db.Integer, default=0, nullable=False)
+    base_defense_override = db.Column(db.Integer, default=0, nullable=False)
+    base_stamina_override = db.Column(db.Integer, default=0, nullable=False)
 
     @hybrid_property
     def speed_mod(self):
@@ -138,26 +141,35 @@ class Pokemon(db.Model):
 
     @hybrid_property
     def base_attack(self):
-        ba = self.scaled_attack * self.speed_mod * self.stat_nerf_mod
-        rba = decimal.Decimal(ba).quantize(0, rounding=decimal.ROUND_HALF_UP)
-        return float(rba)
+        if self.base_attack_override > 0:
+            return self.base_attack_override
+        else:
+            ba = self.scaled_attack * self.speed_mod * self.stat_nerf_mod
+            rba = decimal.Decimal(ba).quantize(0, rounding=decimal.ROUND_HALF_UP)
+            return float(rba)
 
     @hybrid_property
     def base_defense(self):
-        bd = self.scaled_defense * self.speed_mod * self.stat_nerf_mod
-        rda = decimal.Decimal(bd).quantize(0, rounding=decimal.ROUND_HALF_UP)
-        return float(rda)
+        if self.base_defense_override > 0:
+            return self.base_defense_override
+        else:
+            bd = self.scaled_defense * self.speed_mod * self.stat_nerf_mod
+            rda = decimal.Decimal(bd).quantize(0, rounding=decimal.ROUND_HALF_UP)
+            return float(rda)
 
     @hybrid_property
     def base_stamina(self):
-        bs = (self.hp * 1.75 + 50) * self.stat_nerf_mod
-
-        if self.stat_nerf_mod < 1:
-            rbs = decimal.Decimal(bs).quantize(0, rounding=decimal.ROUND_HALF_UP)
+        if self.base_stamina_override > 0:
+            return self.base_stamina_override
         else:
-            rbs = math.floor(bs)
+            bs = (self.hp * 1.75 + 50) * self.stat_nerf_mod
 
-        return float(rbs)
+            if self.stat_nerf_mod < 1:
+                rbs = decimal.Decimal(bs).quantize(0, rounding=decimal.ROUND_HALF_UP)
+            else:
+                rbs = math.floor(bs)
+
+            return float(rbs)
 
     @hybrid_property
     def max_cp(self):
