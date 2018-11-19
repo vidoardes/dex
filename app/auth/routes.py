@@ -91,7 +91,7 @@ def confirm_email(token):
 
     if not user:
         flash("The confirmation link is invalid or has expired", "warning")
-        return redirect(url_for("resend_confirmation"))
+        return redirect(url_for("auth.resend_confirmation"))
 
     if user.email_registered:
         flash("Account already confirmed. Please login.", "success")
