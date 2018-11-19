@@ -149,7 +149,10 @@ class Pokemon(db.Model):
     @hybrid_property
     def base_stamina(self):
         hp = self.hp * 1.75 + 50
-        return math.floor(self.hp * 1.75 * self.stat_nerf_mod)
+        if self.stat_nerf_mod > 0:
+            return round((self.hp * 1.75) * self.stat_nerf_mod)
+        else:
+            return math.floor(self.hp * 1.75)
 
     @hybrid_property
     def max_cp(self):
