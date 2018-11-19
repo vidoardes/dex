@@ -16,6 +16,7 @@ def fetch_users():
     public_users = []
     users = (
         User.query.filter_by(is_public=True)
+        .filter_by(deleted=False)
         .filter(User.username.ilike("%" + str(q) + "%"))
         .limit(10)
         .all()
@@ -45,6 +46,7 @@ def get_user_settings(username):
         settings = {
             "config": json.loads(user.settings),
             "public": user.is_public,
+            "unsubscribe": user.unsubscribe,
             "email": user.email,
             "player_level": user.player_level,
         }
@@ -70,6 +72,7 @@ def update_user(username):
         public = data.get("public")
         player_level = data.get("player_level")
         view_settings = data.get("view-settings")
+        unsubscribe = data.get("unsubscribe")
 
         if tour is not None:
             if isinstance(tour, bool):
@@ -110,6 +113,13 @@ def update_user(username):
             )
             user.settings = json.dumps(old_settings)
 
+        if unsubscribe is not None:
+            if isinstance(unsubscribe, bool):
+                user.unsubscribe = unsubscribe
+            else:
+                r = json.dumps({"success": False})
+                return Response(r, status=422, mimetype="application/json")
+
         db.session.commit()
 
         settings = {
@@ -120,6 +130,25 @@ def update_user(username):
         }
 
         r = json.dumps({"success": True, "settings": settings})
+        return Response(r, status=200, mimetype="application/json")
+    else:
+        r = json.dumps({"success": False})
+        return Response(r, status=403, mimetype="application/json")
+
+
+@bp.route("/user/<username>/settings/delete", methods=["GET"])
+@login_required
+def delete_user(username):
+    user = User.query.filter(
+        func.lower(User.username) == func.lower(username)
+    ).first_or_404()
+
+    if current_user.username == user.username:
+        user.deleted = True
+
+        db.session.commit()
+
+        r = json.dumps({"success": True})
         return Response(r, status=200, mimetype="application/json")
     else:
         r = json.dumps({"success": False})

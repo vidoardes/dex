@@ -116,7 +116,9 @@ $.fn.renderpokemon = function (list, type) {
         let arrayLength = list.length
 
         if (type === 'generate') {
-            $('.pokemon-result-count').fadeOut("fast", function() { $(this).html(list.length + ' pokemon found').fadeIn("fast")})
+            $('.pokemon-result-count').fadeOut("fast", function () {
+                $(this).html(list.length + ' pokemon found').fadeIn("fast")
+            })
             $(this).fadeOut("fast", function () {
                 $(this)
                     .html('')
@@ -153,6 +155,26 @@ $(function () {
         onChange: function () {
             let _obj = {}
             _obj['public'] = $('.ui.checkbox.private-profile').checkbox('is unchecked')
+            let data = {data: JSON.stringify(_obj)}
+
+            $.ajax({
+                url: '/api/user/' + $('#user-profile').data('username') + '/settings/update',
+                data: data,
+                type: 'PUT',
+                success: function (r) {
+
+                },
+                error: function (e) {
+                    console.log(e.status)
+                }
+            })
+        }
+    })
+
+    $('.ui.checkbox.unsubscribe').checkbox({
+        onChange: function () {
+            let _obj = {}
+            _obj['unsubscribe'] = $('.ui.checkbox.unsubscribe').checkbox('is checked')
             let data = {data: JSON.stringify(_obj)}
 
             $.ajax({
@@ -407,7 +429,7 @@ $('.sidebar-link.user-settings').click(function () {
 
                 $('.view-settings .ui.checkbox').checkbox('set checked')
 
-                for(const [key, value] of Object.entries(_settings.config["view-settings"])) {
+                for (const [key, value] of Object.entries(_settings.config["view-settings"])) {
                     if (value == false) {
                         $('.view-settings .ui.checkbox.' + key).checkbox('set unchecked')
                     } else {
@@ -416,6 +438,12 @@ $('.sidebar-link.user-settings').click(function () {
                 }
 
                 if (!_settings.public) {
+                    $('.content-panel.user-settings .ui.checkbox.private-profile').checkbox('set checked')
+                } else {
+                    $('.content-panel.user-settings .ui.checkbox.private-profile').checkbox('set unchecked')
+                }
+
+                if (_settings.unsubscribe) {
                     $('.content-panel.user-settings .ui.checkbox.private-profile').checkbox('set checked')
                 } else {
                     $('.content-panel.user-settings .ui.checkbox.private-profile').checkbox('set unchecked')
@@ -434,29 +462,6 @@ $('.sidebar-link.user-settings').click(function () {
             }
         })
     })
-})
-
-$('.view-settings .ui.checkbox').checkbox({
-    onChange: function () {
-        let _obj = {}
-        let _setting_changed = $(this).attr('name')
-
-        _obj['view-settings'] = {[_setting_changed]: $('.ui.checkbox.' + _setting_changed).checkbox('is checked')}
-
-        let data = {data: JSON.stringify(_obj)}
-
-        $.ajax({
-            url: '/api/user/' + $('#user-profile').data('username') + '/settings/update',
-            data: data,
-            type: 'PUT',
-            success: function (r) {
-
-            },
-            error: function (e) {
-                console.log(e.status)
-            }
-        })
-    }
 })
 
 $('#update-email').click(function () {
@@ -508,3 +513,23 @@ $('#update-player-level').click(function () {
         }
     })
 })
+
+$('.delete-profile').click(function () {
+    $('.tiny.modal').modal('show')
+})
+
+$('.ui.tiny.modal')
+    .modal({
+        closable: false,
+        onApprove: function () {
+            $.ajax({
+                url: '/api/user/' + $('#user-profile').data('username') + '/settings/delete',
+                success: function (r) {
+                    window.location.href = '/logout';
+                },
+                error: function (e) {
+                    console.log(e.status)
+                }
+            })
+        }
+    })

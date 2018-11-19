@@ -105,9 +105,9 @@
                                 </div>
 
                                 {% if settings["show-alolan"] != False %}
-                                <div class="item" data-value="alolan"><i
-                                        class="icon alolan"></i> Alolan
-                                </div>
+                                    <div class="item" data-value="alolan"><i
+                                            class="icon alolan"></i> Alolan
+                                    </div>
                                 {% endif %}
 
                                 <div class="item" data-value="regional"><i
@@ -121,9 +121,9 @@
                                 </div>
 
                                 {% if settings["show-costumed"] != False %}
-                                <div class="item" data-value="costumed"><i
-                                        class="icon fab fa-pied-piper-hat"></i> Costumed
-                                </div>
+                                    <div class="item" data-value="costumed"><i
+                                            class="icon fab fa-pied-piper-hat"></i> Costumed
+                                    </div>
                                 {% endif %}
 
                                 <div class="item" data-value="lucky"><i
@@ -230,7 +230,7 @@
                                 given up the dream of finding all Unown, you can simply remove them
                                 from your list via the ckheck boxes below. Deselecting them all
                                 will just provide you with unique dex numbers.</p>
-                            <div class="ui five column center aligned stackable divided grid segment">
+                            <div class="ui five column center aligned attached divided grid segment">
                                 <div class="column">
                                     <div class="inline field">
                                         <div class="ui checkbox show-costumed">
@@ -302,19 +302,24 @@
                                     <label>Make my profile private</label>
                                 </div>
                             </div>
-
-                            {% if user.is_public == False %}
-                                <div class="ui visible error message">
-                                    <div class="header">
-                                        This will hide your profile from other users
-                                    </div>
-                                    <p>You will no longer appear in search results, and your direct
-                                        link will
-                                        no longer work for
-                                        other users</p>
-                                </div>
-                            {% endif %}
                         </form>
+                        <form class="ui form">
+                            <div class="inline field">
+                                <div class="ui toggle checkbox unsubscribe">
+                                    <input type="checkbox" name="unsubscribe"
+                                           id="unsubscribe"
+                                           tabindex="1"
+                                           class="hidden">
+                                    <label>Unsubscribe from content updates</label>
+                                </div>
+                            </div>
+                        </form>
+                        <div class="ui divider"></div>
+                        <div class="inline field">
+                            <button class="ui negative button delete-profile">
+                                Delete My Profile
+                            </button>
+                        </div>
                     </div>
 
 
@@ -337,6 +342,27 @@
                                     href="https://ko-fi.com/vidoardes"
                                     target="_blank">You can
                                 find my ko-fi page here.</a></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="ui tiny modal">
+                <div class="ui icon header">
+                    <i class="trash icon"></i>
+                    Delete Profile
+                </div>
+                <div class="content">
+                    <p>Are you sure you pant to delete your profile?</p>
+                    <b>This action is irriversable</b>
+                </div>
+                <div class="actions">
+                    <div class="ui cancel button">
+                        <i class="remove icon"></i>
+                        No, I want to keep my profile
+                    </div>
+                    <div class="ui red ok button">
+                        <i class="trash icon"></i>
+                        Yes, delete my profile
                     </div>
                 </div>
             </div>

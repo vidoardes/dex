@@ -31,6 +31,8 @@ class User(UserMixin, db.Model):
     settings = db.Column(db.Text, nullable=False, default="[]")
     taken_tour = db.Column(db.Boolean, nullable=False, default=False)
     last_logged_in = db.Column(db.DateTime, default=datetime.utcnow)
+    unsubscribe = db.Column(db.Boolean, default=False, nullable=False)
+    deleted = db.Column(db.Boolean, default=False, nullable=False)
 
     def __repr__(self):
         return "<User {}>".format(self.username)

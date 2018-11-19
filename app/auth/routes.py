@@ -42,6 +42,10 @@ def login():
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
 
+        if user.deleted:
+            flash("You have deleted your account", "error")
+            return redirect(url_for("auth.login"))
+
         if user is None or not user.check_password(form.password.data):
             flash("Invalid username or password", "error")
             return redirect(url_for("auth.login"))
