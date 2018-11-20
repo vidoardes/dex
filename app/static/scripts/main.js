@@ -8,6 +8,7 @@ $.fn.renderallpokemon = function () {
         success: function (r) {
             let _pokemon_list = r['pokemon']
             $('#pokemon-wrapper').renderpokemon(_pokemon_list, 'generate')
+            $.updateurl()
         },
         error: function (e) {
             console.log(e.status)
@@ -142,6 +143,25 @@ $.fn.renderpokemon = function (list, type) {
     }
 }
 
+$.updateurl = function () {
+    let urlParts = window.location.href.split('?')
+
+    if (urlParts.length > 0) {
+        let baseUrl = urlParts[0]
+        let updatedQueryString = ''
+
+        for (const [key, value] of Object.entries(qs)) {
+            updatedQueryString = updatedQueryString + key + '=' + value + '&'
+        }
+
+        updatedQueryString = updatedQueryString.slice(0, -1)
+        if (updatedQueryString.length > 0) {
+            var updatedUri = baseUrl + '?' + updatedQueryString
+            window.history.replaceState({}, document.title, updatedUri)
+        }
+    }
+}
+
 $.fn.api.settings.api = {
     'search': '/api/users/get?q={query}',
 }
@@ -149,6 +169,21 @@ $.fn.api.settings.api = {
 let qs = {}
 
 $(function () {
+    if ($('#gen-select').val() != 'None') {
+        console.log('here')
+        qs.gen = $('#gen-select').val()
+    }
+
+    if ($('#cat-select').val() != 'None') {
+        console.log('here 2')
+        qs.cat = $('#cat-select').val()
+    }
+
+    if ($('#own-select').val() != 'None') {
+        console.log('here 3')
+        qs.own = $('#own-select').val()
+    }
+
     $('#pokemon-wrapper').renderallpokemon()
 
     $('.ui.checkbox.private-profile').checkbox({
@@ -548,7 +583,7 @@ $('.ui.tiny.modal')
             $.ajax({
                 url: '/api/user/' + $('#user-profile').data('username') + '/settings/delete',
                 success: function (r) {
-                    window.location.href = '/logout';
+                    window.location.href = '/logout'
                 },
                 error: function (e) {
                     console.log(e.status)

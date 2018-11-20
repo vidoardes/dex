@@ -46,10 +46,10 @@ def fetch_pokemon(username):
     if name is not None:
         filtered_query = filtered_query.filter_by(name=name)
 
-    if gen not in ("all"):
+    if gen != "all":
         filtered_query = filtered_query.filter_by(gen=gen)
 
-    if cat in ("lucky"):
+    if cat == "lucky":
         filtered_query = filtered_query.filter_by(mythical=False)
 
     if cat not in ("all", "lucky"):
