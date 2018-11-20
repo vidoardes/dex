@@ -11,6 +11,13 @@ Built using Python 3.7
 * Node v10+
 * NPM v3.1+
 
+### Features
+* Track and share your living Pokedex with an easy to use UI
+* Pick and choose what you want to track: select wether you want to track forms, costumed variants, shiny, alolan, gender, or track every variant availible!
+* Filters help you narrow down you list to exactly what you want to see
+* Easy search and find other trainers using the app
+* If you want to keep your data for personal use, you can hide your profile from other users 
+
 ### Project Setup  
 First you will need to create you virtual environment, so open once you have checked out the repo open a terminal window and create a new directory in the root of your project:
 
@@ -33,4 +40,7 @@ npm install
  
  Once all of the above is complete, you are ready to run the site!  Simply type`python -m dex` and `gulp` to get started.
  
- **Please note**: Due to potential copyright issues, images of the pokemon as well as the data on each one is not included in this repo, and will need to be sourced elsewhere 
+ ### Other Resources
+ **Massive thank you to Chrales**, whos work on updating the assets from PoGO makes this app looks so good!: https://github.com/ZeChrales/PogoAssets
+ 
+ I will be uploading my data source to a seperate repository soon: stay tuned!
