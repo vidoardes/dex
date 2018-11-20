@@ -1,12 +1,25 @@
 from datetime import datetime
 
-from flask import render_template, flash, redirect, url_for, request, current_app
+from flask import (
+    render_template,
+    flash,
+    redirect,
+    url_for,
+    request,
+    current_app,
+    json,
+    Response,
+)
 from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
 
 from app import db
 from app.auth import bp
-from app.auth.email import send_password_reset_email, send_confirm_email
+from app.auth.email import (
+    send_password_reset_email,
+    send_confirm_email,
+    send_update_email,
+)
 from app.auth.forms import (
     LoginForm,
     RegistrationForm,
@@ -19,13 +32,15 @@ from app.models import User
 
 @bp.before_request
 def check_for_maintenance():
-    if current_app.config["MAINTENANCE"]=="TRUE" and request.path != url_for("auth.maintenance"):
+    if current_app.config["MAINTENANCE"] == "TRUE" and request.path != url_for(
+        "auth.maintenance"
+    ):
         return redirect(url_for("auth.maintenance"))
 
 
 @bp.route("/maintenance", methods=["GET"])
 def maintenance():
-    if current_app.config["MAINTENANCE"]=="TRUE":
+    if current_app.config["MAINTENANCE"] == "TRUE":
         return render_template("auth/maintenance.html", title="Maintenance")
     else:
         return redirect(url_for("auth.login"))
@@ -194,3 +209,24 @@ def reset_password(token):
         return redirect(url_for("auth.login"))
 
     return render_template("auth/reset_password.html", form=form)
+
+
+@bp.route("/admin/send_update_email", methods=["GET"])
+@login_required
+def update_email():
+    if current_user.is_admin:
+        users = (
+            User.query.filter_by(unsubscribe=False)
+            .filter_by(deleted=False)
+            .filter_by(email_registered=True)
+            .all()
+        )
+
+        for u in users:
+            send_update_email(u)
+
+        r = json.dumps({"success": True})
+        return Response(r, status=200, mimetype="application/json")
+    else:
+        r = json.dumps({"success": False})
+        return Response(r, status=403, mimetype="application/json")
