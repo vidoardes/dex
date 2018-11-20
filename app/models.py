@@ -101,8 +101,6 @@ class Pokemon(db.Model):
     in_game = db.Column(db.Boolean, default=False, nullable=False)
     level_1 = db.Column(db.Boolean, default=True, nullable=False)
     classification = db.Column(db.String(120))
-    japanese_name_romaji = db.Column(db.String(120))
-    japanese_name = db.Column(db.String(120))
     type1 = db.Column(db.String(20))
     type2 = db.Column(db.String(20))
     hp = db.Column(db.Integer, default=1, nullable=False)
