@@ -140,7 +140,7 @@ def fetch_pokemon(username):
             json.loads(user.pokemon_owned).get(list, []),
             append=False,
         ),
-        key=lambda k: (k["dex"], k["img_suffix"]),
+        key=lambda k: (k["p_uid"]),
     )
 
     if "show-spinda" in json.loads(user.settings)["view-settings"]:
@@ -215,11 +215,13 @@ def update_pokemon(username):
         for p in updated_pokemon_list:
             view_settings = json.loads(user.settings)["view-settings"]
 
-            if not view_settings["show-spinda"] and p["forme"] == "Spinda #1":
-                p["forme"] = "Spinda"
+            if "show-spinda" in view_settings:
+                if not view_settings["show-spinda"] and p["forme"] == "Spinda #1":
+                    p["forme"] = "Spinda"
 
-            if not view_settings["show-unown"] and p["forme"] == "Unown (F)":
-                p["forme"] = "Unown"
+            if "show-unown" in view_settings:
+                if not view_settings["show-unown"] and p["forme"] == "Unown (F)":
+                    p["forme"] = "Unown"
 
         r = json.dumps({"success": True, "updated_pokemon": updated_pokemon_list})
         return Response(r, status=200, mimetype="application/json")

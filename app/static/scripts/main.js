@@ -86,7 +86,7 @@ $.fn.renderpokemon = function (list, type) {
         }
     }
 
-    const Pokemon = ({name, forme, dex, img_suffix, released, owned, shiny, shinyowned, male, maleowned, female, femaleowned, ungendered, ungenderedowned, luckyowned, type1, type2, max_cp, base_attack, base_defense, base_stamina}) => `
+    const Pokemon = ({name, forme, dex, p_uid, released, owned, shiny, shinyowned, male, maleowned, female, femaleowned, ungendered, ungenderedowned, luckyowned, type1, type2, max_cp, base_attack, base_defense, base_stamina}) => `
         <div class="pokemon ${owned ? 'owned' : ''}"
             ${maleowned ? 'data-maleowned="True"' : ''}
             ${femaleowned ? 'data-femaleowned="True"' : ''}
@@ -98,7 +98,7 @@ $.fn.renderpokemon = function (list, type) {
             data-key="${forme}"
             data-dex="${dex}">
             
-            <div class="img" style="background-image: url('../static/img/sprites/pokemon_icon_${dex.toString().padStart(3, '0')}${img_suffix}${qs.cat === 'shiny' ? '_shiny' : ''}.png')"></div>
+            <div class="img" style="background-image: url('../static/img/sprites/pokemon_icon_${p_uid}${qs.cat === 'shiny' ? '_shiny' : ''}.png')"></div>
             <div class="info">${forme}</div>
             <div class="type">
                 ${type1 !== null ? '<img src="../static/img/types/icon_' + type1 + '.png" />' : ''}
@@ -192,7 +192,7 @@ $(function () {
     })
 
     $('.ui.search').search()
-    $('.ui.dropdown').dropdown('set selected', '1')
+    $('.ui.dropdown').dropdown()
     $('#filter-view i').popup()
 
     $('#filter-view .fa-th-large').hide()
@@ -325,7 +325,7 @@ $('.sidebar-link.raid-bosses').click(function () {
             url: '/api/pokemon/raidbosses/get',
             type: 'GET',
             success: function (r) {
-                const RaidBoss = ({name, forme, dex, img_suffix, shiny, raid, battle_cp, max_cp, max_cp_weather, min_cp, min_cp_weather, type1, type2}) => `
+                const RaidBoss = ({name, forme, dex, p_uid, shiny, raid, battle_cp, max_cp, max_cp_weather, min_cp, min_cp_weather, type1, type2}) => `
                     <div class="raid-boss">
                         <div class="tier">
                             ${raid === 6 ? 'EX' : ''}
@@ -336,7 +336,7 @@ $('.sidebar-link.raid-bosses').click(function () {
                             ${raid === 1 ? 'I' : ''}
                         </div>
                         <div class="img">
-                            <img src="../static/img/sprites/pokemon_icon_${dex.toString().padStart(3, '0')}${img_suffix}${shiny ? '_shiny' : ''}.png" />
+                            <img src="../static/img/sprites/pokemon_icon_${p_uid}${shiny ? '_shiny' : ''}.png" />
                         </div>
                         <div class="name">
                             ${forme}
@@ -385,10 +385,10 @@ $('.sidebar-link.egg-hatches').click(function () {
             url: '/api/pokemon/egghatches/get',
             type: 'GET',
             success: function (r) {
-                const EggHatch = ({forme, dex, img_suffix, shiny}) => `
+                const EggHatch = ({forme, dex, shiny, p_uid}) => `
                     <div class="egg-hatch">
                         <div class="img">
-                            <img src="../static/img/sprites/pokemon_icon_${dex.toString().padStart(3, '0')}${img_suffix}${shiny ? '_shiny' : ''}.png" />
+                            <img src="../static/img/sprites/pokemon_icon_${p_uid}${shiny ? '_shiny' : ''}.png" />
                             ${shiny ? "<div class='shiny'><i class='icon star'></i></div>" : "" }
                         </div>
                         <div class="name">${forme}</div>

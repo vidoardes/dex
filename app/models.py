@@ -74,12 +74,12 @@ class User(UserMixin, db.Model):
 class Pokemon(db.Model):
     __tablename__ = "pokemon"
 
+    p_uid = db.Column(db.String(20))
     dex = db.Column(db.Integer, nullable=False)
     name = db.Column(db.String(120), unique=False, default="", nullable=False)
     forme = db.Column(
         db.String(120), unique=True, default="", primary_key=True, nullable=False
     )
-    img_suffix = db.Column(db.String(6), default="_00", nullable=False)
     male = db.Column(db.Boolean, default=False, nullable=False)
     female = db.Column(db.Boolean, default=False, nullable=False)
     ungendered = db.Column(db.Boolean, default=False, nullable=False)
