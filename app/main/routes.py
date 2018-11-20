@@ -9,7 +9,9 @@ from app.models import User
 
 @bp.route("/user/<username>")
 def show_user(username):
-    user = User.query.filter_by(username=username).filter_by(deleted=False).first_or_404()
+    user = (
+        User.query.filter_by(username=username).filter_by(deleted=False).first_or_404()
+    )
 
     if not user.is_public and current_user.username != user.username:
         abort(403)

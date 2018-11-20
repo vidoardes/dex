@@ -464,6 +464,29 @@ $('.sidebar-link.user-settings').click(function () {
     })
 })
 
+$('.view-settings .ui.checkbox').checkbox({
+    onChange: function () {
+        let _obj = {}
+        let _setting_changed = $(this).attr('name')
+
+        _obj['view-settings'] = {[_setting_changed]: $('.ui.checkbox.' + _setting_changed).checkbox('is checked')}
+
+        let data = {data: JSON.stringify(_obj)}
+
+        $.ajax({
+            url: '/api/user/' + $('#user-profile').data('username') + '/settings/update',
+            data: data,
+            type: 'PUT',
+            success: function (r) {
+
+            },
+            error: function (e) {
+                console.log(e.status)
+            }
+        })
+    }
+})
+
 $('#update-email').click(function () {
     let _obj = {}
     _obj['email'] = $('#email').val()
