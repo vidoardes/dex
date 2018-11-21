@@ -892,9 +892,10 @@
       max-width: 800px;
       display: grid;
       grid-template-areas: "tier img name type battlecp cp";
-      grid-template-columns: 40px 40px auto 55px 100px 120px;
+      grid-template-columns: 30px 70px auto 55px 100px 120px;
       grid-template-rows: 50px;
       grid-gap: 5px;
+      padding: 5px 0;
 
       &:first-child {
         border-radius: 4px 4px 0 0;
@@ -910,7 +911,7 @@
 
       @include phone {
         grid-template-areas: "tier img name type cp";
-        grid-template-columns: 40px 40px auto 55px 100px;
+        grid-template-columns: 30px 60px auto 55px 100px;
 
         .battle_cp {
           display: none;
@@ -928,12 +929,26 @@
       .img {
         grid-area: img;
         position: relative;
+        display: grid;
+        justify-content: center;
+        align-content: center;
+        overflow: hidden;
 
         img {
-          position: absolute;
+          max-width: 80px;
           max-height: 50px;
-          left: calc(50% - 35px);
-          bottom: 0;
+        }
+
+        .shiny {
+          position: absolute;
+          top: 0;
+          right: 0;
+          background: rgba(33, 87, 136, 0.2) url(../static/img/icon_shiny.png) no-repeat center;
+          background-size: contain;
+          display: block;
+          width: 25px;
+          height: 25px;
+          border-radius: 13px;
         }
       }
 
@@ -944,60 +959,50 @@
         font-size: 20px;
         line-height: 50px;
         z-index: 1;
-
-        .shiny {
-          display: inline;
-          color: #fff8db;
-          margin-left: 10px;
-
-          i {
-            text-shadow: -2px 0 #b58105, 0 2px #b58105, 2px 0 #b58105, 0 -2px #b58105;
-          }
-        }
-
-        @include phone {
-          font-size: 16px;
-        }
       }
 
-      .type {
-        grid-area: type;
-
-        img {
-          float: left;
-          height: 30px;
-          margin: 10px 0 10px -10px;
-
-          &:first-child {
-            margin: 10px 0;
-          }
-        }
-      }
-
-      .battle_cp {
-        grid-area: battlecp;
-        font-weight: 600;
+      @include phone {
         font-size: 16px;
-        line-height: 26px;
-        color: #333;
-        margin: 12px 0;
-        background: rgba(255, 255, 255, 0.4);
-        border-radius: 4px;
-        text-align: center;
       }
+    }
 
-      .cp {
-        grid-area: cp;
+    .type {
+      grid-area: type;
 
-        div {
-          text-align: center;
-          line-height: 25px;
-          font-weight: 600;
-          color: #fff;
+      img {
+        float: left;
+        height: 30px;
+        margin: 10px 0 10px -10px;
 
-          &.cp_range_weather {
-            color: #333;
-          }
+        &:first-child {
+          margin: 10px 0;
+        }
+      }
+    }
+
+    .battle_cp {
+      grid-area: battlecp;
+      font-weight: 600;
+      font-size: 16px;
+      line-height: 26px;
+      color: #333;
+      margin: 12px 0;
+      background: rgba(255, 255, 255, 0.4);
+      border-radius: 4px;
+      text-align: center;
+    }
+
+    .cp {
+      grid-area: cp;
+
+      div {
+        text-align: center;
+        line-height: 25px;
+        font-weight: 600;
+        color: #fff;
+
+        &.cp_range_weather {
+          color: #333;
         }
       }
     }
@@ -1012,19 +1017,15 @@
   .egg-hatch-tier {
     padding: 10px;
 
-    &.tier-10km {
-      margin: 0;
-    }
-
     .tier-header {
       grid-area: header;
       font-weight: 600;
       font-size: 24px;
-      line-height: 30px;
+      line-height: 50px;
       margin-bottom: 20px;
 
       img {
-        height: 30px;
+        height: 50px;
         float: left;
         margin-right: 10px;
       }
