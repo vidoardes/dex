@@ -101,8 +101,7 @@
                                     <i class="icon book"></i> All Pokemon
                                 </div>
                                 <div class="item" data-value="shiny">
-                                    <i class="icon shiny"></i>
-
+                                    <i class="icon shiny"></i> Shiny
                                 </div>
 
                                 {% if settings["show-alolan"] != False %}
@@ -185,36 +184,38 @@
                         <i class="circular cogs icon"></i>
                         User Settings
                     </h1>
-                    <div class="ui horizontal padded segments">
-                        <div class="ui segment padded">
-                            <div class="ui medium header">
-                                <i class="icon far fa-envelope-open"></i>
-                                <div class="content">Change Your Email Address</div>
-                            </div>
-                            <div class="ui form">
-                                <div class="field">
-                                    <input type="email" name="email" id="email"
-                                           placeholder="Email Address">
+                    <div class="ui placeholder segment">
+                        <div class="ui two column stackable divided grid">
+                            <div class="column">
+                                <div class="ui medium header">
+                                    <i class="icon far fa-envelope-open"></i>
+                                    <div class="content">Change Your Email Address</div>
                                 </div>
-                                <button class="ui primary button right floated" id="update-email">
-                                    <i class='fas fa-fw fa-envelope'></i> Update email
-                                </button>
-                            </div>
-                        </div>
-                        <div class="ui segment padded">
-                            <div class="ui medium header">
-                                <i class="icon fas fa-medal"></i>
-                                <div class="content">Update Your Trainer Level</div>
-                            </div>
-                            <div class="ui form">
-                                <div class="field">
-                                    <input type="number" name="level" min="1" max="40" id="level"
-                                           placeholder="Player Level">
+                                <div class="ui form">
+                                    <div class="field">
+                                        <input type="email" name="email" id="email"
+                                               placeholder="Email Address">
+                                    </div>
+                                    <button class="ui primary button right floated" id="update-email">
+                                        <i class='fas fa-fw fa-envelope'></i> Update email
+                                    </button>
                                 </div>
-                                <button class="ui primary button right floated"
-                                        id="update-player-level"><i
-                                        class='fas fa-fw fa-hand-point-up'></i> Level Up!
-                                </button>
+                            </div>
+                            <div class="column">
+                                <div class="ui medium header">
+                                    <i class="icon fas fa-medal"></i>
+                                    <div class="content">Update Your Trainer Level</div>
+                                </div>
+                                <div class="ui form">
+                                    <div class="field">
+                                        <input type="number" name="level" min="1" max="40" id="level"
+                                               placeholder="Player Level">
+                                    </div>
+                                    <button class="ui primary button right floated"
+                                            id="update-player-level"><i
+                                            class='fas fa-fw fa-hand-point-up'></i> Level Up!
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -224,14 +225,14 @@
                             <i class="icon fas fa-binoculars"></i>
                             <div class="content">Pokemon Filter Settings</div>
                         </div>
-                        <form class="ui form view-settings">
-                            <div class="ui small header">Show / Hide Forms</div>
+
+                            <div class="ui small header">Show / Hide Formes & Variants</div>
                             <p>By default all catchable forms are availible to select, but if you
                                 aren't interested in tracking all the variants of Spinda, or have
                                 given up the dream of finding all Unown, you can simply remove them
-                                from your list via the ckheck boxes below. Deselecting them all
-                                will just provide you with unique dex numbers.</p>
-                            <div class="ui five column center aligned attached divided grid segment">
+                                from your list via the check boxes below. Deselecting them all
+                                will provide you with only unique dex numbers.</p>
+                            <div class="ui stackable five column grid">
                                 <div class="column">
                                     <div class="inline field">
                                         <div class="ui checkbox show-costumed">
@@ -280,12 +281,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="column"></div>
-                                <div class="column"></div>
-                                <div class="column"></div>
-                                <div class="column"></div>
                             </div>
-                        </form>
                     </div>
 
                     <div class="ui segment padded">
@@ -293,36 +289,39 @@
                             <i class="icon fas fa-user-secret"></i>
                             <div class="content">Update Your Privacy Settings</div>
                         </div>
-                        <form class="ui form">
-                            <div class="inline field">
-                                <div class="ui toggle checkbox private-profile">
-                                    <input type="checkbox" name="private-profile"
-                                           id="private-profile"
-                                           tabindex="0"
-                                           class="hidden">
-                                    <label>Make my profile private</label>
+                        <div class="ui stackable one column grid">
+                            <div class="column">
+                                <div class="inline field">
+                                    <div class="ui toggle checkbox private-profile">
+                                        <input type="checkbox" name="private-profile"
+                                               id="private-profile"
+                                               tabindex="0"
+                                               class="hidden">
+                                        <label>Make my profile private</label>
+                                    </div>
                                 </div>
                             </div>
-                        </form>
-                        <form class="ui form">
-                            <div class="inline field">
-                                <div class="ui toggle checkbox unsubscribe">
-                                    <input type="checkbox" name="unsubscribe"
-                                           id="unsubscribe"
-                                           tabindex="1"
-                                           class="hidden">
+                            <div class="column">
+                                <div class="inline field">
+                                    <div class="ui toggle checkbox unsubscribe">
+                                        <input type="checkbox" name="unsubscribe"
+                                               id="unsubscribe"
+                                               tabindex="1"
+                                               class="hidden">
                                     <label>Unsubscribe from content updates</label>
+                                    </div>
                                 </div>
                             </div>
-                        </form>
+                        </div>
+
                         <div class="ui divider"></div>
+
                         <div class="inline field">
                             <button class="ui negative button delete-profile">
                                 Delete My Profile
                             </button>
                         </div>
                     </div>
-
 
                     <div class="ui segment">
                         <div class="ui medium header">

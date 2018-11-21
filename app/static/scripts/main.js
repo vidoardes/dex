@@ -135,9 +135,11 @@ $.fn.renderpokemon = function (list, type) {
             }
         }
     } else {
-        $('.pokemon-result-count').fadeOut("fast")
+        $('.pokemon-result-count').fadeOut("fast", function () {
+            $(this).html(list.length + ' pokemon found').fadeIn("fast")
+        })
         $(this).fadeOut("fast", function () {
-            $(this).html('<p id="no-results">Unfortunatly there are no Pokemon match your criteria. Please select a different option from the choices above.</p>').fadeIn("fast")
+            $(this).html('<p id="no-results">Unfortunatly there are no Pokemon that match your criteria. Please select a different option from the filters above.</p>').fadeIn("fast")
 
         })
     }
