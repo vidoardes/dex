@@ -2,6 +2,8 @@ $.fn.renderallpokemon = function () {
     let _qs = '?' + $.param(qs)
     let _container = $(this)
 
+    $('#pokemon-list .ui.dimmer').dimmer('show')
+
     $.ajax({
         url: '/api/' + $('#user-profile').data('username') + '/pokemon/get' + _qs,
         type: 'GET',
@@ -12,6 +14,7 @@ $.fn.renderallpokemon = function () {
         },
         error: function (e) {
             console.log(e.status)
+            $('#pokemon-list .ui.dimmer').dimmer('hide')
         }
     })
 }
@@ -120,12 +123,10 @@ $.fn.renderpokemon = function (list, type) {
             $('.pokemon-result-count').fadeOut("fast", function () {
                 $(this).html(list.length + ' pokemon found').fadeIn("fast")
             })
-            $(this).fadeOut("fast", function () {
-                $(this)
-                    .html('')
-                    .append(list.map(Pokemon).join(''))
-                    .fadeIn()
-            })
+
+            $(this).html('').append(list.map(Pokemon).join(''))
+            $('#pokemon-list .ui.dimmer').dimmer('hide')
+
         } else if (type === 'update') {
             for (let i = 0; i < arrayLength; i++) {
                 let _pokemon = list[i]
@@ -140,6 +141,7 @@ $.fn.renderpokemon = function (list, type) {
         })
         $(this).fadeOut("fast", function () {
             $(this).html('<p id="no-results">Unfortunatly there are no Pokemon that match your criteria. Please select a different option from the filters above.</p>').fadeIn("fast")
+            $('#pokemon-list .ui.dimmer').dimmer('hide')
 
         })
     }

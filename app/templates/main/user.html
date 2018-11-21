@@ -158,11 +158,14 @@
                         </div>
                     </div>
 
-                    <div class="pokemon-result-count">
-                        Returned 0 results
+                    <div class="result-count ui top attached segment pokemon-result-count">
+                        No Pokemon Found :(
                     </div>
 
-                    <div id="pokemon-list">
+                    <div id="pokemon-list" class="ui blurring attached segment">
+                        <div class="ui inverted dimmer">
+                            <div class="ui text loader">Loading</div>
+                        </div>
                         <div id="pokemon-wrapper"></div>
                     </div>
                 </div>

@@ -503,11 +503,9 @@
 
     @include tablet {
       padding: 5px;
-      margin: 3px;
     }
 
     @include phone {
-      margin: 2px 2px 0;
       grid-gap: 5px;
       grid-template-areas: "dd view" "dd view" "dd view";
       grid-template-rows: 1fr 1fr 1fr;
@@ -523,33 +521,36 @@
     }
   }
 
-  .pokemon-result-count {
-    padding: 5px 10px 0;
+  .pokemon-result-count.ui.attached.segment {
     font-weight: bold;
     font-size: 12px;
+
+    @include phone {
+      margin-top: 5px;
+      padding: 5px 10px
+    }
   }
 
   #pokemon-list {
     overflow-y: scroll;
-    height: calc(100vh - 168px);
+    height: calc(100vh - 202px);
 
     @include tablet {
-      padding: 3px;
-      margin: 3px;
-      height: calc(100vh - 171px);
+      height: calc(100vh - 192px);
+      padding: 5px;
     }
 
     @include phone {
-      padding: 0;
-      margin: 0;
-      border-radius: 0;
-      height: calc(100vh - 236px);
+      height: calc(100vh - 244px);
+      padding: 5px;
     }
 
     #pokemon-wrapper {
       display: grid;
       grid-template-rows: auto;
       grid-template-columns: repeat(6, 1fr);
+      padding: 5px;
+      grid-gap: 10px;
 
       @include ultrahddesktop {
         grid-template-columns: repeat(10, 1fr);
@@ -568,13 +569,12 @@
       }
 
       @include phone {
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(2, 1fr);
       }
 
       .pokemon {
         height: 195px;
         float: left;
-        margin: 5px;
         border-radius: 3px;
         position: relative;
         box-shadow: 0 0 0 1px #a9d5de inset, 0 0 0 0 transparent;
