@@ -170,121 +170,129 @@ $.fn.api.settings.api = {
     'search': '/api/users/get?q={query}',
 }
 
+$.taketour = function() {
+    introJs()
+        .oncomplete(function () {
+            let obj = {}
+            obj['tour'] = true
+            let data = {data: JSON.stringify(obj)}
+
+            $.ajax({
+                url: '/api/user/' + $('#user-profile').data('username') + '/settings/update',
+                data: data,
+                type: 'PUT',
+                success: function (r) {
+
+                },
+                error: function (e) {
+                    console.log(e.status)
+                }
+            })
+        })
+        .addStep({
+            element: document.querySelectorAll('#sidebar')[0],
+            intro: "Welcome to DEX! You look new here, let me show you around.<br /><br />This is your player profile, which will show you your stats and allow you to change your settings. <br /><br /> If you are view someone elses profile, it will show you their details. Neat, huh?<br /><br />Speaking of other trainers...",
+        })
+        .addStep({
+            element: document.querySelectorAll('.ui.search .ui')[0],
+            intro: "Here is the search, which you can find other trainers profiles. That way you can see what they need, and make sure you keep them back for trading.<br /><br />If you'd rather not be found in the search, you can set your profile to private.",
+        })
+        .addStep({
+            element: document.querySelectorAll('#pokemon-list')[0],
+            intro: "... and here is what you came for, the pokemon! This is a list of every Pokemon currently availible in Pokemon GO, with a picture, name, dex number, and 4 options",
+        })
+        .addStep({
+            element: document.querySelectorAll('.pm-opt')[0],
+            intro: "You can record wether you have caught one of each gender, it's shiny form, or have a lucky variant. The options will only be active if they apply to the individual Pokemon no telling people you have a shiny Mew!",
+        })
+        .addStep({
+            element: document.querySelectorAll('#pokemon-filters')[0],
+            intro: "These filters allow you to narrow down the results. You can pick individual regions (or generations), pick a group such a shiny or legendary, and the pick wether you want to see ones you own or still need.<br /><br />These can be combined to filter to just what you want to see, so you can find out what Kanto Regionals your buddy still needs!<br /><br />You can also switch between the card view, and a more compacted list view.",
+        })
+        .addStep({
+            element: document.querySelectorAll('#menu')[0],
+            intro: "..and last but but by no means least these options will allow you to get back to your own profile, or to log out if you want to leave (*sniff*)<br /><br />That marks the end of our tour. Hope you find the tool useful, and happy hunting!",
+        })
+        .start()
+}
+
+// INITIALISE UI
+
 let qs = {}
 
 $(function () {
+    $(window).on("load, resize", function() {
+        var viewportWidth = $(window).width();
+        if (viewportWidth < 421) {
+            $("#pokemon-wrapper").addClass("list-view")
+            $("#filter-view .th-list").hide()
+            $("#filter-view .th-large").show()
+        }
+    });
+
     if ($('#gen-select').val() != 'None') {
-        console.log('here')
         qs.gen = $('#gen-select').val()
     }
 
     if ($('#cat-select').val() != 'None') {
-        console.log('here 2')
         qs.cat = $('#cat-select').val()
     }
 
     if ($('#own-select').val() != 'None') {
-        console.log('here 3')
         qs.own = $('#own-select').val()
     }
 
+    $('.ui.search').search()
     $('#pokemon-wrapper').renderallpokemon()
 
-    $('.ui.checkbox.private-profile').checkbox({
-        onChange: function () {
-            let _obj = {}
-            _obj['public'] = $('.ui.checkbox.private-profile').checkbox('is unchecked')
-            let data = {data: JSON.stringify(_obj)}
-
-            $.ajax({
-                url: '/api/user/' + $('#user-profile').data('username') + '/settings/update',
-                data: data,
-                type: 'PUT',
-                success: function (r) {
-
-                },
-                error: function (e) {
-                    console.log(e.status)
-                }
-            })
-        }
-    })
-
-    $('.ui.checkbox.unsubscribe').checkbox({
-        onChange: function () {
-            let _obj = {}
-            _obj['unsubscribe'] = $('.ui.checkbox.unsubscribe').checkbox('is checked')
-            let data = {data: JSON.stringify(_obj)}
-
-            $.ajax({
-                url: '/api/user/' + $('#user-profile').data('username') + '/settings/update',
-                data: data,
-                type: 'PUT',
-                success: function (r) {
-
-                },
-                error: function (e) {
-                    console.log(e.status)
-                }
-            })
-        }
-    })
-
-    $('.ui.search').search()
-    $('.ui.dropdown').dropdown()
-    $('#filter-view i').popup()
-
-    $('#filter-view .fa-th-large').hide()
 
     if ($('body').data("take-tour") === 'True') {
-        introJs()
-            .oncomplete(function () {
-                let obj = {}
-                obj['tour'] = true
-                let data = {data: JSON.stringify(obj)}
-
-                $.ajax({
-                    url: '/api/user/' + $('#user-profile').data('username') + '/settings/update',
-                    data: data,
-                    type: 'PUT',
-                    success: function (r) {
-
-                    },
-                    error: function (e) {
-                        console.log(e.status)
-                    }
-                })
-            })
-            .addStep({
-                element: document.querySelectorAll('#sidebar')[0],
-                intro: "Welcome to DEX! You look new here, let me show you around.<br /><br />This is your player profile, which will show you your stats and allow you to change your settings. <br /><br /> If you are view someone elses profile, it will show you their details. Neat, huh?<br /><br />Speaking of other trainers...",
-            })
-            .addStep({
-                element: document.querySelectorAll('.ui.search .ui')[0],
-                intro: "Here is the search, which you can find other trainers profiles. That way you can see what they need, and make sure you keep them back for trading.<br /><br />If you'd rather not be found in the search, you can set your profile to private.",
-            })
-            .addStep({
-                element: document.querySelectorAll('#pokemon-list')[0],
-                intro: "... and here is what you came for, the pokemon! This is a list of every Pokemon currently availible in Pokemon GO, with a picture, name, dex number, and 4 options",
-            })
-            .addStep({
-                element: document.querySelectorAll('.pm-opt')[0],
-                intro: "You can record wether you have caught one of each gender, it's shiny form, or have a lucky variant. The options will only be active if they apply to the individual Pokemon no telling people you have a shiny Mew!",
-            })
-            .addStep({
-                element: document.querySelectorAll('#pokemon-filters')[0],
-                intro: "These filters allow you to narrow down the results. You can pick individual regions (or generations), pick a group such a shiny or legendary, and the pick wether you want to see ones you own or still need.<br /><br />These can be combined to filter to just what you want to see, so you can find out what Kanto Regionals your buddy still needs!<br /><br />You can also switch between the card view, and a more compacted list view.",
-            })
-            .addStep({
-                element: document.querySelectorAll('#menu')[0],
-                intro: "..and last but but by no means least these options will allow you to get back to your own profile, or to log out if you want to leave (*sniff*)<br /><br />That marks the end of our tour. Hope you find the tool useful, and happy hunting!",
-            })
-            .start()
+        $.taketour()
     }
 })
 
+// SIDEBAR
+
 $('#sidebartoggle').click(function () {
     $('#sidebar').toggleClass('show-sidebar')
+})
+
+$('.sidebar-link').mouseenter(function () {
+    $(this).children(".icon.right").transition('jiggle')
+})
+
+// POKEDEX
+
+$('.sidebar-link.living-dex').click(function () {
+    if (!$('.sidebar-link.living-dex').hasClass('active')) {
+        $('.content-panel.active').fadeOut('fast', function () {
+            $('.content-panel.active').removeClass('active')
+            $('.sidebar-link.active').removeClass('active')
+            $('.sidebar-link.living-dex').addClass('active')
+            $('#pokemon-wrapper').renderallpokemon()
+            $('.content-panel.dex').addClass('active').fadeIn()
+            $('#sidebar').removeClass('show-sidebar')
+        })
+    }
+})
+
+$('#pokemon-filters .ui.dropdown').dropdown().on('change', '#gen-select', function () {
+    qs.gen = $('#gen-select').val()
+    $('#pokemon-list').renderallpokemon()
+}).on('change', '#cat-select', function () {
+    qs.cat = $('#cat-select').val()
+    $('#pokemon-list').renderallpokemon()
+}).on('change', '#own-select', function () {
+    qs.own = $('#own-select').val()
+    $('#pokemon-list').renderallpokemon()
+})
+
+$('#filter-view i').popup().click(function () {
+    $('#filter-view .fa-th-large').toggle()
+    $('#filter-view .fa-th-list').toggle()
+    $('#pokemon-wrapper').toggleClass('list-view')
+})
+
 })
 
 $('#pokemon-wrapper').on('click', 'div.opt.shiny', function () {
@@ -303,39 +311,7 @@ $('#pokemon-wrapper').on('click', 'div.opt.shiny', function () {
     $(this).updatestate('luckyowned')
 })
 
-$('#pokemon-filters').on('change', '#gen-select', function () {
-    qs.gen = $('#gen-select').val()
-    $('#pokemon-list').renderallpokemon()
-}).on('change', '#cat-select', function () {
-    qs.cat = $('#cat-select').val()
-    $('#pokemon-list').renderallpokemon()
-}).on('change', '#own-select', function () {
-    qs.own = $('#own-select').val()
-    $('#pokemon-list').renderallpokemon()
-})
-
-$('#filter-view i').click(function () {
-    $('#filter-view .fa-th-large').toggle()
-    $('#filter-view .fa-th-list').toggle()
-    $('#pokemon-wrapper').toggleClass('list-view')
-})
-
-$('.sidebar-link').mouseenter(function () {
-    $(this).children(".icon.right").transition('jiggle')
-})
-
-$('.sidebar-link.living-dex').click(function () {
-    if (!$('.sidebar-link.living-dex').hasClass('active')) {
-        $('.content-panel.active').fadeOut('fast', function () {
-            $('.content-panel.active').removeClass('active')
-            $('.sidebar-link.active').removeClass('active')
-            $('.sidebar-link.living-dex').addClass('active')
-            $('#pokemon-wrapper').renderallpokemon()
-            $('.content-panel.dex').addClass('active').fadeIn()
-            $('#sidebar').removeClass('show-sidebar')
-        })
-    }
-})
+// LEGACY MOVES
 
 $('.sidebar-link.legacy-moves').click(function () {
     if (!$('.sidebar-link.legacy-moves').hasClass('active')) {
@@ -350,6 +326,7 @@ $('.sidebar-link.legacy-moves').click(function () {
     }
 })
 
+// RAID BOSSES
 
 $('.sidebar-link.raid-bosses').click(function () {
     $('.content-panel.active').fadeOut('fast', function () {
@@ -418,6 +395,8 @@ $('.sidebar-link.raid-bosses').click(function () {
     })
 })
 
+// EGGS
+
 $('.sidebar-link.egg-hatches').click(function () {
     $('.content-panel.active').fadeOut('fast', function () {
         $.ajax({
@@ -457,6 +436,9 @@ $('.sidebar-link.egg-hatches').click(function () {
         })
     })
 })
+
+
+// SETTINGS
 
 $('.sidebar-link.user-settings').click(function () {
     $('.content-panel.active').fadeOut('fast', function () {
@@ -501,29 +483,6 @@ $('.sidebar-link.user-settings').click(function () {
             }
         })
     })
-})
-
-$('.view-settings .ui.checkbox').checkbox({
-    onChange: function () {
-        let _obj = {}
-        let _setting_changed = $(this).attr('name')
-
-        _obj['view-settings'] = {[_setting_changed]: $('.ui.checkbox.' + _setting_changed).checkbox('is checked')}
-
-        let data = {data: JSON.stringify(_obj)}
-
-        $.ajax({
-            url: '/api/user/' + $('#user-profile').data('username') + '/settings/update',
-            data: data,
-            type: 'PUT',
-            success: function (r) {
-
-            },
-            error: function (e) {
-                console.log(e.status)
-            }
-        })
-    }
 })
 
 $('#update-email').click(function () {
@@ -574,6 +533,69 @@ $('#update-player-level').click(function () {
             }, 3000)
         }
     })
+})
+
+$('.view-settings .ui.checkbox').checkbox({
+    onChange: function () {
+        let _obj = {}
+        let _setting_changed = $(this).attr('name')
+
+        _obj['view-settings'] = {[_setting_changed]: $('.ui.checkbox.' + _setting_changed).checkbox('is checked')}
+
+        let data = {data: JSON.stringify(_obj)}
+
+        $.ajax({
+            url: '/api/user/' + $('#user-profile').data('username') + '/settings/update',
+            data: data,
+            type: 'PUT',
+            success: function (r) {
+
+            },
+            error: function (e) {
+                console.log(e.status)
+            }
+        })
+    }
+})
+
+$('.ui.checkbox.private-profile').checkbox({
+    onChange: function () {
+        let _obj = {}
+        _obj['public'] = $('.ui.checkbox.private-profile').checkbox('is unchecked')
+        let data = {data: JSON.stringify(_obj)}
+
+        $.ajax({
+            url: '/api/user/' + $('#user-profile').data('username') + '/settings/update',
+            data: data,
+            type: 'PUT',
+            success: function (r) {
+
+            },
+            error: function (e) {
+                console.log(e.status)
+            }
+        })
+    }
+})
+
+$('.ui.checkbox.unsubscribe').checkbox({
+    onChange: function () {
+        let _obj = {}
+        _obj['unsubscribe'] = $('.ui.checkbox.unsubscribe').checkbox('is checked')
+        let data = {data: JSON.stringify(_obj)}
+
+        $.ajax({
+            url: '/api/user/' + $('#user-profile').data('username') + '/settings/update',
+            data: data,
+            type: 'PUT',
+            success: function (r) {
+
+            },
+            error: function (e) {
+                console.log(e.status)
+            }
+        })
+    }
 })
 
 $('.delete-profile').click(function () {

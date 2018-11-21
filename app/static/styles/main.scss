@@ -605,7 +605,7 @@
             height: 100px;
             border-radius: 50px;
             background: #276f86;
-            opacity: 0;
+            opacity: 0.15;
             z-index: -1;
           }
         }
@@ -774,6 +774,10 @@
             background-repeat: no-repeat;
             background-position: center;
             background-size: contain;
+
+            &:after {
+              display: none;
+            }
           }
 
           .type {
@@ -862,8 +866,8 @@
   padding-right: 10px;
 
   @include phone {
-    height: calc(100vh - 73px);
-    padding-right: 5px;
+    padding: 0;
+    overflow-y: unset;
   }
 
   .raid-boss-tier {
@@ -1053,8 +1057,8 @@
   padding-right: 10px;
 
   @include phone {
-    height: calc(100vh - 73px);
-    padding-right: 5px;
+    padding: 0;
+    overflow-y: unset;
   }
 
   .egg-hatch-tier {
@@ -1142,12 +1146,20 @@
 
 .content-panel.user-settings {
   padding: 18px;
+  overflow-y: scroll;
+  height: calc(100vh - 83px);
 
   @include phone {
-    padding: 10px;
+    padding: 0;
+    overflow-y: unset;
 
     .ui.segment {
       margin: 10px 0;
+    }
+
+    .ui.basic.segment {
+      margin: 0;
+      padding: 0;
     }
 
     .ui.icon.header .circular.icon {
