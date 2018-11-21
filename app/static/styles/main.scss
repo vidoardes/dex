@@ -573,32 +573,40 @@
       }
 
       .pokemon {
-        height: 195px;
-        float: left;
         border-radius: 3px;
         position: relative;
         box-shadow: 0 0 0 1px #a9d5de inset, 0 0 0 0 transparent;
         background-color: #f8ffff;
         color: #276f86;
         z-index: 1;
+        overflow: hidden;
+        display: grid;
+        grid-auto-flow: row;
+        grid-template-columns: 100%;
+        grid-template-rows: 116px 20px 20px 38px;
+        grid-template-areas: "img" "name" "types" "opt";
 
         &.owned {
           background-color: darken(#f8ffff, 3%);
         }
 
         .img {
-          height: 116px;
-          background-image: url('../img/sprites/pokemon/0.png');
-          background-repeat: no-repeat;
-          background-position: center 100%;
-          position: relative;
-          overflow: hidden;
+          grid-area: img;
+          display: grid;
+          justify-content: center;
+          align-content: end;
+
+          img {
+            max-height: 110px;
+            position: relative;
+
+          }
 
           &:after {
             content: '';
             display: block;
             position: absolute;
-            bottom: 10px;
+            bottom: 80px;
             left: calc(50% - 45px);
             width: 90px;
             height: 90px;
@@ -610,6 +618,7 @@
         }
 
         .info {
+          grid-area: name;
           font-weight: 600;
           text-align: center;
           width: 100%;
@@ -618,14 +627,13 @@
         }
 
         .type {
+          grid-area: types;
           height: 20px;
           max-width: 35px;
           margin: auto;
 
           img {
             height: 20px;
-            display: inline;
-            text-align: center;
             margin-left: -8px;
 
             &:first-child {
@@ -645,31 +653,8 @@
           border-radius: 0 3px 0 3px;
         }
 
-        .dex-special {
-          position: absolute;
-          top: 0;
-          left: 0;
-          height: 20px;
-          width: 20px;
-
-          background-color: #a9d5de;
-          color: #276f86;
-          text-align: center;
-          border-radius: 3px 0 3px 0;
-
-          &.legendary {
-            background-size: 16px;
-            background-repeat: no-repeat;
-            background-position: 2px 3px;
-            background-image: url('../static/img/icon_legendary.png');
-          }
-
-          &.regional {
-
-          }
-        }
-
         .pm-opt {
+          grid-area: opt;
           width: 100%;
           overflow: hidden;
           margin-top: 6px;
@@ -749,8 +734,9 @@
           background-color: #f8ffff;
           color: #276f86;
           display: grid;
+          grid-template-rows: 40px;
           grid-template-columns: 45px 45px minmax(0, 1fr) 150px;
-          grid-template-areas: "dex img name options";
+          grid-template-areas: "dex img name opt";
 
           &.owned {
             background-color: darken(#f8ffff, 3%);
@@ -763,19 +749,16 @@
             line-height: 40px;
             border-radius: 3px 0 0 3px;
             height: 40px;
-            max-width: 100%
+            max-width: 100%;
+            z-index: 1;
           }
 
           .img {
-            grid-area: img;
-            height: 40px;
-            background-image: url('../img/sprites/pokemon/0.png');
-            background-repeat: no-repeat;
-            background-position: center;
-            background-size: contain;
+            align-content: center;
 
-            &:after {
-              display: none;
+            img {
+              max-height: 40px;
+              max-width: 50px;
             }
           }
 
@@ -792,6 +775,7 @@
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            z-index: 1;
           }
 
           .dex-special {
@@ -799,9 +783,7 @@
           }
 
           .pm-opt {
-            grid-area: options;
-            overflow: hidden;
-            margin: 0px;
+            margin: 0;
 
             .opt {
               height: 40px;
@@ -810,29 +792,6 @@
 
               &:last-child {
                 border-radius: 0 3px 3px 0;
-              }
-
-              &.owned {
-                background: #276f86;
-                color: white;
-              }
-
-              .fas.fa-ban {
-                color: Tomato;
-                margin-top: 1px;
-              }
-            }
-
-            div.opt {
-              &:hover {
-                background: #a9d5de;
-                cursor: pointer;
-              }
-            }
-
-            span.opt {
-              i {
-                color: #ddd;
               }
             }
           }
@@ -1087,22 +1046,25 @@
           position: relative;
           width: 110px;
           overflow: hidden;
+          display: grid;
+          align-content: center;
+          justify-content: center;
 
           img {
-            margin-left: 50%;
-            transform: translateX(-50%);
-            height: 70px;
+            max-height: 70px;
+            max-width: 90px;
           }
 
           .shiny {
             position: absolute;
             top: 0;
             right: 0;
-            background: url(../static/img/icon_shiny.png) no-repeat center;
+            background: rgba(33, 87, 136, 0.2) url(../static/img/icon_shiny.png) no-repeat center;
             background-size: contain;
             display: block;
             width: 25px;
             height: 25px;
+            border-radius: 13px;
           }
         }
 
