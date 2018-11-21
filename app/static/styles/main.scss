@@ -590,8 +590,7 @@
           height: 116px;
           background-image: url('../img/sprites/pokemon/0.png');
           background-repeat: no-repeat;
-          background-position: center 5px;
-          background-size: contain;
+          background-position: center 100%;
           position: relative;
           overflow: hidden;
 
@@ -599,11 +598,11 @@
             content: '';
             display: block;
             position: absolute;
-            bottom: -15px;
-            left: calc(50% - 50px);
-            width: 100px;
-            height: 100px;
-            border-radius: 50px;
+            bottom: 10px;
+            left: calc(50% - 45px);
+            width: 90px;
+            height: 90px;
+            border-radius: 45px;
             background: #276f86;
             opacity: 0.15;
             z-index: -1;
@@ -973,9 +972,9 @@
 
         img {
           position: absolute;
-          width: 70px;
-          bottom: -5px;
-          right: -5px;
+          max-height: 50px;
+          left: calc(50% - 35px);
+          bottom: 0;
         }
       }
 
@@ -1052,37 +1051,18 @@
   padding-right: 10px;
 
   .egg-hatch-tier {
-    position: relative;
-    margin: 0 0 10px;
-    border-radius: 4px;
-    max-width: 800px;
     padding: 10px;
 
-
-    &.tier-2km {
-      background-color: #95b36a;
-    }
-
-    &.tier-5km {
-      background-color: #d6a743;
-    }
-
-    &.tier-7km {
-      background-color: #fccc6d;
-    }
-
     &.tier-10km {
-      background-color: lighten(#897da9, 10%);
       margin: 0;
     }
 
     .tier-header {
       grid-area: header;
-      font-family: "Patua One";
-      font-weight: 400;
-      font-size: 20px;
+      font-weight: 600;
+      font-size: 24px;
       line-height: 30px;
-      margin-bottom: 10px;
+      margin-bottom: 20px;
 
       img {
         height: 30px;
@@ -1094,33 +1074,35 @@
     .pokemon_list {
       display: grid;
       grid-gap: 5px;
-      grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
 
       .egg-hatch {
         display: grid;
         grid-template-areas: "img" "name";
         grid-template-columns: 1fr;
-        grid-template-rows: 70px 35px;
+        grid-template-rows: 70px 55px;
 
         .img {
           grid-area: img;
           position: relative;
-          text-align: center;
+          width: 110px;
+          overflow: hidden;
 
           img {
-            width: 70px;
-            margin: auto;
+            margin-left: 50%;
+            transform: translateX(-50%);
+            height: 70px;
           }
 
           .shiny {
             position: absolute;
             top: 0;
-            left: 0;
-            color: #fff8db;
-
-            i {
-              text-shadow: -2px 0 #b58105, 0 2px #b58105, 2px 0 #b58105, 0 -2px #b58105;
-            }
+            right: 0;
+            background: url(../static/img/icon_shiny.png) no-repeat center;
+            background-size: contain;
+            display: block;
+            width: 25px;
+            height: 25px;
           }
         }
 
@@ -1128,6 +1110,10 @@
           grid-area: name;
           font-weight: 600;
           text-align: center;
+
+          .cp_subtext {
+            color: #8c8c8c;
+          }
         }
       }
     }
@@ -1150,7 +1136,7 @@
     }
 
     .ui.icon.header .circular.icon {
-        font-size: 1em;
+      font-size: 1em;
     }
   }
 }

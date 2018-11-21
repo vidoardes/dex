@@ -176,6 +176,14 @@ class Pokemon(db.Model):
     def max_cp(self):
         return self.calc_cp(40, 15, 15, 15)
 
+    @hybrid_property
+    def min_hatch_cp(self):
+        return self.calc_cp(20, 10, 10, 10)
+
+    @hybrid_property
+    def max_hatch_cp(self):
+        return self.calc_cp(20, 15, 15, 15)
+
     def __repr__(self):
         return "<Profile {}>".format(self.body)
 
@@ -185,6 +193,8 @@ class Pokemon(db.Model):
         _dict["base_attack"] = self.base_attack
         _dict["base_defense"] = self.base_defense
         _dict["base_stamina"] = self.base_stamina
+        _dict["min_hatch_cp"] = self.min_hatch_cp
+        _dict["max_hatch_cp"] = self.max_hatch_cp
 
         return _dict
 

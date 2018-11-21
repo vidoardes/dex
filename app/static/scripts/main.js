@@ -401,13 +401,16 @@ $('.sidebar-link.egg-hatches').click(function () {
             url: '/api/pokemon/egghatches/get',
             type: 'GET',
             success: function (r) {
-                const EggHatch = ({forme, dex, shiny, p_uid}) => `
+                const EggHatch = ({forme, dex, shiny, p_uid, min_hatch_cp, max_hatch_cp}) => `
                     <div class="egg-hatch">
                         <div class="img">
                             <img src="../static/img/sprites/pokemon_icon_${p_uid}${shiny ? '_shiny' : ''}.png" />
-                            ${shiny ? "<div class='shiny'><i class='icon star'></i></div>" : "" }
+                            ${shiny ? "<div class='shiny'></div>" : "" }
                         </div>
-                        <div class="name">${forme}</div>
+                        <div class="name">
+                            ${forme}<br />
+                            <span class="cp_subtext">${min_hatch_cp} - ${max_hatch_cp}</span>
+                        </div>
                     </div>
                 `
 
@@ -424,7 +427,7 @@ $('.sidebar-link.egg-hatches').click(function () {
                     let _egg_hatches_group = value
 
                     $("#egg-hatches-list")
-                        .append('<div class="egg-hatch-tier tier-' + key + 'km"><div class="tier-header"><img src="../static/img/egg_' + key + 'km.png" />' + key + 'km Eggs</div><div class="pokemon_list">' + _egg_hatches_group.map(EggHatch).join('') + '</div></div>')
+                        .append('<div class="ui segment egg-hatch-tier tier-' + key + 'km"><div class="tier-header"><img src="../static/img/egg_' + key + 'km.png" />' + key + 'km Eggs</div><div class="pokemon_list">' + _egg_hatches_group.map(EggHatch).join('') + '</div></div>')
                         .fadeIn()
                 }
             },

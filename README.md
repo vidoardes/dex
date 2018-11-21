@@ -42,5 +42,12 @@ npm install
  
  ### Other Resources
  **Massive thank you to Chrales**, whos work on updating the assets from PoGO makes this app looks so good!: https://github.com/ZeChrales/PogoAssets
+ To normalise the images, you can install ImageMagick and run the following command:
+ 
+ Windows
+ > Foreach ($f in Get-ChildItem *.png) {convert "$f" -fuzz 15% -trim +repage -resize "x110>" "$f"}
+ 
+ Unix
+ > Foreach ($f in Get-ChildItem *.png) {convert "$f" -fuzz 15% -trim +repage -resize "x110>" "$f"}
  
  I will be uploading my data source to a seperate repository soon: stay tuned!
