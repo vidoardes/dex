@@ -824,63 +824,28 @@
   padding-right: 10px;
 
   .raid-boss-tier {
-    margin-bottom: 10px;
-
-    &.t1 .raid-boss {
-      background-color: #e5a1b0;
-
-      &:hover {
-        background-color: lighten(#e5a1b0, 10%);
-      }
+    &.t1 {
+      background-color: rgba(235, 99, 133, 0.15);
     }
 
-    &.t2 .raid-boss {
-      background-color: #eb6385;
-
-      &:hover {
-        background-color: lighten(#eb6385, 10%);
-      }
+    &.t2 {
+      background-color: rgba(235, 99, 133, 0.2);
     }
 
-    &.t3 .raid-boss {
-      background-color: #fccc6d;
-
-      &:hover {
-        background-color: lighten(#fccc6d, 10%);
-      }
+    &.t3 {
+      background-color: rgba(227, 179, 70, 0.2);
     }
 
-    &.t4 .raid-boss {
-      background-color: #e3b346;
-
-      &:hover {
-        background-color: lighten(#e3b346, 10%);
-      }
+    &.t4 {
+      background-color: rgba(227, 179, 70, 0.3);
     }
 
-    &.t5 .raid-boss {
-      background-color: #c9a0e2;
-
-      &:hover {
-        background-color: lighten(#c9a0e2, 10%);
-      }
+    &.t5 {
+      background-color: rgba(201, 160, 226, 0.3);
     }
 
-    &.t6 .raid-boss {
-      background-color: #000;
-      color: #fff;
-
-      &:hover {
-        background-color: lighten(#000, 10%);
-      }
-
-      .cp div.cp_range_weather {
-        color: #aaa;
-      }
-
-      .battle_cp {
-        background: rgba(255, 255, 255, 0.8);
-      }
+    &.t6 {
+      background-color: rgba(0, 0, 0, 0.1);
     }
 
     &:last-child {
@@ -888,42 +853,20 @@
     }
 
     .raid-boss {
-      background: #2aabd2;
-      max-width: 800px;
       display: grid;
-      grid-template-areas: "tier img name type battlecp cp";
-      grid-template-columns: 30px 70px auto 55px 100px 120px;
+      grid-template-areas: "img name type battlecp cp";
+      grid-template-columns: 70px auto 55px 100px 120px;
       grid-template-rows: 50px;
       grid-gap: 5px;
       padding: 5px 0;
 
-      &:first-child {
-        border-radius: 4px 4px 0 0;
-      }
-
-      &:last-child {
-        border-radius: 0 0 4px 4px;
-      }
-
-      &:only-child {
-        border-radius: 4px;
-      }
-
       @include phone {
-        grid-template-areas: "tier img name type cp";
-        grid-template-columns: 30px 60px auto 55px 100px;
+        grid-template-areas: "img name type cp";
+        grid-template-columns: 60px auto 55px 100px;
 
         .battle_cp {
           display: none;
         }
-      }
-
-      .tier {
-        grid-area: tier;
-        text-align: center;
-        font-weight: 600;
-        font-size: 16px;
-        line-height: 50px;
       }
 
       .img {
@@ -954,9 +897,8 @@
 
       .name {
         grid-area: name;
-        font-family: "Patua One";
-        font-weight: 400;
-        font-size: 20px;
+        font-weight: 600;
+        font-size: 24px;
         line-height: 50px;
         z-index: 1;
       }
@@ -999,7 +941,7 @@
         text-align: center;
         line-height: 25px;
         font-weight: 600;
-        color: #fff;
+        color: #a8a8a8;
 
         &.cp_range_weather {
           color: #333;
@@ -1013,6 +955,11 @@
   overflow-y: scroll;
   height: calc(100vh - 83px);
   padding-right: 10px;
+
+  @include phone {
+    padding-right: 5px;
+    height: calc(100vh - 72px);
+  }
 
   .egg-hatch-tier {
     padding: 10px;
@@ -1029,6 +976,22 @@
         float: left;
         margin-right: 10px;
       }
+    }
+
+    &.tier-2km {
+      background: rgba(166, 196, 117, 0.1);
+    }
+
+    &.tier-5km {
+      background: rgba(213, 161, 63, 0.1);
+    }
+
+    &.tier-7km {
+      background: rgba(240, 126, 187, 0.1);
+    }
+
+    &.tier-10km {
+      background: rgba(121, 112, 148, 0.1);
     }
 
     .pokemon_list {
