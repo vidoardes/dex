@@ -102,7 +102,7 @@ $.fn.renderpokemon = function (list, type) {
             data-key="${forme}"
             data-dex="${dex}">
             
-            <div class="img" style="background-image: url('../static/img/sprites/pokemon_icon_${p_uid}${qs.cat === 'shiny' ? '_shiny' : ''}.png')"></div>
+            <div class="img"><img src="../static/img/sprites/pokemon_icon_${p_uid}${qs.cat === 'shiny' ? '_shiny' : ''}.png"></img></div>
             <div class="info">${forme}</div>
             <div class="type">
                 ${type1 !== null ? '<img src="../static/img/types/icon_' + type1 + '.png" />' : ''}
@@ -351,10 +351,10 @@ $('.sidebar-link.raid-bosses').click(function () {
                         </div>
                         <div class="img">
                             <img src="../static/img/sprites/pokemon_icon_${p_uid}${shiny ? '_shiny' : ''}.png" />
+                            ${shiny ? "<div class='shiny'></div>" : "" }
                         </div>
                         <div class="name">
                             ${forme}
-                            ${shiny ? "<div class='shiny'><i class='icon star'></i></div>" : "" }
                         </div>
                         <div class="type">
                             ${type1 !== null ? '<img src="../static/img/types/icon_' + type1 + '.png" />' : ''}
