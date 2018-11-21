@@ -3,14 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <meta name="viewport" content="minimal-ui, width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
     <title>DEX | The Ultimate Online Tracker for Pokemon GO</title>
     <meta name="author" content="vidoardes">
     <meta name="description" content="The Ultimate Online Tracker for Pokemon GO">
     <meta name="keywords" content="pokemon,tacker,pokedex,dex">
     {% include 'blocks/icons.html' %}
     {% include 'blocks/fonts.html' %}
+    <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.3.3/dist/semantic.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intro.js@2/minified/introjs.min.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}" type="text/css">
