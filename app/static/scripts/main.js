@@ -221,14 +221,12 @@ $.taketour = function() {
 let qs = {}
 
 $(function () {
-    $(window).on("load, resize", function() {
-        var viewportWidth = $(window).width();
-        if (viewportWidth < 421) {
-            $("#pokemon-wrapper").addClass("list-view")
-            $("#filter-view .th-list").hide()
-            $("#filter-view .th-large").show()
-        }
-    });
+    var viewportWidth = $(window).width();
+    if (viewportWidth < 421) {
+        $("#pokemon-wrapper").addClass("list-view")
+        $("#filter-view .th-list").hide()
+        $("#filter-view .th-large").show()
+    }
 
     if ($('#gen-select').val() != 'None') {
         qs.gen = $('#gen-select').val()

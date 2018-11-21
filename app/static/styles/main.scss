@@ -865,11 +865,6 @@
   height: calc(100vh - 83px);
   padding-right: 10px;
 
-  @include phone {
-    padding: 0;
-    overflow-y: unset;
-  }
-
   .raid-boss-tier {
     margin-bottom: 10px;
 
@@ -1056,11 +1051,6 @@
   height: calc(100vh - 83px);
   padding-right: 10px;
 
-  @include phone {
-    padding: 0;
-    overflow-y: unset;
-  }
-
   .egg-hatch-tier {
     position: relative;
     margin: 0 0 10px;
@@ -1145,14 +1135,11 @@
 }
 
 .content-panel.user-settings {
-  padding: 18px;
+  padding: 0 10px 0 0;
   overflow-y: scroll;
   height: calc(100vh - 83px);
 
   @include phone {
-    padding: 0;
-    overflow-y: unset;
-
     .ui.segment {
       margin: 10px 0;
     }
