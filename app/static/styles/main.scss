@@ -823,6 +823,11 @@
   height: calc(100vh - 83px);
   padding-right: 10px;
 
+  @include phone {
+    padding-right: 5px;
+    height: calc(100vh - 72px);
+  }
+
   .raid-boss-tier {
     &.t1 {
       background-color: rgba(235, 99, 133, 0.15);
@@ -899,8 +904,13 @@
         grid-area: name;
         font-weight: 600;
         font-size: 24px;
-        line-height: 50px;
-        z-index: 1;
+        display: grid;
+        word-wrap: normal;
+        align-content: center;
+
+        @include phone {
+          font-size: 16px;
+        }
       }
 
       @include phone {

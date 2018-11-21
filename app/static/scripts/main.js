@@ -291,7 +291,6 @@ $('#filter-view i').popup().click(function () {
     $('#pokemon-wrapper').toggleClass('list-view')
 })
 
-})
 
 $('#pokemon-wrapper').on('click', 'div.opt.shiny', function () {
     $(this).updatestate('shinyowned')
@@ -341,14 +340,6 @@ $('.sidebar-link.raid-bosses').click(function () {
             success: function (r) {
                 const RaidBoss = ({name, forme, dex, p_uid, shiny, raid, battle_cp, max_cp, max_cp_weather, min_cp, min_cp_weather, type1, type2}) => `
                     <div class="raid-boss">
-                        <div class="tier">
-                            ${raid === 6 ? 'EX' : ''}
-                            ${raid === 5 ? 'V' : ''}
-                            ${raid === 4 ? 'IV' : ''}
-                            ${raid === 3 ? 'III' : ''}
-                            ${raid === 2 ? 'II' : ''}
-                            ${raid === 1 ? 'I' : ''}
-                        </div>
                         <div class="img">
                             <img src="../static/img/sprites/pokemon_icon_${p_uid}${shiny ? '_shiny' : ''}.png" />
                             ${shiny ? "<div class='shiny'></div>" : "" }
@@ -382,7 +373,7 @@ $('.sidebar-link.raid-bosses').click(function () {
                     let _raid_bosses_tier = _raid_bosses[_tier]
 
                     $("#raid-bosses-list")
-                        .append('<div class="raid-boss-tier t' + _tier + '">' + _raid_bosses_tier.map(RaidBoss).join('') + '</div>')
+                        .append('<div class="raid-boss-tier t' + _tier + ' ui segment">' + _raid_bosses_tier.map(RaidBoss).join('') + '</div>')
                         .fadeIn()
                 }
             },
