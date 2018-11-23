@@ -120,9 +120,7 @@ $.fn.renderpokemon = function (list, type) {
         let arrayLength = list.length
 
         if (type === 'generate') {
-            $('.pokemon-result-count').fadeOut("fast", function () {
-                $(this).html(list.length + ' pokemon found').fadeIn("fast")
-            })
+            $('.pokemon-result-count').html(list.length + ' pokemon found').fadeIn("fast")
 
             $(this).html('').append(list.map(Pokemon).join(''))
             $('#pokemon-list .ui.dimmer').dimmer('hide')
@@ -136,9 +134,8 @@ $.fn.renderpokemon = function (list, type) {
             }
         }
     } else {
-        $('.pokemon-result-count').fadeOut("fast", function () {
-            $(this).html(list.length + ' pokemon found').fadeIn("fast")
-        })
+        $('.pokemon-result-count').html(list.length + ' pokemon found').fadeIn("fast")
+
         $(this).fadeOut("fast", function () {
             $(this).html('<p id="no-results">Unfortunatly there are no Pokemon that match your criteria. Please select a different option from the filters above.</p>').fadeIn("fast")
             $('#pokemon-list .ui.dimmer').dimmer('hide')
