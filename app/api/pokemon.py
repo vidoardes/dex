@@ -37,7 +37,7 @@ def fetch_pokemon(username):
     pokemon_list = []
     list = request.args.get("list", "default")
     cat = request.args.get("cat", "all")
-    gen = request.args.get("gen", "1")
+    gen = request.args.get("gen", "all")
     own = request.args.get("own", "all")
     name = request.args.get("name", None)
 

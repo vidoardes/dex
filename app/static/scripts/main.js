@@ -90,8 +90,8 @@ $.fn.renderpokemon = function (list, type) {
         }
     }
 
-    const Pokemon = ({name, forme, dex, p_uid, released, owned, shiny, shinyowned, male, maleowned, female, femaleowned, ungendered, ungenderedowned, luckyowned, type1, type2, max_cp, base_attack, base_defense, base_stamina}) => `
-        <div class="pokemon ${owned ? 'owned' : ''}"
+    const Pokemon = ({name, forme, dex, p_uid, released, owned, shiny, shinyowned, male, maleowned, female, femaleowned, ungendered, ungenderedowned, luckyowned, type1, type2,}) => `
+        <div class="pokemon${owned ? ' owned' : ''}"
             ${maleowned ? 'data-maleowned="True"' : ''}
             ${femaleowned ? 'data-femaleowned="True"' : ''}
             ${ungenderedowned ? 'data-ungenderedowned="True"' : ''}
@@ -145,6 +145,82 @@ $.fn.renderpokemon = function (list, type) {
 
         })
     }
+}
+
+$.fn.renderpokemoncard = function () {
+    const PokemonCard = ({name, forme, dex, p_uid, released, owned, shiny, shinyowned, male, maleowned, female, femaleowned, ungendered, ungenderedowned, luckyowned, type1, type2, classification, max_cp, base_attack, base_defense, base_stamina}) => `
+        <div class="ui modal pokemon-card data-key="${forme}" data-dex="${dex}">
+            <i class="close icon"></i>
+            <div class="header">
+                #${dex.toString().padStart(3, '0')} ${forme}
+                <span class="sub-header"> - ${classification} Pokémon</span>
+            </div>
+            <div class="content">
+                <div class="ui grid stackable two column">
+                    <div class="column img">
+                        <img src="../static/img/sprites/pokemon_icon_${p_uid}${qs.cat === 'shiny' ? '_shiny' : ''}.png">
+                    </div>
+                    <div class="column">
+                        <div class="max_cp_stat stat_bar">
+                            <div class="label">Max CP</div>
+                            <div class="ui red progress small" data-value="${max_cp}" data-total="5441" id="base_attack">
+                              <div class="bar"></div>
+                            </div>
+                            <div class="stat">${max_cp} / 5441</div>
+                        </div>
+                        <div class="attack_stat stat_bar">
+                            <div class="label">Attack</div>
+                            <div class="ui green progress small attack_stat" data-value="${base_attack}" data-total="414" id="base_attack">
+                              <div class="bar"></div>
+                            </div>
+                            <div class="stat">${base_attack} / 414</div>
+                        </div>
+                        <div class="defense_stat stat_bar">
+                            <div class="label">Defense</div>
+                            <div class="ui blue progress small defense_stat" data-value="${base_defense}" data-total="396" id="base_attack">
+                              <div class="bar"></div>
+                            </div>
+                            <div class="stat">${base_defense} / 396</div>
+                        </div>
+                        <div class="stamina_stat stat_bar">
+                            <div class="label">Stamina</div>
+                            <div class="ui pink progress small stamina_stat" data-value="${base_stamina}" data-total="510" id="base_attack">
+                              <div class="bar"></div>
+                            </div>
+                            <div class="stat">${base_stamina} / 510</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `
+
+    var _pokemon = $(this).parent()
+    let _qs = '?name=' + _pokemon.data('key')
+
+    $.ajax({
+        url: '/api/' + $('#user-profile').data('username') + '/pokemon/get' + _qs,
+        type: 'GET',
+        success: function (r) {
+            let _pokemon_list = r['pokemon']
+
+            if (_pokemon_list.length > 0) {
+                let _pokemon = _pokemon_list[0]
+
+                $('body .pokemon-card').remove()
+                $('body').append([_pokemon].map(PokemonCard).join(''))
+
+                $('.ui.progress').progress({showActivity: false,})
+
+                $('.pokemon-card.modal').modal({
+                    blurring: true,
+                }).modal('show')
+            }
+        },
+        error: function (e) {
+            console.log(e.status)
+        }
+    })
 }
 
 $.updateurl = function () {
@@ -204,6 +280,10 @@ $.taketour = function() {
         .addStep({
             element: document.querySelectorAll('.pm-opt')[0],
             intro: "You can record wether you have caught one of each gender, it's shiny form, or have a lucky variant. The options will only be active if they apply to the individual Pokemon no telling people you have a shiny Mew!",
+        })
+        .addStep({
+            element: document.querySelectorAll('.pokemon.img img')[0],
+            intro: "Clicking on the image of the Pokemon will reveal a popup, showing more details about each creature.",
         })
         .addStep({
             element: document.querySelectorAll('#pokemon-filters')[0],
@@ -291,6 +371,9 @@ $('#filter-view i').popup().click(function () {
     $('#pokemon-wrapper').toggleClass('list-view')
 })
 
+$('#pokemon-wrapper').on('click', '.pokemon .img', function () {
+    $(this).renderpokemoncard()
+})
 
 $('#pokemon-wrapper').on('click', 'div.opt.shiny', function () {
     $(this).updatestate('shinyowned')

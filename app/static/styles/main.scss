@@ -816,6 +816,65 @@
     font-style: italic;
     color: #8c8c8c;
   }
+
+  .content {
+    .ui.grid {
+      .column {
+        display: grid;
+        height: 256px;
+        align-content: center;
+
+        &.img {
+          justify-content: center;
+          align-content: end;
+          z-index: 1;
+
+          &:after {
+            content: '';
+            display: block;
+            position: absolute;
+            bottom: calc(50% - 100px);
+            left: calc(50% - 100px);
+            width: 200px;
+            height: 200px;
+            border-radius: 100px;
+            background: #276f86;
+            opacity: 0.15;
+            z-index: -1;
+          }
+        }
+      }
+
+      .stat_bar {
+        display: grid;
+        grid-gap: 10px;
+        grid-template-columns: 70px 1fr 90px;
+        grid-template-rows: 1fr;
+        border-bottom: solid 1px #ddd;
+
+        &:last-child {
+          border: none;
+        }
+
+        .label {
+          font-weight: bold;
+          text-align: right;
+          display: grid;
+          align-content: center;
+        }
+
+        .ui.progress {
+          margin: 10px 0
+        }
+
+        .stat {
+          display: grid;
+          align-content: center;
+        }
+
+      }
+    }
+  }
 }
 
 #raid-bosses-list {
