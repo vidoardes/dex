@@ -550,7 +550,7 @@
       grid-template-rows: auto;
       grid-template-columns: repeat(6, 1fr);
       padding: 5px;
-      grid-gap: 10px;
+      grid-gap: 20px;
 
       @include ultrahddesktop {
         grid-template-columns: repeat(10, 1fr);
@@ -575,8 +575,8 @@
       .pokemon {
         border-radius: 3px;
         position: relative;
-        box-shadow: 0 0 0 1px #a9d5de inset, 0 0 0 0 transparent;
-        background-color: #f8ffff;
+        background-color: darken(#f8ffff, 3%);
+        filter: grayscale(1) opacity(0.8);
         color: #276f86;
         z-index: 1;
         overflow: hidden;
@@ -587,7 +587,7 @@
         grid-template-areas: "img" "name" "types" "opt";
 
         &.owned {
-          background-color: darken(#f8ffff, 3%);
+          filter: grayscale(0) opacity(1);
         }
 
         .img {
@@ -727,20 +727,11 @@
         }
 
         .pokemon {
-          height: 40px;
-          border-radius: 3px;
-          position: relative;
-          box-shadow: 0 0 0 1px #a9d5de inset, 0 0 0 0 transparent;
-          background-color: #f8ffff;
-          color: #276f86;
-          display: grid;
+          height: 40px;;
+          grid-gap: 10px;
           grid-template-rows: 40px;
-          grid-template-columns: 45px 45px minmax(0, 1fr) 150px;
+          grid-template-columns: 45px 45px minmax(0, 1fr) 110px;
           grid-template-areas: "dex img name opt";
-
-          &.owned {
-            background-color: darken(#f8ffff, 3%);
-          }
 
           .dex-num {
             grid-area: dex;
@@ -921,7 +912,7 @@
       grid-template-areas: "img name type battlecp cp";
       grid-template-columns: 70px auto 55px 100px 120px;
       grid-template-rows: 50px;
-      grid-gap: 5px;
+      grid-gap: 10px;
       padding: 5px 0;
 
       @include phone {
@@ -962,7 +953,7 @@
       .name {
         grid-area: name;
         font-weight: 600;
-        font-size: 24px;
+        font-size: 18px;
         display: grid;
         word-wrap: normal;
         align-content: center;
