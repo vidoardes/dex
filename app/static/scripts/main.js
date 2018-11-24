@@ -520,8 +520,6 @@ $('.sidebar-link.user-settings').click(function () {
             success: function (r) {
                 let _settings = r['settings']
 
-                $('.view-settings .ui.checkbox').checkbox('set checked')
-
                 for (const [key, value] of Object.entries(_settings.config["view-settings"])) {
                     if (value == false) {
                         $('.view-settings .ui.checkbox.' + key).checkbox('set unchecked')
