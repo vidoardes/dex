@@ -158,8 +158,26 @@
                         </div>
                     </div>
 
-                    <div class="result-count ui top attached segment pokemon-result-count">
-                        No Pokemon Found :(
+                    <div class="list-header ui top attached segment">
+                        <div class="pokemon-result-count">No Pokemon Found :(</div>
+                        <div class="ui dropdown basic">
+                            <input type="hidden" id="list-select" value="{{ request.args.get('list') }}" />
+                            <div class="text">Select a list...</div>
+                            <i class="dropdown icon"></i>
+                            <div class="menu">
+                                <div class="header">
+                                    <i class="tags icon"></i>
+                                    Select Existing list
+                                </div>
+                                {% for item in user.pokemon_lists %}
+                                    <div class="item" data-value="{{ item.value }}">
+                                        {{ item.name }}
+                                    </div>
+                                {% endfor %}
+                          </div>
+                        </div>
+
+
                     </div>
 
                     <div id="pokemon-list" class="ui blurring attached segment">

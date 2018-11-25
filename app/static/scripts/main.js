@@ -20,6 +20,7 @@ $.fn.renderallpokemon = function () {
 }
 
 $.fn.updatestate = function (statetype) {
+    let _qs = '?' + $.param(qs)
     var _pokemon = $(this).parent().parent()
 
     _pokemon.data(statetype, !_pokemon.data(statetype))
@@ -38,7 +39,7 @@ $.fn.updatestate = function (statetype) {
     var data = {data: JSON.stringify(obj)}
 
     $.ajax({
-        url: '/api/' + $('#user-profile').data('username') + '/pokemon/update',
+        url: '/api/' + $('#user-profile').data('username') + '/pokemon/update' + _qs,
         data: data,
         type: 'PUT',
         success: function (r) {
@@ -317,6 +318,12 @@ $(function () {
         qs.own = $('#own-select').val()
     }
 
+    if ($('#list-select').val() != 'None') {
+        qs.list = $('#list-select').val()
+    } else {
+        qs.list = 'default'
+    }
+
     $('.ui.search').search()
     $('#pokemon-wrapper').renderallpokemon()
 
@@ -359,6 +366,11 @@ $('#pokemon-filters .ui.dropdown').dropdown().on('change', '#gen-select', functi
     $('#pokemon-list').renderallpokemon()
 }).on('change', '#own-select', function () {
     qs.own = $('#own-select').val()
+    $('#pokemon-list').renderallpokemon()
+})
+
+$('.list-header .ui.dropdown').dropdown().on('change', '#list-select', function () {
+    qs.list = $('#list-select').val()
     $('#pokemon-list').renderallpokemon()
 })
 

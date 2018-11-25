@@ -196,7 +196,10 @@ def update_pokemon(username):
             "forme", json.loads(user.pokemon_owned).get(list, []), [pokemon]
         )
 
-        user.pokemon_owned = json.dumps({list: ul})
+        updated_user_pokemon = json.loads(user.pokemon_owned)
+        updated_user_pokemon[list] = ul
+        user.pokemon_owned = json.dumps(updated_user_pokemon)
+
         db.session.commit()
 
         updated_pokemon = pokemon

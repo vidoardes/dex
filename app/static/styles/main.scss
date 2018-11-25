@@ -521,13 +521,26 @@
     }
   }
 
-  .pokemon-result-count.ui.attached.segment {
-    font-weight: bold;
-    font-size: 12px;
+  .list-header {
+    display: grid;
+    grid-template-columns: repeat(2, 50%);
 
-    @include phone {
-      margin-top: 5px;
-      padding: 5px 10px
+    .pokemon-result-count {
+      font-weight: bold;
+      font-size: 12px;
+
+      @include phone {
+        margin-top: 5px;
+        padding: 5px 10px
+      }
+    }
+
+    .ui.dropdown {
+      justify-self: flex-end;
+
+      .text i.delete, .text i.pencil {
+        display: none;
+      }
     }
   }
 

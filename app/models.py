@@ -33,6 +33,7 @@ class User(UserMixin, db.Model):
     last_logged_in = db.Column(db.DateTime, default=datetime.utcnow)
     unsubscribe = db.Column(db.Boolean, default=False, nullable=False)
     deleted = db.Column(db.Boolean, default=False, nullable=False)
+    pokemon_lists = db.Column(db.JSON)
 
     def __repr__(self):
         return "<User {}>".format(self.username)
