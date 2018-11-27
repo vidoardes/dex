@@ -30,13 +30,3 @@ def send_password_reset_email(user):
             "auth/email/reset_password.html", user=user, token=token
         ),
     )
-
-
-def send_update_email(user):
-    send_email(
-        "[Dex] New Updates Released!",
-        sender=current_app.config["MAIL_FROM"],
-        recipients=[user.email],
-        text_body=render_template("auth/email/update_email.txt", user=user),
-        html_body=render_template("auth/email/update_email.html", user=user),
-    )

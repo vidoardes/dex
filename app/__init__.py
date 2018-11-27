@@ -66,6 +66,10 @@ def create_app(config_class=Config):
 
     application.register_blueprint(api_bp, url_prefix="/api")
 
+    from app.admin import bp as admin_bp
+
+    application.register_blueprint(admin_bp, url_prefix="/admin")
+
     if not application.debug and not application.testing:
         if not os.path.exists("logs"):
             os.mkdir("logs")

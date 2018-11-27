@@ -1,0 +1,18 @@
+Dear {{ user.username }},
+
+ 
+** WE'VE UPDATED DEX!
+------------------------------------------------------------
+
+Apologies for the downtime, but I have added some really cool new features I hope you enjoy:
+
+ 	* CP Rebalance - Base Stat calculations are now being done inside the application which will make future updates easier and lays the groundwork for a future features
+ 	* Filter forms - Not interested in costumed Pokemon, unown forms, or only want one Spinda? Check out the new filters in your settings page!
+ 	* Query String Filters You can now visit your profile page with query strings for filters, so if you want to share a specific view of your profile with a frened they don't have to filter it down. Simply select the view you want, and copy the URL. Make sure your profile is public!
+ 	* Unsubscribe and Delete - If you aren't interested in these emails, or want to leave the site (_sniff_), you now have the option to opt out of communication and delete your data from the site
+
+I have many more exciting features planned, so stay tuned!.
+
+Sincerely,
+
+The Dex Team
