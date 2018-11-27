@@ -1,5 +1,3 @@
-import json
-
 from flask import render_template, abort
 from flask_login import current_user
 
@@ -16,6 +14,9 @@ def show_user(username):
     if not user.is_public and current_user.username != user.username:
         abort(403)
 
-    return render_template(
-        "main/user.html", user=user, settings=json.loads(user.settings)["view-settings"]
-    )
+    lists = []
+
+    for d in user.pokemon_owned:
+        lists.append({"name": d["name"], "value": d["value"]})
+
+    return render_template("main/user.html", user=user, lists=lists)

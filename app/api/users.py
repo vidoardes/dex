@@ -31,6 +31,7 @@ def fetch_users():
 
         public_users.append(user)
 
+    db.session.close()
     r = json.dumps({"success": True, "results": public_users})
     return Response(r, status=200, mimetype="application/json")
 
@@ -44,16 +45,16 @@ def get_user_settings(username):
 
     if current_user.username == user.username:
         settings = {
-            "config": json.loads(user.settings),
             "public": user.is_public,
             "unsubscribe": user.unsubscribe,
             "email": user.email,
             "player_level": user.player_level,
         }
-
+        db.session.close()
         r = json.dumps({"success": True, "settings": settings})
         return Response(r, status=200, mimetype="application/json")
     else:
+        db.session.close()
         r = json.dumps({"success": False})
         return Response(r, status=403, mimetype="application/json")
 
@@ -123,15 +124,15 @@ def update_user(username):
         db.session.commit()
 
         settings = {
-            "config": json.loads(user.settings),
             "public": user.is_public,
             "email": user.email,
             "player_level": user.player_level,
         }
-
+        db.session.close()
         r = json.dumps({"success": True, "settings": settings})
         return Response(r, status=200, mimetype="application/json")
     else:
+        db.session.close()
         r = json.dumps({"success": False})
         return Response(r, status=403, mimetype="application/json")
 
@@ -147,9 +148,10 @@ def delete_user(username):
         user.deleted = True
 
         db.session.commit()
-
+        db.session.close()
         r = json.dumps({"success": True})
         return Response(r, status=200, mimetype="application/json")
     else:
+        db.session.close()
         r = json.dumps({"success": False})
         return Response(r, status=403, mimetype="application/json")

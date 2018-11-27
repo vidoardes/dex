@@ -522,6 +522,7 @@
   }
 
   .list-header {
+    padding: 12px;
     display: grid;
     grid-template-columns: repeat(2, 50%);
 
@@ -537,8 +538,10 @@
 
     .ui.dropdown {
       justify-self: flex-end;
+      font-size: 12px;
+      font-weight: bold;
 
-      .text i.delete, .text i.pencil {
+      .text i.delete, .text i.edit {
         display: none;
       }
     }

@@ -22,7 +22,7 @@ class User(UserMixin, db.Model):
     password_hash = db.Column(db.String(60), nullable=False)
     player_level = db.Column(db.Integer, nullable=False, default=0)
     player_team = db.Column(db.String(10), default="Harmony", nullable=False)
-    pokemon_owned = db.Column(db.Text, nullable=False, default="{}")
+    pokemon_owned = db.Column(db.JSON)
     email_registered = db.Column(db.Boolean, default=False, nullable=False)
     email_registered_on = db.Column(db.DateTime, nullable=True)
     is_admin = db.Column(db.Boolean, default=False, nullable=True)
@@ -33,7 +33,6 @@ class User(UserMixin, db.Model):
     last_logged_in = db.Column(db.DateTime, default=datetime.utcnow)
     unsubscribe = db.Column(db.Boolean, default=False, nullable=False)
     deleted = db.Column(db.Boolean, default=False, nullable=False)
-    pokemon_lists = db.Column(db.JSON)
 
     def __repr__(self):
         return "<User {}>".format(self.username)

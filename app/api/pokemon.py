@@ -31,6 +31,7 @@ def fetch_pokemon(username):
     ).first_or_404()
 
     if user is None or (not user.is_public and current_user.username != user.username):
+        db.session.close()
         r = json.dumps({"success": False})
         return Response(r, status=403, mimetype="application/json")
 
@@ -40,6 +41,18 @@ def fetch_pokemon(username):
     gen = request.args.get("gen", "all")
     own = request.args.get("own", "all")
     name = request.args.get("name", None)
+
+    active_list = next(
+        (item for item in user.pokemon_owned if item["value"] == list), None
+    )
+
+    if active_list is None:
+        db.session.close()
+        r = json.dumps({"success": False})
+        return Response(r, status=403, mimetype="application/json")
+
+    owned_pokemon = active_list["pokemon"]
+    pokemon_filters = active_list["view-settings"]
 
     filtered_query = Pokemon.query.filter_by(in_game=True).filter_by(released=True)
 
@@ -55,7 +68,7 @@ def fetch_pokemon(username):
     if cat not in ("all", "lucky"):
         filtered_query = filtered_query.filter(getattr(Pokemon, cat), True)
 
-    for key, value in json.loads(user.settings)["view-settings"].items():
+    for key, value in pokemon_filters.items():
         if key == "show-spinda" and not value:
             filtered_query = filtered_query.filter(
                 Pokemon.forme.notin_(
@@ -134,43 +147,37 @@ def fetch_pokemon(username):
         pokemon_list.append(u.as_dict())
 
     pokemon = sorted(
-        merge_dict_lists(
-            "forme",
-            pokemon_list,
-            json.loads(user.pokemon_owned).get(list, []),
-            append=False,
-        ),
+        merge_dict_lists("forme", pokemon_list, owned_pokemon, append=False),
         key=lambda k: (k["p_uid"]),
     )
 
-    if "show-spinda" in json.loads(user.settings)["view-settings"]:
-        if not json.loads(user.settings)["view-settings"]["show-spinda"]:
-            for p in pokemon:
-                if p["forme"] == "Spinda #1":
-                    p["forme"] = p["name"]
-
-    if "show-unown" in json.loads(user.settings)["view-settings"]:
-        if not json.loads(user.settings)["view-settings"]["show-unown"]:
-            for p in pokemon:
-                if p["forme"] == "Unown (F)":
-                    p["forme"] = p["name"]
+    for p in pokemon:
+        if (
+            ("show-spinda", False) in pokemon_filters.items()
+            and p["forme"] == "Spinda #1"
+        ) or (
+            ("show-unown", False) in pokemon_filters.items()
+            and p["forme"] == "Unown (F)"
+        ):
+            p["forme"] = p["name"]
 
     if not own == "all":
         _pokemon_owned = []
 
         for p in pokemon:
-            if cat not in ["shiny", "lucky"]:
-                _owned = p.get("owned", False)
-            elif cat == "shiny":
+            if cat == "shiny":
                 _owned = p.get("shinyowned", False)
             elif cat == "lucky":
                 _owned = p.get("luckyowned", False)
+            else:
+                _owned = p.get("owned", False)
 
             if (own == "owned" and _owned) or (own == "notowned" and not _owned):
                 _pokemon_owned.append(p)
 
         pokemon = _pokemon_owned
 
+    db.session.close()
     r = json.dumps({"success": True, "pokemon": pokemon})
     return Response(r, status=200, mimetype="application/json")
 
@@ -178,59 +185,75 @@ def fetch_pokemon(username):
 @bp.route("/<username>/pokemon/update", methods=["PUT"])
 @login_required
 def update_pokemon(username):
+    if current_user.username != username:
+        r = json.dumps({"success": False})
+        return Response(r, status=403, mimetype="application/json")
+
     user = User.query.filter(
         func.lower(User.username) == func.lower(username)
     ).first_or_404()
 
-    if current_user.username == user.username:
-        list = request.args.get("list", "default")
-        pokemon = json.loads(request.form.get("data"))
+    old_pokemon_owned = user.pokemon_owned
+    db.session.close()
 
-        if pokemon["forme"] == "Spinda":
-            pokemon["forme"] = "Spinda #1"
+    _list = request.args.get("list", "default")
+    updated_pokemon = json.loads(request.form.get("data"))
 
-        if pokemon["forme"] == "Unown":
-            pokemon["forme"] = "Unown (F)"
+    active_list = next((d for d in old_pokemon_owned if d["value"] == _list), None)
 
-        ul = merge_dict_lists(
-            "forme", json.loads(user.pokemon_owned).get(list, []), [pokemon]
-        )
-
-        updated_user_pokemon = json.loads(user.pokemon_owned)
-        updated_user_pokemon[list] = ul
-        user.pokemon_owned = json.dumps(updated_user_pokemon)
-
-        db.session.commit()
-
-        updated_pokemon = pokemon
-
-        for p in json.loads(user.pokemon_owned).get(list, []):
-            if p["forme"] == pokemon["forme"]:
-                updated_pokemon = p
-                break
-
-        updated_pokemon_list = merge_dict_lists(
-            "forme",
-            [updated_pokemon],
-            [Pokemon.query.filter_by(forme=pokemon["forme"]).first_or_404().as_dict()],
-        )
-
-        for p in updated_pokemon_list:
-            view_settings = json.loads(user.settings)["view-settings"]
-
-            if "show-spinda" in view_settings:
-                if not view_settings["show-spinda"] and p["forme"] == "Spinda #1":
-                    p["forme"] = "Spinda"
-
-            if "show-unown" in view_settings:
-                if not view_settings["show-unown"] and p["forme"] == "Unown (F)":
-                    p["forme"] = "Unown"
-
-        r = json.dumps({"success": True, "updated_pokemon": updated_pokemon_list})
-        return Response(r, status=200, mimetype="application/json")
-    else:
+    if active_list is None:
         r = json.dumps({"success": False})
         return Response(r, status=403, mimetype="application/json")
+
+    if updated_pokemon["forme"] == "Spinda":
+        updated_pokemon["forme"] = "Spinda #1"
+    elif updated_pokemon["forme"] == "Unown":
+        updated_pokemon["forme"] = "Unown (F)"
+
+    ul = merge_dict_lists("forme", active_list["pokemon"], [updated_pokemon])
+
+    active_list["pokemon"] = ul
+
+    new_pokemon_owned = []
+    new_pokemon_owned[:] = [d for d in old_pokemon_owned if d.get("value") != _list]
+    new_pokemon_owned.append(active_list)
+
+    user = User.query.filter(
+        func.lower(User.username) == func.lower(username)
+    ).first_or_404()
+
+    user.pokemon_owned = new_pokemon_owned
+
+    db.session.commit()
+    db.session.close()
+
+    for p in ul:
+        if p["forme"] == updated_pokemon["forme"]:
+            updated_pokemon = p
+            break
+
+    updated_pokemon_list = merge_dict_lists(
+        "forme",
+        [updated_pokemon],
+        [
+            Pokemon.query.filter_by(forme=updated_pokemon["forme"])
+            .first_or_404()
+            .as_dict()
+        ],
+    )
+
+    for p in updated_pokemon_list:
+        if (
+            ("show-spinda", False) in active_list["view-settings"].items()
+            and p["forme"] == "Spinda #1"
+        ) or (
+            ("show-unown", False) in active_list["view-settings"].items()
+            and p["forme"] == "Unown (F)"
+        ):
+            p["forme"] = p["name"]
+
+    r = json.dumps({"success": True, "updated_pokemon": updated_pokemon_list})
+    return Response(r, status=200, mimetype="application/json")
 
 
 @bp.route("/pokemon/raidbosses/get", methods=["GET"])
@@ -254,6 +277,7 @@ def fetch_raid_bosses():
 
         raid_bosses[rb.raid].append(raid_boss)
 
+    db.session.close()
     r = json.dumps({"success": True, "raidbosses": raid_bosses})
     return Response(r, status=200, mimetype="application/json")
 
@@ -274,5 +298,6 @@ def fetch_egg_hatches():
 
         egg_hatches[eh.hatch].append(egg_hatch)
 
+    db.session.close()
     r = json.dumps({"success": True, "egghatches": egg_hatches})
     return Response(r, status=200, mimetype="application/json")

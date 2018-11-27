@@ -36,7 +36,7 @@
                     </div>
                     <div id="sidebar-links">
                         <div class="sidebar-link living-dex active">
-                            <i class="icon book"></i>
+                            <i class="icon far fa-ballot-check"></i>
                             <span>Living DEX</span>
                             <i class="icon right angle"></i>
                         </div>
@@ -103,13 +103,9 @@
                                 <div class="item" data-value="shiny">
                                     <i class="icon shiny"></i> Shiny
                                 </div>
-
-                                {% if settings["show-alolan"] != False %}
-                                    <div class="item" data-value="alolan">
-                                        <i class="icon alolan"></i> Alolan
-                                    </div>
-                                {% endif %}
-
+                                <div class="item" data-value="alolan">
+                                    <i class="icon alolan"></i> Alolan
+                                </div>
                                 <div class="item" data-value="regional">
                                     <i class="icon fas fa-globe-africa"></i> Regional
                                 </div>
@@ -119,13 +115,9 @@
                                 <div class="item" data-value="mythical">
                                     <i class="icon fas fa-map-marker-question"></i> Mythical
                                 </div>
-
-                                {% if settings["show-costumed"] != False %}
-                                    <div class="item" data-value="costumed">
-                                        <i class="icon fab fa-pied-piper-hat"></i> Costumed
-                                    </div>
-                                {% endif %}
-
+                                <div class="item" data-value="costumed">
+                                    <i class="icon fab fa-pied-piper-hat"></i> Costumed
+                                </div>
                                 <div class="item" data-value="lucky">
                                     <i class="icon fas fa-dice"></i> Lucky
                                 </div>
@@ -165,11 +157,7 @@
                             <div class="text">Select a list...</div>
                             <i class="dropdown icon"></i>
                             <div class="menu">
-                                <div class="header">
-                                    <i class="tags icon"></i>
-                                    Select Existing list
-                                </div>
-                                {% for item in user.pokemon_lists %}
+                                {% for item in lists %}
                                     <div class="item" data-value="{{ item.value }}">
                                         {{ item.name }}
                                     </div>
@@ -243,69 +231,69 @@
                         </div>
                     </div>
 
-                    <div class="ui segment padded">
-                        <div class="ui medium header">
-                            <i class="icon fas fa-binoculars"></i>
-                            <div class="content">Pokemon Filter Settings</div>
-                        </div>
-
-                        <div class="ui small header">Show / Hide Formes & Variants</div>
-                        <p>By default all catchable forms are availible to select, but if you
-                            aren't interested in tracking all the variants of Spinda, or have
-                            given up the dream of finding all Unown, you can simply remove them
-                            from your list via the check boxes below. Deselecting them all
-                            will provide you with only unique dex numbers.</p>
-                        <div class="ui stackable five column grid view-settings">
-                            <div class="column">
-                                <div class="inline field">
-                                    <div class="ui checkbox show-costumed">
-                                        <input type="checkbox" name="show-costumed">
-                                        <label>Costumed</label>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="column">
-                                <div class="inline field">
-                                    <div class="ui checkbox show-alolan">
-                                        <input type="checkbox" name="show-alolan">
-                                        <label>Alolan</label>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="column">
-                                <div class="inline field">
-                                    <div class="ui checkbox show-unown">
-                                        <input type="checkbox" name="show-unown">
-                                        <label>Unown</label>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="column">
-                                <div class="inline field">
-                                    <div class="ui checkbox show-spinda">
-                                        <input type="checkbox" name="show-spinda">
-                                        <label>Spinda</label>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="column">
-                                <div class="inline field">
-                                    <div class="ui checkbox show-castform">
-                                        <input type="checkbox" name="show-castform">
-                                        <label>Castform</label>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="column">
-                                <div class="inline field">
-                                    <div class="ui checkbox show-deoxys">
-                                        <input type="checkbox" name="show-deoxys">
-                                        <label>Deoxys</label>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+{#                    <div class="ui segment padded">#}
+{#                        <div class="ui medium header">#}
+{#                            <i class="icon fas fa-binoculars"></i>#}
+{#                            <div class="content">Pokemon Filter Settings</div>#}
+{#                        </div>#}
+{##}
+{#                        <div class="ui small header">Show / Hide Formes & Variants</div>#}
+{#                        <p>By default all catchable forms are availible to select, but if you#}
+{#                            aren't interested in tracking all the variants of Spinda, or have#}
+{#                            given up the dream of finding all Unown, you can simply remove them#}
+{#                            from your list via the check boxes below. Deselecting them all#}
+{#                            will provide you with only unique dex numbers.</p>#}
+{#                        <div class="ui stackable five column grid view-settings">#}
+{#                            <div class="column">#}
+{#                                <div class="inline field">#}
+{#                                    <div class="ui checkbox show-costumed">#}
+{#                                        <input type="checkbox" name="show-costumed">#}
+{#                                        <label>Costumed</label>#}
+{#                                    </div>#}
+{#                                </div>#}
+{#                            </div>#}
+{#                            <div class="column">#}
+{#                                <div class="inline field">#}
+{#                                    <div class="ui checkbox show-alolan">#}
+{#                                        <input type="checkbox" name="show-alolan">#}
+{#                                        <label>Alolan</label>#}
+{#                                    </div>#}
+{#                                </div>#}
+{#                            </div>#}
+{#                            <div class="column">#}
+{#                                <div class="inline field">#}
+{#                                    <div class="ui checkbox show-unown">#}
+{#                                        <input type="checkbox" name="show-unown">#}
+{#                                        <label>Unown</label>#}
+{#                                    </div>#}
+{#                                </div>#}
+{#                            </div>#}
+{#                            <div class="column">#}
+{#                                <div class="inline field">#}
+{#                                    <div class="ui checkbox show-spinda">#}
+{#                                        <input type="checkbox" name="show-spinda">#}
+{#                                        <label>Spinda</label>#}
+{#                                    </div>#}
+{#                                </div>#}
+{#                            </div>#}
+{#                            <div class="column">#}
+{#                                <div class="inline field">#}
+{#                                    <div class="ui checkbox show-castform">#}
+{#                                        <input type="checkbox" name="show-castform">#}
+{#                                        <label>Castform</label>#}
+{#                                    </div>#}
+{#                                </div>#}
+{#                            </div>#}
+{#                            <div class="column">#}
+{#                                <div class="inline field">#}
+{#                                    <div class="ui checkbox show-deoxys">#}
+{#                                        <input type="checkbox" name="show-deoxys">#}
+{#                                        <label>Deoxys</label>#}
+{#                                    </div>#}
+{#                                </div>#}
+{#                            </div>#}
+{#                        </div>#}
+{#                    </div>#}
 
                     <div class="ui segment padded">
                         <div class="ui medium header">

@@ -244,7 +244,7 @@ $.fn.api.settings.api = {
     'search': '/api/users/get?q={query}',
 }
 
-$.taketour = function() {
+$.taketour = function () {
     introJs()
         .oncomplete(function () {
             let obj = {}
@@ -299,7 +299,7 @@ $.taketour = function() {
 let qs = {}
 
 $(function () {
-    var viewportWidth = $(window).width();
+    var viewportWidth = $(window).width()
     if (viewportWidth < 421) {
         $("#pokemon-wrapper").addClass("list-view")
         $("#filter-view .th-list").hide()
@@ -532,13 +532,13 @@ $('.sidebar-link.user-settings').click(function () {
             success: function (r) {
                 let _settings = r['settings']
 
-                for (const [key, value] of Object.entries(_settings.config["view-settings"])) {
-                    if (value == false) {
-                        $('.view-settings .ui.checkbox.' + key).checkbox('set unchecked')
-                    } else {
-                        $('.view-settings .ui.checkbox.' + key).checkbox('set checked')
-                    }
-                }
+                // for (const [key, value] of Object.entries(_settings.config["view-settings"])) {
+                //     if (value == false) {
+                //         $('.view-settings .ui.checkbox.' + key).checkbox('set unchecked')
+                //     } else {
+                //         $('.view-settings .ui.checkbox.' + key).checkbox('set checked')
+                //     }
+                // }
 
                 if (!_settings.public) {
                     $('.content-panel.user-settings .ui.checkbox.private-profile').checkbox('set checked')
@@ -617,28 +617,28 @@ $('#update-player-level').click(function () {
     })
 })
 
-$('.view-settings .ui.checkbox').checkbox({
-    onChange: function () {
-        let _obj = {}
-        let _setting_changed = $(this).attr('name')
-
-        _obj['view-settings'] = {[_setting_changed]: $('.ui.checkbox.' + _setting_changed).checkbox('is checked')}
-
-        let data = {data: JSON.stringify(_obj)}
-
-        $.ajax({
-            url: '/api/user/' + $('#user-profile').data('username') + '/settings/update',
-            data: data,
-            type: 'PUT',
-            success: function (r) {
-
-            },
-            error: function (e) {
-                console.log(e.status)
-            }
-        })
-    }
-})
+// $('.view-settings .ui.checkbox').checkbox({
+//     onChange: function () {
+//         let _obj = {}
+//         let _setting_changed = $(this).attr('name')
+//
+//         _obj['view-settings'] = {[_setting_changed]: $('.ui.checkbox.' + _setting_changed).checkbox('is checked')}
+//
+//         let data = {data: JSON.stringify(_obj)}
+//
+//         $.ajax({
+//             url: '/api/user/' + $('#user-profile').data('username') + '/settings/update',
+//             data: data,
+//             type: 'PUT',
+//             success: function (r) {
+//
+//             },
+//             error: function (e) {
+//                 console.log(e.status)
+//             }
+//         })
+//     }
+// })
 
 $('.ui.checkbox.private-profile').checkbox({
     onChange: function () {
