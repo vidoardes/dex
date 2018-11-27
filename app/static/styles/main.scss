@@ -541,8 +541,15 @@
       font-size: 12px;
       font-weight: bold;
 
-      .text i.delete, .text i.edit {
-        display: none;
+      .text {
+        i.delete, .text i.edit {
+          display: none;
+        }
+
+        .ui.label {
+          padding: 0.3em !important;
+          margin-right: 3px;
+        }
       }
     }
   }

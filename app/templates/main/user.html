@@ -159,6 +159,7 @@
                             <div class="menu">
                                 {% for item in lists %}
                                     <div class="item" data-value="{{ item.value }}">
+                                        <div class="ui {{ item.colour }} empty circular label"></div>
                                         {{ item.name }}
                                     </div>
                                 {% endfor %}

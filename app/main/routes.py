@@ -17,6 +17,6 @@ def show_user(username):
     lists = []
 
     for d in user.pokemon_owned:
-        lists.append({"name": d["name"], "value": d["value"]})
+        lists.append({"name": d["name"], "value": d["value"], "colour": d["colour"]})
 
     return render_template("main/user.html", user=user, lists=lists)

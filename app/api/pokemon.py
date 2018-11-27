@@ -53,6 +53,7 @@ def fetch_pokemon(username):
 
     owned_pokemon = active_list["pokemon"]
     pokemon_filters = active_list["view-settings"]
+    list_type = active_list["type"]
 
     filtered_query = Pokemon.query.filter_by(in_game=True).filter_by(released=True)
 
@@ -67,6 +68,11 @@ def fetch_pokemon(username):
 
     if cat not in ("all", "lucky"):
         filtered_query = filtered_query.filter(getattr(Pokemon, cat), True)
+
+    if list_type == "exclusive":
+        filtered_query = filtered_query.filter(Pokemon.dex.notin_(active_list["exclusions"]))
+    elif list_type == "inclusive":
+        filtered_query = filtered_query.filter(Pokemon.dex.in_(active_list["inclusions"]))
 
     for key, value in pokemon_filters.items():
         if key == "show-spinda" and not value:
