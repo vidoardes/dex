@@ -521,7 +521,7 @@
     }
   }
 
-  .list-header {
+  .ui.attached.segment.list-header {
     padding: 12px;
     display: grid;
     grid-template-columns: repeat(2, 50%);
@@ -529,11 +529,11 @@
     .pokemon-result-count {
       font-weight: bold;
       font-size: 12px;
+    }
 
-      @include phone {
-        margin-top: 5px;
-        padding: 5px 10px
-      }
+    @include phone {
+      margin-top: 5px;
+      padding: 5px 10px
     }
 
     .ui.dropdown {
