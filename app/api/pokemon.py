@@ -331,7 +331,9 @@ def add_list(username):
     new_list = json.loads(request.form.get("data"))
     db.session.close()
 
-    new_list["value"] = new_list["name"].lower().replace(" ", "_")
+    new_list["value"] = re.sub(
+        "[\-=<>|]", "", new_list["name"].lower().replace(" ", "_")
+    )
     new_list["type"] = "exclusive"
     new_list["exclusions"] = []
     new_list["view-settings"] = {}
@@ -354,9 +356,37 @@ def add_list(username):
     return Response(r, status=200, mimetype="application/json")
 
 
-@bp.route("/<username>/dex/edit", methods=["PUT"])
+@bp.route("/<username>/dex/get", methods=["GET"])
 @login_required
-def edit_list(username):
+def get_list(username):
+    if current_user.username != username:
+        r = json.dumps({"success": False})
+        return Response(r, status=403, mimetype="application/json")
+
+    user = User.query.filter(
+        func.lower(User.username) == func.lower(username)
+    ).first_or_404()
+
+    list = request.args.get("list")
+
+    rq_list = next((item for item in user.pokemon_owned if item["value"] == list), None)
+
+    _list = {
+        "name": rq_list["name"],
+        "value": rq_list["value"],
+        "colour": rq_list["colour"],
+        "view-settings": rq_list["view-settings"],
+    }
+
+    db.session.close()
+
+    r = json.dumps({"success": True, "list-settings": _list})
+    return Response(r, status=200, mimetype="application/json")
+
+
+@bp.route("/<username>/dex/update", methods=["PUT"])
+@login_required
+def update_list(username):
     if current_user.username != username:
         r = json.dumps({"success": False})
         return Response(r, status=403, mimetype="application/json")
@@ -366,23 +396,21 @@ def edit_list(username):
     ).first_or_404()
 
     old_pokemon_owned = user.pokemon_owned
+    updated_list = json.loads(request.form.get("data"))
     db.session.close()
 
-    new_list = json.loads(request.form.get("data"))
+    updated_list["value"] = updated_list["name"].lower().replace(" ", "_")
+    _list = next(
+        (d for d in old_pokemon_owned if d["value"] == updated_list["old-list"]), None
+    )
 
-    if not re.match("[A-Za-z0-9]*(?:[\sA-Za-z0-9+\-<>|]+)", new_list["name"]):
-        r = json.dumps({"success": False})
-        return Response(r, status=403, mimetype="application/json")
-
-    new_list["value"] = new_list["name"].lower().replace(" ", "_")
-    new_list["type"] = "exclusive"
-    new_list["exclusions"] = []
-    new_list["view-settings"] = {}
-    new_list["pokemon"] = []
+    _new_list = {**_list, **updated_list}
 
     new_pokemon_owned = []
-    new_pokemon_owned[:] = [d for d in old_pokemon_owned]
-    new_pokemon_owned.append(new_list)
+    new_pokemon_owned[:] = [
+        d for d in old_pokemon_owned if d["value"] != updated_list["old-list"]
+    ]
+    new_pokemon_owned.append(_new_list)
 
     user = User.query.filter(
         func.lower(User.username) == func.lower(username)

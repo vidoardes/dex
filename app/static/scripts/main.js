@@ -563,14 +563,6 @@ $('.sidebar-link.user-settings').click(function () {
             success: function (r) {
                 let _settings = r['settings']
 
-                // for (const [key, value] of Object.entries(_settings.config["view-settings"])) {
-                //     if (value == false) {
-                //         $('.view-settings .ui.checkbox.' + key).checkbox('set unchecked')
-                //     } else {
-                //         $('.view-settings .ui.checkbox.' + key).checkbox('set checked')
-                //     }
-                // }
-
                 if (!_settings.public) {
                     $('.content-panel.user-settings .ui.checkbox.private-profile').checkbox('set checked')
                 } else {
@@ -713,11 +705,97 @@ $('.ui.modal.create-dex-popup')
     })
 
 $('.ui.dropdown.list-edit-select').dropdown({
-    action: 'hide',
-    onChange: function () {
-
+    onChange: function (value, text, $selectedItem) {
+        $.ajax({
+            url: '/api/' + $('#user-profile').data('username') + '/dex/get?list=' + value,
+            type: 'GET',
+            success: function (r) {
+                console.log(r)
+                $('.edit-dex-popup .ui.form').form('set values', {
+                    oldlist: r["list-settings"]["value"],
+                    listname: r["list-settings"]["name"],
+                    listcolour: r["list-settings"]["colour"],
+                    viewsettings: r["list-settings"]["view-settings"],
+                })
+                $('.ui.modal.edit-dex-popup').modal('show')
+            },
+            error: function (e) {
+                console.log(e.status)
+                return false
+            }
+        })
     }
 })
+
+$('.edit-dex-popup .ui.form').form({
+    on: 'blur',
+    inline: true,
+    fields: {
+        listname: {
+            identifier: "listname",
+            rules: [{
+                type: 'empty',
+                prompt: 'Please enter a name.'
+            }, {
+                type: 'regExp',
+                value: /^[A-Za-z0-9]*(?:[\sA-Za-z0-9+\-<>|]+)$/i,
+                prompt: 'Names can only contain letters, numbers, spaces, and the following characters: + - > < |.'
+            }]
+        },
+        oldlist: {
+            identifier: "oldlist",
+        },
+        listcolour: {
+            identifier: "listcolour",
+        },
+        viewsettings: {
+            identifier: "viewsettings",
+        }
+    }
+})
+
+$('.ui.modal.edit-dex-popup')
+    .modal({
+        closable: true,
+        onApprove: function () {
+            let _obj = {}
+            let _view_settings = {}
+            let _query_string = ''
+
+            if (!$('.edit-dex-popup .ui.form').form('is valid')) {
+                return false
+            }
+
+            _obj['name'] = $('.edit-dex-popup #list-name').val()
+            _obj['old-list'] = $('.edit-dex-popup #old-list').val()
+            _obj['colour'] = $('.edit-dex-popup #list-colour').val()
+
+            $('.edit-dex-popup .view-settings .ui.checkbox input').each(function (i, obj) {
+                let _setting_changed = $(this).attr('name')
+
+                _view_settings[_setting_changed] = $(this).is(':checked')
+            })
+
+            _obj['view-settings'] = _view_settings
+
+            let data = {data: JSON.stringify(_obj)}
+
+            $.ajax({
+                url: '/api/' + $('#user-profile').data('username') + '/dex/update',
+                data: data,
+                type: 'PUT',
+                success: function (r) {
+                    $(".sidebar-link.user-settings").trigger("click")
+                    history.go(0)
+                },
+                error: function (e) {
+                    console.log(e.status)
+                    return false
+                }
+            })
+        }
+    })
+
 
 $('.ui.checkbox.private-profile').checkbox({
     onChange: function () {
