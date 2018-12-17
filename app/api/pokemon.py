@@ -43,13 +43,8 @@ def fetch_pokemon(username):
     name = request.args.get("name", None)
 
     active_list = next(
-        (item for item in user.pokemon_owned if item["value"] == list), None
+        (item for item in user.pokemon_owned if item["value"] == list), user.pokemon_owned[0]
     )
-
-    if active_list is None:
-        db.session.close()
-        r = json.dumps({"success": False})
-        return Response(r, status=403, mimetype="application/json")
 
     owned_pokemon = active_list["pokemon"]
     pokemon_filters = active_list["view-settings"]
@@ -70,9 +65,13 @@ def fetch_pokemon(username):
         filtered_query = filtered_query.filter(getattr(Pokemon, cat), True)
 
     if list_type == "exclusive":
-        filtered_query = filtered_query.filter(Pokemon.dex.notin_(active_list["exclusions"]))
+        filtered_query = filtered_query.filter(
+            Pokemon.dex.notin_(active_list["exclusions"])
+        )
     elif list_type == "inclusive":
-        filtered_query = filtered_query.filter(Pokemon.dex.in_(active_list["inclusions"]))
+        filtered_query = filtered_query.filter(
+            Pokemon.dex.in_(active_list["inclusions"])
+        )
 
     for key, value in pokemon_filters.items():
         if key == "show-spinda" and not value:
@@ -152,6 +151,8 @@ def fetch_pokemon(username):
     for u in filtered_query.all():
         pokemon_list.append(u.as_dict())
 
+    print(owned_pokemon)
+
     pokemon = sorted(
         merge_dict_lists("forme", pokemon_list, owned_pokemon, append=False),
         key=lambda k: (k["p_uid"]),
@@ -202,7 +203,13 @@ def update_pokemon(username):
     old_pokemon_owned = user.pokemon_owned
     db.session.close()
 
-    _list = request.args.get("list", "default")
+    _list = request.args.get("list")
+
+    if list is None:
+        db.session.close()
+        r = json.dumps({"success": False})
+        return Response(r, status=403, mimetype="application/json")
+
     updated_pokemon = json.loads(request.form.get("data"))
 
     active_list = next((d for d in old_pokemon_owned if d["value"] == _list), None)

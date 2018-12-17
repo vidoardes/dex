@@ -306,6 +306,11 @@ $(function () {
         $("#filter-view .th-large").show()
     }
 
+    if(typeof qs.list == "undefined") {
+        $('#list-select').val($('.list-selectors .menu .item:first').attr('data-value'))
+        $('.list-header .ui.dropdown').dropdown()
+    }
+
     if ($('#gen-select').val() != 'None') {
         qs.gen = $('#gen-select').val()
     }
@@ -320,8 +325,6 @@ $(function () {
 
     if ($('#list-select').val() != 'None') {
         qs.list = $('#list-select').val()
-    } else {
-        qs.list = 'default'
     }
 
     $('.ui.search').search()
@@ -681,10 +684,10 @@ $('.ui.checkbox.unsubscribe').checkbox({
 })
 
 $('.delete-profile').click(function () {
-    $('.tiny.modal').modal('show')
+    $('.tiny.modal.delete-profile').modal('show')
 })
 
-$('.ui.tiny.modal')
+$('.ui.tiny.modal.delete-profile')
     .modal({
         closable: false,
         onApprove: function () {

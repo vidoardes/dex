@@ -152,21 +152,23 @@
 
                     <div class="list-header ui top attached segment">
                         <div class="pokemon-result-count">No Pokemon Found :(</div>
-                        <div class="ui dropdown basic">
-                            <input type="hidden" id="list-select" value="{{ request.args.get('list') }}" />
-                            <div class="text">Select a list...</div>
-                            <i class="dropdown icon"></i>
-                            <div class="menu">
-                                {% for item in lists %}
-                                    <div class="item" data-value="{{ item.value }}">
-                                        <div class="ui {{ item.colour }} empty circular label"></div>
-                                        {{ item.name }}
+                        <div class="list-selectors">
+                            <div class="ui dropdown pointing top right">
+                                <input type="hidden" id="list-select" value="{{ request.args.get('list') }}" />
+                                <div class="text">Select a DEX...</div>
+                                <i class="dropdown icon"></i>
+                                <div class="menu">
+                                    <div class="scrolling menu">
+                                        {% for item in lists %}
+                                            <div class="item" data-value="{{ item.value }}">
+                                                <div class="ui {{ item.colour }} empty circular label"></div>
+                                                {{ item.name }}
+                                            </div>
+                                        {% endfor %}
                                     </div>
-                                {% endfor %}
-                          </div>
+                                </div>
+                            </div>
                         </div>
-
-
                     </div>
 
                     <div id="pokemon-list" class="ui blurring attached segment">
@@ -354,7 +356,7 @@
                 </div>
             </div>
 
-            <div class="ui tiny modal">
+            <div class="ui tiny modal delete-profile">
                 <div class="ui icon header">
                     <i class="trash icon"></i>
                     Delete Profile

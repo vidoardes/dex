@@ -16,19 +16,31 @@ from sqlalchemy.ext.hybrid import hybrid_property
 class User(UserMixin, db.Model):
     __tablename__ = "user"
 
+    pokemon_owned_default = [
+        {
+            "name": "Living DEX",
+            "value": "default",
+            "colour": "red",
+            "type": "exclusive",
+            "exclusions": [],
+            "view-settings": {},
+            "pokemon": [],
+        }
+    ]
+
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(15), unique=True, nullable=False)
     email = db.Column(db.String(120), index=True, unique=True, nullable=False)
     password_hash = db.Column(db.String(60), nullable=False)
     player_level = db.Column(db.Integer, nullable=False, default=0)
     player_team = db.Column(db.String(10), default="Harmony", nullable=False)
-    pokemon_owned = db.Column(db.JSON)
+    pokemon_owned = db.Column(db.JSON, default=pokemon_owned_default)
     email_registered = db.Column(db.Boolean, default=False, nullable=False)
     email_registered_on = db.Column(db.DateTime, nullable=True)
     is_admin = db.Column(db.Boolean, default=False, nullable=True)
     is_public = db.Column(db.Boolean, default=True, nullable=False)
     created = db.Column(db.DateTime, index=True, default=datetime.utcnow)
-    settings = db.Column(db.Text, nullable=False, default="[]")
+    settings = db.Column(db.Text, nullable=False, default='{"view-settings": {}}')
     taken_tour = db.Column(db.Boolean, nullable=False, default=False)
     last_logged_in = db.Column(db.DateTime, default=datetime.utcnow)
     unsubscribe = db.Column(db.Boolean, default=False, nullable=False)
@@ -50,6 +62,14 @@ class User(UserMixin, db.Model):
         )
 
     def get_password_token(self, expires_in=600):
+        print(
+            jwt.encode(
+                {"password_token": self.id, "exp": time() + expires_in},
+                current_app.config["SECRET_KEY"],
+                algorithm="HS256",
+            ).decode("utf-8")
+        )
+
         return jwt.encode(
             {"password_token": self.id, "exp": time() + expires_in},
             current_app.config["SECRET_KEY"],
@@ -65,6 +85,7 @@ class User(UserMixin, db.Model):
             id = jwt.decode(
                 token, current_app.config["SECRET_KEY"], algorithms=["HS256"]
             )["password_token"]
+
         except:
             return
 

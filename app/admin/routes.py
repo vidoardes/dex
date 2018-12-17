@@ -1,12 +1,11 @@
 import copy
+from flask import json, Response
+from flask_login import current_user, login_required
 
 from app import db
 from app.admin import bp
 from app.admin.email import send_update_email
 from app.models import User
-
-from flask import json, Response
-from flask_login import current_user, login_required
 
 
 @bp.route("/send_update_email", methods=["GET"])
@@ -33,6 +32,7 @@ def update_email():
     r = json.dumps({"success": True, "sent-to": json.dumps(sent_list)})
     return Response(r, status=200, mimetype="application/json")
 
+
 @bp.route("/upgrade_pokemon_list", methods=["GET"])
 @login_required
 def upgrade_dict():
@@ -42,14 +42,24 @@ def upgrade_dict():
 
     users = (
         User.query.filter_by(unsubscribe=False)
-            .filter_by(deleted=False)
-            .filter_by(email_registered=True)
-            .all()
+        .filter_by(deleted=False)
+        .filter_by(email_registered=True)
+        .all()
     )
 
     count = 0
 
-    empty_dict = [{"name": "Default List", "value": "default", "view-settings": {}, "pokemon": [{}]}]
+    empty_dict = [
+        {
+            "name": "Living DEX",
+            "value": "default",
+            "colour": "red",
+            "type": "exclusive",
+            "exclusions": [],
+            "view-settings": {},
+            "pokemon": [],
+        }
+    ]
 
     for u in users:
         count += 1
@@ -63,7 +73,9 @@ def upgrade_dict():
             new_pokemon_owned = copy.deepcopy(empty_dict)
             old_pokemon_owned = u.pokemon_owned["default"]
 
-            active_list = next((d for d in new_pokemon_owned if d["value"] == "default"), None)
+            active_list = next(
+                (d for d in new_pokemon_owned if d["value"] == "default"), None
+            )
             active_list["pokemon"] = old_pokemon_owned
             active_list["view-settings"] = json.loads(u.settings)["view-settings"]
 

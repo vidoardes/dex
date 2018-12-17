@@ -536,12 +536,14 @@
       padding: 5px 10px
     }
 
-    .ui.dropdown {
-      justify-self: flex-end;
-      font-size: 12px;
-      font-weight: bold;
+    .list-selectors {
+      display: grid;
+      justify-content: right;
 
       .text {
+        font-weight: bold;
+        font-size: 12px;
+
         i.delete, .text i.edit {
           display: none;
         }
@@ -556,15 +558,15 @@
 
   #pokemon-list {
     overflow-y: scroll;
-    height: calc(100vh - 202px);
+    height: calc(100vh - 203px);
 
     @include tablet {
-      height: calc(100vh - 192px);
+      height: calc(100vh - 193px);
       padding: 5px;
     }
 
     @include phone {
-      height: calc(100vh - 244px);
+      height: calc(100vh - 245px);
       padding: 5px;
     }
 
@@ -1133,6 +1135,12 @@
   padding: 0 10px 0 0;
   overflow-y: scroll;
   height: calc(100vh - 83px);
+  justify-items: center;
+
+  .ui.segment {
+    max-width: 1000px;
+    width: 100%;
+  }
 
   @include phone {
     .ui.segment {
