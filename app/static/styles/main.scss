@@ -1046,15 +1046,36 @@
     height: calc(100vh - 72px);
   }
 
+  @include mediumdesktop {
+    display: grid;
+    grid-column-gap: 10px;
+    grid-template-columns: repeat(4, 1fr);
+
+    .egg-hatch-tier {
+      margin: 0;
+    }
+  }
+
+  @include ultrahddesktop {
+    display: grid;
+    grid-column-gap: 10px;
+    grid-template-columns: repeat(4, 1fr);
+
+    .egg-hatch-tier {
+      margin: 0;
+    }
+  }
+
   .egg-hatch-tier {
     padding: 10px;
 
     .tier-header {
       grid-area: header;
-      font-weight: 600;
       font-size: 24px;
+      font-family: 'Patua One', cursive;
       line-height: 50px;
       margin-bottom: 20px;
+      text-align: center;
 
       img {
         height: 50px;
@@ -1064,19 +1085,19 @@
     }
 
     &.tier-2km {
-      background: rgba(166, 196, 117, 0.1);
+      background: rgba(148, 185, 100, 0.66);
     }
 
     &.tier-5km {
-      background: rgba(213, 161, 63, 0.1);
+      background: rgba(234, 182, 52, 0.62);
     }
 
     &.tier-7km {
-      background: rgba(240, 126, 187, 0.1);
+      background: rgba(243, 136, 194, 0.45);
     }
 
     &.tier-10km {
-      background: rgba(121, 112, 148, 0.1);
+      background: rgba(137, 120, 169, 0.71);
     }
 
     .pokemon_list {
@@ -1086,27 +1107,38 @@
 
       .egg-hatch {
         display: grid;
-        grid-template-areas: "img" "name";
+        grid-template-areas: "name" "img" "cp-range";
         grid-template-columns: 1fr;
-        grid-template-rows: 70px 55px;
+        grid-template-rows: 15px 70px 15px;
+        padding: 3px;
+        background: rgba(0, 0, 0, 0.1);
+
+        .name {
+          grid-area: name;
+          font-weight: 600;
+          font-size: 12px;
+          text-align: center;
+          text-transform: uppercase;
+          line-height: 15px;
+          background: rgba(40, 40, 40, 0.15)
+        }
 
         .img {
           grid-area: img;
           position: relative;
-          width: 110px;
           overflow: hidden;
           display: grid;
           align-content: center;
           justify-content: center;
 
           img {
-            max-height: 70px;
+            max-height: 60px;
             max-width: 90px;
           }
 
           .shiny {
             position: absolute;
-            top: 0;
+            top: 5px;
             right: 0;
             background: rgba(33, 87, 136, 0.2) url(../static/img/icon_shiny.png) no-repeat center;
             background-size: contain;
@@ -1117,13 +1149,17 @@
           }
         }
 
-        .name {
-          grid-area: name;
+        .cp {
+          grid-area: cp-range;
+          color: #444;
+          display: grid;
+          font-size: 11px;
+          line-height: 15px;
           font-weight: 600;
-          text-align: center;
+          grid-template-columns: 25% 75%;
 
-          .cp_subtext {
-            color: #8c8c8c;
+          .cp_range {
+            text-align: right;
           }
         }
       }

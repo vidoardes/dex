@@ -349,6 +349,10 @@ $('.sidebar-link').mouseenter(function () {
 // POKEDEX
 
 $('.sidebar-link.living-dex').click(function () {
+    $('#list-select').val($('.list-selectors .menu .item:first').attr('data-value'))
+    $('.list-header .ui.dropdown').dropdown()
+    qs.list == $('#list-select').val()
+
     if (!$('.sidebar-link.living-dex').hasClass('active')) {
         $('.content-panel.active').fadeOut('fast', function () {
             $('.content-panel.active').removeClass('active')
@@ -489,13 +493,16 @@ $('.sidebar-link.egg-hatches').click(function () {
             success: function (r) {
                 const EggHatch = ({forme, dex, shiny, p_uid, min_hatch_cp, max_hatch_cp}) => `
                     <div class="egg-hatch">
+                        <div class="name">
+                            ${forme.includes("Alolan") ? forme.replace("Alolan", "A.") : forme}
+                        </div>
                         <div class="img">
                             <img src="../static/img/sprites/pokemon_icon_${p_uid}${shiny ? '_shiny' : ''}.png" />
                             ${shiny ? "<div class='shiny'></div>" : "" }
                         </div>
-                        <div class="name">
-                            ${forme}<br />
-                            <span class="cp_subtext">${min_hatch_cp} - ${max_hatch_cp}</span>
+                        <div class="cp">
+                            <div class="cp_label">CP</div>
+                            <div class="cp_range">${min_hatch_cp} - ${max_hatch_cp}</div>
                         </div>
                     </div>
                 `
@@ -513,7 +520,7 @@ $('.sidebar-link.egg-hatches').click(function () {
                     let _egg_hatches_group = value
 
                     $("#egg-hatches-list")
-                        .append('<div class="ui segment egg-hatch-tier tier-' + key + 'km"><div class="tier-header"><img src="../static/img/egg_' + key + 'km.png" />' + key + 'km Eggs</div><div class="pokemon_list">' + _egg_hatches_group.map(EggHatch).join('') + '</div></div>')
+                        .append('<div class="ui segment egg-hatch-tier tier-' + key + 'km"><div class="tier-header"><img src="../static/img/egg_' + key + 'km.png" />' + key + 'KM Eggs</div><div class="pokemon_list">' + _egg_hatches_group.map(EggHatch).join('') + '</div></div>')
                         .fadeIn()
                 }
             },
