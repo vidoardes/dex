@@ -299,6 +299,7 @@ $.taketour = function () {
 let qs = {}
 
 $(function () {
+    var params = new window.URLSearchParams(window.location.search);
     var viewportWidth = $(window).width()
     if (viewportWidth < 421) {
         $("#pokemon-wrapper").addClass("list-view")
@@ -306,24 +307,44 @@ $(function () {
         $("#filter-view .th-large").show()
     }
 
-    if(typeof qs.list == "undefined") {
+    if(params.get("page") === "legacy") {
+        $(".sidebar-link.legacy-moves").trigger("click")
+        return
+    }
+
+    if(params.get("page") === "raid") {
+        $(".sidebar-link.raid-bosses").trigger("click")
+        return
+    }
+
+    if(params.get("page") === "eggs") {
+        $(".sidebar-link.egg-hatches").trigger("click")
+        return
+    }
+
+    if(params.get("page") === "settings") {
+        $(".sidebar-link.user-settings").trigger("click")
+        return
+    }
+
+    if(!params.has("list")) {
         $('#list-select').val($('.list-selectors .menu .item:first').attr('data-value'))
         $('.list-header .ui.dropdown').dropdown()
     }
 
-    if ($('#gen-select').val() != 'None') {
+    if ($('#gen-select').val() !== 'None') {
         qs.gen = $('#gen-select').val()
     }
 
-    if ($('#cat-select').val() != 'None') {
+    if ($('#cat-select').val() !== 'None') {
         qs.cat = $('#cat-select').val()
     }
 
-    if ($('#own-select').val() != 'None') {
+    if ($('#own-select').val() !== 'None') {
         qs.own = $('#own-select').val()
     }
 
-    if ($('#list-select').val() != 'None') {
+    if ($('#list-select').val() !== 'None') {
         qs.list = $('#list-select').val()
     }
 
