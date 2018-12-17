@@ -59,7 +59,6 @@ def upgrade_dict():
             print(json.loads(u.pokemon_owned))
 
         if json.loads(u.pokemon_owned) == {}:
-            print('Here!')
             u.pokemon_owned = copy.deepcopy(empty_dict)
 
             continue

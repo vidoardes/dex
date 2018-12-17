@@ -43,7 +43,8 @@ def fetch_pokemon(username):
     name = request.args.get("name", None)
 
     active_list = next(
-        (item for item in user.pokemon_owned if item["value"] == list), user.pokemon_owned[0]
+        (item for item in user.pokemon_owned if item["value"] == list),
+        user.pokemon_owned[0],
     )
 
     owned_pokemon = active_list["pokemon"]
