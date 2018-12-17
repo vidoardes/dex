@@ -328,6 +328,7 @@ $(function () {
     }
 
     if(!params.has("list")) {
+        params.set("list", $('.list-selectors .menu .item:first').attr('data-value'))
         $('#list-select').val($('.list-selectors .menu .item:first').attr('data-value'))
         $('.list-header .ui.dropdown').dropdown()
     }
@@ -350,7 +351,6 @@ $(function () {
 
     $('.ui.search').search()
     $('#pokemon-wrapper').renderallpokemon()
-
 
     if ($('body').data("take-tour") === 'True') {
         $.taketour()

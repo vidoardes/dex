@@ -36,7 +36,7 @@ def fetch_pokemon(username):
         return Response(r, status=403, mimetype="application/json")
 
     pokemon_list = []
-    list = request.args.get("list", "default")
+    list = request.args.get("list")
     cat = request.args.get("cat", "all")
     gen = request.args.get("gen", "all")
     own = request.args.get("own", "all")
@@ -151,8 +151,6 @@ def fetch_pokemon(username):
 
     for u in filtered_query.all():
         pokemon_list.append(u.as_dict())
-
-    print(owned_pokemon)
 
     pokemon = sorted(
         merge_dict_lists("forme", pokemon_list, owned_pokemon, append=False),
