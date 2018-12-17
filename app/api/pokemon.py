@@ -1,3 +1,4 @@
+import re
 from flask import request, json, Response
 from flask_login import login_required, current_user
 from sqlalchemy import func
@@ -312,4 +313,85 @@ def fetch_egg_hatches():
 
     db.session.close()
     r = json.dumps({"success": True, "egghatches": egg_hatches})
+    return Response(r, status=200, mimetype="application/json")
+
+
+@bp.route("/<username>/dex/add", methods=["PUT"])
+@login_required
+def add_list(username):
+    if current_user.username != username:
+        r = json.dumps({"success": False})
+        return Response(r, status=403, mimetype="application/json")
+
+    user = User.query.filter(
+        func.lower(User.username) == func.lower(username)
+    ).first_or_404()
+
+    old_pokemon_owned = user.pokemon_owned
+    new_list = json.loads(request.form.get("data"))
+    db.session.close()
+
+    new_list["value"] = new_list["name"].lower().replace(" ", "_")
+    new_list["type"] = "exclusive"
+    new_list["exclusions"] = []
+    new_list["view-settings"] = {}
+    new_list["pokemon"] = []
+
+    new_pokemon_owned = []
+    new_pokemon_owned[:] = [d for d in old_pokemon_owned]
+    new_pokemon_owned.append(new_list)
+
+    user = User.query.filter(
+        func.lower(User.username) == func.lower(username)
+    ).first_or_404()
+
+    user.pokemon_owned = new_pokemon_owned
+
+    db.session.commit()
+    db.session.close()
+
+    r = json.dumps({"success": True})
+    return Response(r, status=200, mimetype="application/json")
+
+
+@bp.route("/<username>/dex/edit", methods=["PUT"])
+@login_required
+def edit_list(username):
+    if current_user.username != username:
+        r = json.dumps({"success": False})
+        return Response(r, status=403, mimetype="application/json")
+
+    user = User.query.filter(
+        func.lower(User.username) == func.lower(username)
+    ).first_or_404()
+
+    old_pokemon_owned = user.pokemon_owned
+    db.session.close()
+
+    new_list = json.loads(request.form.get("data"))
+
+    if not re.match("[A-Za-z0-9]*(?:[\sA-Za-z0-9+\-<>|]+)", new_list["name"]):
+        r = json.dumps({"success": False})
+        return Response(r, status=403, mimetype="application/json")
+
+    new_list["value"] = new_list["name"].lower().replace(" ", "_")
+    new_list["type"] = "exclusive"
+    new_list["exclusions"] = []
+    new_list["view-settings"] = {}
+    new_list["pokemon"] = []
+
+    new_pokemon_owned = []
+    new_pokemon_owned[:] = [d for d in old_pokemon_owned]
+    new_pokemon_owned.append(new_list)
+
+    user = User.query.filter(
+        func.lower(User.username) == func.lower(username)
+    ).first_or_404()
+
+    user.pokemon_owned = new_pokemon_owned
+
+    db.session.commit()
+    db.session.close()
+
+    r = json.dumps({"success": True})
     return Response(r, status=200, mimetype="application/json")

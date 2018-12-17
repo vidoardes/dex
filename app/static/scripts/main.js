@@ -299,7 +299,7 @@ $.taketour = function () {
 let qs = {}
 
 $(function () {
-    var params = new window.URLSearchParams(window.location.search);
+    var params = new window.URLSearchParams(window.location.search)
     var viewportWidth = $(window).width()
     if (viewportWidth < 421) {
         $("#pokemon-wrapper").addClass("list-view")
@@ -307,27 +307,27 @@ $(function () {
         $("#filter-view .th-large").show()
     }
 
-    if(params.get("page") === "legacy") {
+    if (params.get("page") === "legacy") {
         $(".sidebar-link.legacy-moves").trigger("click")
         return
     }
 
-    if(params.get("page") === "raid") {
+    if (params.get("page") === "raid") {
         $(".sidebar-link.raid-bosses").trigger("click")
         return
     }
 
-    if(params.get("page") === "eggs") {
+    if (params.get("page") === "eggs") {
         $(".sidebar-link.egg-hatches").trigger("click")
         return
     }
 
-    if(params.get("page") === "settings") {
+    if (params.get("page") === "settings") {
         $(".sidebar-link.user-settings").trigger("click")
         return
     }
 
-    if(!params.has("list")) {
+    if (!params.has("list")) {
         params.set("list", $('.list-selectors .menu .item:first').attr('data-value'))
         $('#list-select').val($('.list-selectors .menu .item:first').attr('data-value'))
         $('.list-header .ui.dropdown').dropdown()
@@ -462,7 +462,7 @@ $('.sidebar-link.raid-bosses').click(function () {
                     <div class="raid-boss">
                         <div class="img">
                             <img src="../static/img/sprites/pokemon_icon_${p_uid}${shiny ? '_shiny' : ''}.png" />
-                            ${shiny ? "<div class='shiny'></div>" : "" }
+                            ${shiny ? "<div class='shiny'></div>" : ""}
                         </div>
                         <div class="name">
                             ${forme}
@@ -519,7 +519,7 @@ $('.sidebar-link.egg-hatches').click(function () {
                         </div>
                         <div class="img">
                             <img src="../static/img/sprites/pokemon_icon_${p_uid}${shiny ? '_shiny' : ''}.png" />
-                            ${shiny ? "<div class='shiny'></div>" : "" }
+                            ${shiny ? "<div class='shiny'></div>" : ""}
                         </div>
                         <div class="cp">
                             <div class="cp_label">CP</div>
@@ -648,28 +648,76 @@ $('#update-player-level').click(function () {
     })
 })
 
-// $('.view-settings .ui.checkbox').checkbox({
-//     onChange: function () {
-//         let _obj = {}
-//         let _setting_changed = $(this).attr('name')
-//
-//         _obj['view-settings'] = {[_setting_changed]: $('.ui.checkbox.' + _setting_changed).checkbox('is checked')}
-//
-//         let data = {data: JSON.stringify(_obj)}
-//
-//         $.ajax({
-//             url: '/api/user/' + $('#user-profile').data('username') + '/settings/update',
-//             data: data,
-//             type: 'PUT',
-//             success: function (r) {
-//
-//             },
-//             error: function (e) {
-//                 console.log(e.status)
-//             }
-//         })
-//     }
-// })
+$('.create-dex').click(function () {
+    $('.ui.modal.create-dex-popup .ui.dropdown').dropdown()
+    $('.ui.modal.create-dex-popup').modal('show')
+})
+
+$('.create-dex-popup .ui.form').form({
+    on: 'blur',
+    inline: true,
+    fields: {
+        listname: {
+            identifier: "listname",
+            rules: [{
+                type: 'empty',
+                prompt: 'Please enter a name.'
+            }, {
+                type: 'regExp',
+                value: /^[A-Za-z0-9]*(?:[\sA-Za-z0-9\+\-\<\>\|]+)$/i,
+                prompt: 'Names can only contain letters, numbers, spaces, and the following characters: + - > < |.'
+            }]
+        }
+    }
+})
+
+$('.ui.modal.create-dex-popup')
+    .modal({
+        closable: true,
+        onApprove: function () {
+            let _obj = {}
+            let _view_settings = {}
+            let _query_string = ''
+
+            if (!$('.create-dex-popup .ui.form').form('is valid')) {
+                return false
+            }
+
+            _obj['name'] = $('.create-dex-popup #list-name').val()
+            _obj['colour'] = $('.create-dex-popup #list-colour').val()
+            // _obj['filter-query'] = '?gen=' + $('.create-dex-popup #gen-select').val() + '&cat=' + $('.create-dex-popup #cat-select').val() + '&own=' + $('.create-dex-popup #own-select').val()
+
+            $('.create-dex-popup .view-settings .ui.checkbox input').each(function (i, obj) {
+                let _setting_changed = $(this).attr('name')
+
+                _view_settings[_setting_changed] = $(this).is(':checked')
+            })
+
+            _obj['view-settings'] = _view_settings
+
+            let data = {data: JSON.stringify(_obj)}
+
+            $.ajax({
+                url: '/api/' + $('#user-profile').data('username') + '/dex/add',
+                data: data,
+                type: 'PUT',
+                success: function (r) {
+
+                },
+                error: function (e) {
+                    console.log(e.status)
+                    return false
+                }
+            })
+        }
+    })
+
+$('.ui.dropdown.list-edit-select').dropdown({
+    action: 'hide',
+    onChange: function () {
+
+    }
+})
 
 $('.ui.checkbox.private-profile').checkbox({
     onChange: function () {
