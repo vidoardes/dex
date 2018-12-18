@@ -212,7 +212,8 @@
                                 </div>
                                 <div class="ui form">
                                     <div class="field">
-                                        <input type="number" name="level" min="1" max="40" id="level"
+                                        <input type="number" name="level" min="1" max="40"
+                                               id="level"
                                                placeholder="Player Level">
                                     </div>
                                     <button class="ui primary button right floated"
@@ -281,7 +282,7 @@
                                                id="unsubscribe"
                                                tabindex="1"
                                                class="hidden">
-                                    <label>Unsubscribe from content updates</label>
+                                        <label>Unsubscribe from content updates</label>
                                     </div>
                                 </div>
                             </div>
@@ -304,12 +305,15 @@
                         <p>
                             This is a fun pet project, but if you have any ideas, suggestions, or
                             just want to see how it all works
-                            <a href="https://github.com/vidoardes/dex" target="_blank">you can check out the GitHub repo here.</a>
+                            <a href="https://github.com/vidoardes/dex" target="_blank">you can
+                                check out the GitHub repo here.</a>
                         </p>
                         <p>
-                            Although this isn't for profit, it does cost money to run, so if you would
-                            like to make a donation to keep the server up I would very much appreciate it.
-                            <a href="https://ko-fi.com/vidoardes" target="_blank">You can find my ko-fi page here.</a>
+                            Although this isn't for profit, it does cost money to run, so if you
+                            would like to make a donation to keep the server up I would very much
+                            appreciate it.
+                            <a href="https://ko-fi.com/vidoardes" target="_blank">You can find my
+                                ko-fi page here.</a>
                         </p>
                     </div>
                 </div>
@@ -341,10 +345,12 @@
                 <div class="header">Create New DEX</div>
                 <div class="content">
                     <form class="ui form">
+                        <div class="ui error message"></div>
                         <div class="two fields">
                             <div class="required field">
                                 <label>DEX Name</label>
-                                <input id="list-name" data-validate="listname" type="text" autocomplete="off"/>
+                                <input id="list-name" data-validate="listname" type="text"
+                                       autocomplete="off"/>
                             </div>
 
                             <div class="required field">
@@ -354,78 +360,87 @@
                                     <option value="orange">Orange</option>
                                     <option value="green">Green</option>
                                     <option value="purple">Purple</option>
+                                    <option value="blue">Blue</option>
+                                    <option value="black">Black</option>
+                                    <option value="yellow">Yellow</option>
+                                    <option value="pink">Pink</option>
                                 </select>
                             </div>
                         </div>
 
                         <div class="ui small header">Show / Hide Formes & Variants</div>
-                            <p>By default all catchable forms are availible to select, but if you
-                                aren't interested in tracking all the variants of Spinda, or have
-                                given up the dream of finding all Unown, you can simply remove them
-                                from your list via the check boxes below. Deselecting them all
-                                will provide you with only unique dex numbers.</p>
-                            <div class="ui stackable five column grid view-settings">
-                                <div class="column">
-                                    <div class="inline field">
-                                        <div class="ui checkbox show-costumed">
-                                            <input type="checkbox" name="viewsettings[]" value="show-costumed">
-                                            <label>Costumed</label>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="column">
-                                    <div class="inline field">
-                                        <div class="ui checkbox show-alolan">
-                                            <input type="checkbox" name="viewsettings[]" value="show-alolan">
-                                            <label>Alolan</label>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="column">
-                                    <div class="inline field">
-                                        <div class="ui checkbox show-unown">
-                                            <input type="checkbox" name="viewsettings[]" value="show-unown">
-                                            <label>Unown</label>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="column">
-                                    <div class="inline field">
-                                        <div class="ui checkbox show-spinda">
-                                            <input type="checkbox" name="viewsettings[]" value="show-spinda">
-                                            <label>Spinda</label>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="column">
-                                    <div class="inline field">
-                                        <div class="ui checkbox show-castform">
-                                            <input type="checkbox" name="viewsettings[]" value="show-castform">
-                                            <label>Castform</label>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="column">
-                                    <div class="inline field">
-                                        <div class="ui checkbox show-deoxys">
-                                            <input type="checkbox" name="viewsettings[]" value="show-deoxys">
-                                            <label>Deoxys</label>
-                                        </div>
+                        <p>By default all catchable forms are availible to select, but if you
+                            aren't interested in tracking all the variants of Spinda, or have
+                            given up the dream of finding all Unown, you can simply remove them
+                            from your list via the check boxes below. Deselecting them all
+                            will provide you with only unique dex numbers.</p>
+                        <div class="ui stackable five column grid view-settings">
+                            <div class="column">
+                                <div class="inline field">
+                                    <div class="ui checkbox show-costumed">
+                                        <input type="checkbox" name="viewsettings[]"
+                                               value="show-costumed">
+                                        <label>Costumed</label>
                                     </div>
                                 </div>
                             </div>
-                        </form>
-                    </div>
+                            <div class="column">
+                                <div class="inline field">
+                                    <div class="ui checkbox show-alolan">
+                                        <input type="checkbox" name="viewsettings[]"
+                                               value="show-alolan">
+                                        <label>Alolan</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="column">
+                                <div class="inline field">
+                                    <div class="ui checkbox show-unown">
+                                        <input type="checkbox" name="viewsettings[]"
+                                               value="show-unown">
+                                        <label>Unown</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="column">
+                                <div class="inline field">
+                                    <div class="ui checkbox show-spinda">
+                                        <input type="checkbox" name="viewsettings[]"
+                                               value="show-spinda">
+                                        <label>Spinda</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="column">
+                                <div class="inline field">
+                                    <div class="ui checkbox show-castform">
+                                        <input type="checkbox" name="viewsettings[]"
+                                               value="show-castform">
+                                        <label>Castform</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="column">
+                                <div class="inline field">
+                                    <div class="ui checkbox show-deoxys">
+                                        <input type="checkbox" name="viewsettings[]"
+                                               value="show-deoxys">
+                                        <label>Deoxys</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
 
-                    <div class="actions">
-                        <div class="ui cancel button">
-                            <i class="remove icon"></i>
-                            Cancel
-                        </div>
-                        <div class="ui ok green button">
-                            <i class="save icon"></i>
-                            Save DEX
-                        </div>
+                <div class="actions">
+                    <div class="ui cancel button">
+                        <i class="remove icon"></i>
+                        Cancel
+                    </div>
+                    <div class="ui ok green button">
+                        <i class="save icon"></i>
+                        Save DEX
                     </div>
                 </div>
             </div>
@@ -435,94 +450,107 @@
                 <div class="header">Edit DEX</div>
                 <div class="content">
                     <form class="ui form">
-                        <input id="old-list" data-validate="oldlist" type="hidden" />
+                        <div class="ui error message"></div>
+                        <input id="old-list" data-validate="oldlist" type="hidden"/>
                         <div class="two fields">
                             <div class="required field">
                                 <label>DEX Name</label>
-                                <input id="list-name" data-validate="listname" type="text" autocomplete="off"/>
+                                <input id="list-name" data-validate="listname" type="text"
+                                       autocomplete="off"/>
                             </div>
 
                             <div class="required field">
                                 <label>Colour Indicator</label>
-                                <select class="ui fluid dropdown" id="list-colour" data-validate="listcolour">
+                                <select class="ui fluid dropdown" id="list-colour"
+                                        data-validate="listcolour">
                                     <option value="red">Red</option>
                                     <option value="orange">Orange</option>
                                     <option value="green">Green</option>
                                     <option value="purple">Purple</option>
+                                    <option value="blue">Blue</option>
+                                    <option value="black">Black</option>
+                                    <option value="yellow">Yellow</option>
+                                    <option value="pink">Pink</option>
                                 </select>
                             </div>
                         </div>
 
                         <div class="ui small header">Show / Hide Formes & Variants</div>
-                            <p>By default all catchable forms are availible to select, but if you
-                                aren't interested in tracking all the variants of Spinda, or have
-                                given up the dream of finding all Unown, you can simply remove them
-                                from your list via the check boxes below. Deselecting them all
-                                will provide you with only unique dex numbers.</p>
-                            <div class="ui stackable five column grid view-settings">
-                                <div class="column">
-                                    <div class="inline field">
-                                        <div class="ui checkbox show-costumed">
-                                            <input type="checkbox" name="viewsettings[]" value="show-costumed">
-                                            <label>Costumed</label>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="column">
-                                    <div class="inline field">
-                                        <div class="ui checkbox show-alolan">
-                                            <input type="checkbox" name="viewsettings[]" value="show-alolan">
-                                            <label>Alolan</label>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="column">
-                                    <div class="inline field">
-                                        <div class="ui checkbox show-unown">
-                                            <input type="checkbox" name="viewsettings[]" value="show-unown">
-                                            <label>Unown</label>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="column">
-                                    <div class="inline field">
-                                        <div class="ui checkbox show-spinda">
-                                            <input type="checkbox" name="viewsettings[]" value="show-spinda">
-                                            <label>Spinda</label>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="column">
-                                    <div class="inline field">
-                                        <div class="ui checkbox show-castform">
-                                            <input type="checkbox" name="viewsettings[]" value="show-castform">
-                                            <label>Castform</label>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="column">
-                                    <div class="inline field">
-                                        <div class="ui checkbox show-deoxys">
-                                            <input type="checkbox" name="viewsettings[]" value="show-deoxys">
-                                            <label>Deoxys</label>
-                                        </div>
+                        <p>By default all catchable forms are availible to select, but if you
+                            aren't interested in tracking all the variants of Spinda, or have
+                            given up the dream of finding all Unown, you can simply remove them
+                            from your list via the check boxes below. Deselecting them all
+                            will provide you with only unique dex numbers.</p>
+                        <div class="ui stackable five column grid view-settings">
+                            <div class="column">
+                                <div class="inline field">
+                                    <div class="ui checkbox show-costumed">
+                                        <input type="checkbox" name="viewsettings[]"
+                                               value="show-costumed">
+                                        <label>Costumed</label>
                                     </div>
                                 </div>
                             </div>
-                        </form>
-                    </div>
+                            <div class="column">
+                                <div class="inline field">
+                                    <div class="ui checkbox show-alolan">
+                                        <input type="checkbox" name="viewsettings[]"
+                                               value="show-alolan">
+                                        <label>Alolan</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="column">
+                                <div class="inline field">
+                                    <div class="ui checkbox show-unown">
+                                        <input type="checkbox" name="viewsettings[]"
+                                               value="show-unown">
+                                        <label>Unown</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="column">
+                                <div class="inline field">
+                                    <div class="ui checkbox show-spinda">
+                                        <input type="checkbox" name="viewsettings[]"
+                                               value="show-spinda">
+                                        <label>Spinda</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="column">
+                                <div class="inline field">
+                                    <div class="ui checkbox show-castform">
+                                        <input type="checkbox" name="viewsettings[]"
+                                               value="show-castform">
+                                        <label>Castform</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="column">
+                                <div class="inline field">
+                                    <div class="ui checkbox show-deoxys">
+                                        <input type="checkbox" name="viewsettings[]"
+                                               value="show-deoxys">
+                                        <label>Deoxys</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
 
-                    <div class="actions">
-                        <div class="ui cancel button">
-                            <i class="remove icon"></i>
-                            Cancel
-                        </div>
-                        <div class="ui ok green button">
-                            <i class="save icon"></i>
-                            Save DEX
-                        </div>
+                <div class="actions">
+                    <div class="ui cancel button">
+                        <i class="remove icon"></i>
+                        Cancel
+                    </div>
+                    <div class="ui ok green button">
+                        <i class="save icon"></i>
+                        Save DEX
                     </div>
                 </div>
+            </div>
         {% endblock %}
     </div>
 {% endblock %}

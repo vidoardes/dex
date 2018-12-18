@@ -316,10 +316,6 @@ def fetch_egg_hatches():
 @bp.route("/<username>/dex/get", methods=["GET"])
 @login_required
 def get_list(username):
-    if current_user.username != username:
-        r = json.dumps({"success": False})
-        return Response(r, status=403, mimetype="application/json")
-
     user = User.query.filter(
         func.lower(User.username) == func.lower(username)
     ).first_or_404()
@@ -347,10 +343,6 @@ def get_list(username):
 @bp.route("/<username>/dex/getall", methods=["GET"])
 @login_required
 def get_lists(username):
-    if current_user.username != username:
-        r = json.dumps({"success": False})
-        return Response(r, status=403, mimetype="application/json")
-
     user = User.query.filter(
         func.lower(User.username) == func.lower(username)
     ).first_or_404()
@@ -390,6 +382,12 @@ def add_list(username):
     _nl["exclusions"] = []
     _nl["pokemon"] = []
 
+    d = dict((i['value'], i['name']) for i in old_pokemon_owned)
+
+    if _nl["value"] in d:
+        r = json.dumps({"success": False, "message" : "Dex name already exists"})
+        return Response(r, status=403, mimetype="application/json")
+
     new_pokemon_owned = []
     new_pokemon_owned[:] = [d for d in old_pokemon_owned]
     new_pokemon_owned.append(_nl)
@@ -422,18 +420,24 @@ def update_list(username):
     db.session.close()
 
     _ul = json.loads(request.form.get("data"))
-
     _ul["value"] = generate_list_key(_ul["name"])
-
-    _list = next((d for d in old_pokemon_owned if d["value"] == _ul["old-list"]), None)
-
-    _new_list = {**_list, **_ul}
 
     new_pokemon_owned = []
     new_pokemon_owned[:] = [
         d for d in old_pokemon_owned if d["value"] != _ul["old-list"]
     ]
+
+    d = dict((i['value'], i['name']) for i in new_pokemon_owned)
+
+    if _ul["value"] in d:
+        r = json.dumps({"success": False, "message" : "Dex name already exists"})
+        return Response(r, status=403, mimetype="application/json")
+
+    _list = next((d for d in old_pokemon_owned if d["value"] == _ul["old-list"]), None)
+
+    _new_list = {**_list, **_ul}
     _new_list.pop("old-list")
+
     new_pokemon_owned.append(_new_list)
 
     user = User.query.filter(

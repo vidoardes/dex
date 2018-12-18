@@ -1,6 +1,4 @@
 $.fn.renderallpokemon = function () {
-    console.log(qs["list"])
-
     if(typeof qs["list"] === "undefined" || qs["list"] === "") {
         $.ajax({
             url: "/api/" + $('#user-profile').data('username') + "/dex/getall",
@@ -709,21 +707,27 @@ $('.ui.modal.create-dex-popup')
             _obj['view-settings'] = _vs
 
             let data = {data: JSON.stringify(_obj)}
+            let _form_valid = false
 
             $.ajax({
+                async : false,
                 url: '/api/' + $('#user-profile').data('username') + '/dex/add',
                 data: data,
                 type: 'PUT',
                 success: function (r) {
                     $('.ui.dropdown.list-edit-select').dropdown('change values',null)
                     $('.list-header .ui.dropdown').dropdown('change values',null)
+                    _form.form('validate form')
                     _form.form('reset')
+                    _form_valid = true
                 },
                 error: function (e) {
                     console.log(e.status)
-                    return false
+                    _form.form("add errors", [e.responseJSON["message"]])
                 }
             })
+
+            return _form_valid
         }
     })
 
@@ -761,7 +765,6 @@ $('.ui.dropdown.list-edit-select').dropdown({
             },
             error: function (e) {
                 console.log(e.status)
-                return false
             }
         })
     }
@@ -818,22 +821,28 @@ $('.ui.modal.edit-dex-popup')
 
             _obj['view-settings'] = _vs
 
-            data = {data: JSON.stringify(_obj)}
+            let data = {data: JSON.stringify(_obj)}
+            let _form_valid = false
 
             $.ajax({
                 url: '/api/' + $('#user-profile').data('username') + '/dex/update',
                 data: data,
                 type: 'PUT',
+                async : false,
                 success: function (r) {
                     $('.ui.dropdown.list-edit-select').dropdown('change values',null)
                     $('.list-header .ui.dropdown').dropdown('change values',null)
+                    _form.form('validate form')
                     _form.form('reset')
+                    _form_valid = true
                 },
                 error: function (e) {
                     console.log(e.status)
-                    return false
+                    _form.form("add errors", [e.responseJSON["message"]])
                 }
             })
+
+            return _form_valid
         }
     })
 
