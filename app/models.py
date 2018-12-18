@@ -47,7 +47,7 @@ class User(UserMixin, db.Model):
     is_admin = db.Column(db.Boolean, default=False, nullable=True)
     is_public = db.Column(db.Boolean, default=True, nullable=False)
     created = db.Column(db.DateTime, index=True, default=datetime.utcnow)
-    settings = db.Column(db.Text, nullable=False, default='{"view-settings": {}}')
+    settings = db.Column(db.JSON, nullable=False, default={})
     taken_tour = db.Column(db.Boolean, nullable=False, default=False)
     last_logged_in = db.Column(db.DateTime, default=datetime.utcnow)
     unsubscribe = db.Column(db.Boolean, default=False, nullable=False)
