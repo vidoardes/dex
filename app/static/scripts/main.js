@@ -1,5 +1,5 @@
 $.fn.renderallpokemon = function () {
-    if(typeof qs["list"] === "undefined" || qs["list"] === "") {
+    if (typeof qs["list"] === "undefined" || qs["list"] === "") {
         $.ajax({
             url: "/api/" + $('#user-profile').data('username') + "/dex/getall",
             type: 'GET',
@@ -687,9 +687,9 @@ $('.create-dex-popup .ui.form').form({
 $('.ui.modal.create-dex-popup')
     .modal({
         closable: true,
-        onHidden: function() {
+        onHidden: function () {
             $('.create-dex-popup .ui.form').form('reset')
-            $('.create-dex-popup .ui.form .ui.error.message').empty();
+            $('.create-dex-popup .ui.form .ui.error.message').empty()
         },
         onApprove: function () {
             let _obj = {}
@@ -714,13 +714,13 @@ $('.ui.modal.create-dex-popup')
             let _form_valid = false
 
             $.ajax({
-                async : false,
+                async: false,
                 url: '/api/' + $('#user-profile').data('username') + '/dex/add',
                 data: data,
                 type: 'PUT',
                 success: function (r) {
-                    $('.ui.dropdown.list-edit-select').dropdown('change values',null)
-                    $('.list-header .ui.dropdown').dropdown('change values',null)
+                    $('.ui.dropdown.list-edit-select').dropdown('change values', null)
+                    $('.list-header .ui.dropdown').dropdown('change values', null)
                     _form.form('validate form')
                     _form.form('reset')
                     _form_valid = true
@@ -734,6 +734,9 @@ $('.ui.modal.create-dex-popup')
             return _form_valid
         }
     })
+
+let editing_list_value = ""
+let editing_list_name = ""
 
 $('.ui.dropdown.list-edit-select').dropdown({
     apiSettings: {
@@ -764,6 +767,10 @@ $('.ui.dropdown.list-edit-select').dropdown({
                     listcolour: r["list-settings"]["colour"],
                     viewsettings: _vs,
                 })
+
+                editing_list_value = r["list-settings"]["value"]
+                editing_list_name = r["list-settings"]["name"]
+
                 $('.ui.modal.edit-dex-popup').modal('show')
                 $('.ui.dropdown.list-edit-select').dropdown('clear')
             },
@@ -804,9 +811,9 @@ $('.edit-dex-popup .ui.form').form({
 $('.ui.modal.edit-dex-popup')
     .modal({
         closable: true,
-        onHidden: function() {
+        onHidden: function () {
             $('.edit-dex-popup .ui.form').form('reset')
-            $('.edit-dex-popup .ui.form .ui.error.message').empty();
+            $('.edit-dex-popup .ui.form .ui.error.message').empty()
         },
         onApprove: function () {
             let _obj = {}
@@ -836,10 +843,10 @@ $('.ui.modal.edit-dex-popup')
                 url: '/api/' + $('#user-profile').data('username') + '/dex/update',
                 data: data,
                 type: 'PUT',
-                async : false,
+                async: false,
                 success: function (r) {
-                    $('.ui.dropdown.list-edit-select').dropdown('change values',null)
-                    $('.list-header .ui.dropdown').dropdown('change values',null)
+                    $('.ui.dropdown.list-edit-select').dropdown('change values', null)
+                    $('.list-header .ui.dropdown').dropdown('change values', null)
                     _form.form('validate form')
                     _form.form('reset')
                     _form_valid = true
@@ -851,9 +858,37 @@ $('.ui.modal.edit-dex-popup')
             })
 
             return _form_valid
+        },
+        onDeny: function () {
+            $(".ui.modal.delete-dex-popup").modal({
+                closable: true,
+                onShow: function () {
+                    _header = $(this).find('.header')
+                    _content = $(this).find('.content')
+
+                    _header.html("Delete list - " + editing_list_name)
+                    _content.html("<p> Are you sure you want to delete " + editing_list_name + "? This is irreversible!</p>")
+                },
+                onHidden: function () {
+                    editing_list_value = ""
+                    editing_list_name = ""
+                },
+                onApprove: function () {
+                    $.ajax({
+                        url: '/api/' + $('#user-profile').data('username') + '/dex/delete?list=' + editing_list_value,
+                        type: 'GET',
+                        success: function (r) {
+                            $('.ui.dropdown.list-edit-select').dropdown('change values', null)
+                            $('.list-header .ui.dropdown').dropdown('change values', null)
+                        },
+                        error: function (e) {
+                            console.log(e.status)
+                        }
+                    })
+                }
+            }).modal('show')
         }
     })
-
 
 $('.ui.checkbox.private-profile').checkbox({
     onChange: function () {

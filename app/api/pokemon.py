@@ -350,11 +350,19 @@ def get_lists(username):
     _lists = []
 
     for d in user.pokemon_owned:
-        _lists.append({
-            "name": "<div class='ui " + d["colour"] + " empty circular label'></div>" + d["name"],
-            "value": d["value"],
-            "text": "<div class='ui " + d["colour"] + " empty circular label'></div>" + d["name"],
-        })
+        _lists.append(
+            {
+                "name": "<div class='ui "
+                + d["colour"]
+                + " empty circular label'></div>"
+                + d["name"],
+                "value": d["value"],
+                "text": "<div class='ui "
+                + d["colour"]
+                + " empty circular label'></div>"
+                + d["name"],
+            }
+        )
 
     db.session.close()
 
@@ -382,10 +390,10 @@ def add_list(username):
     _nl["exclusions"] = []
     _nl["pokemon"] = []
 
-    d = dict((i['value'], i['name']) for i in old_pokemon_owned)
+    d = dict((i["value"], i["name"]) for i in old_pokemon_owned)
 
     if _nl["value"] in d:
-        r = json.dumps({"success": False, "message" : "Dex name already exists"})
+        r = json.dumps({"success": False, "message": "Dex name already exists"})
         return Response(r, status=403, mimetype="application/json")
 
     new_pokemon_owned = []
@@ -427,10 +435,10 @@ def update_list(username):
         d for d in old_pokemon_owned if d["value"] != _ul["old-list"]
     ]
 
-    d = dict((i['value'], i['name']) for i in new_pokemon_owned)
+    d = dict((i["value"], i["name"]) for i in new_pokemon_owned)
 
     if _ul["value"] in d:
-        r = json.dumps({"success": False, "message" : "Dex name already exists"})
+        r = json.dumps({"success": False, "message": "Dex name already exists"})
         return Response(r, status=403, mimetype="application/json")
 
     _list = next((d for d in old_pokemon_owned if d["value"] == _ul["old-list"]), None)
@@ -439,6 +447,38 @@ def update_list(username):
     _new_list.pop("old-list")
 
     new_pokemon_owned.append(_new_list)
+
+    user = User.query.filter(
+        func.lower(User.username) == func.lower(username)
+    ).first_or_404()
+
+    user.pokemon_owned = new_pokemon_owned
+
+    db.session.commit()
+    db.session.close()
+
+    r = json.dumps({"success": True})
+    return Response(r, status=200, mimetype="application/json")
+
+
+@bp.route("/<username>/dex/delete", methods=["GET"])
+@login_required
+def delete_list(username):
+    if current_user.username != username:
+        r = json.dumps({"success": False})
+        return Response(r, status=403, mimetype="application/json")
+
+    user = User.query.filter(
+        func.lower(User.username) == func.lower(username)
+    ).first_or_404()
+
+    old_pokemon_owned = user.pokemon_owned
+    db.session.close()
+
+    list = request.args.get("list")
+
+    new_pokemon_owned = []
+    new_pokemon_owned[:] = [d for d in old_pokemon_owned if d["value"] != list]
 
     user = User.query.filter(
         func.lower(User.username) == func.lower(username)
