@@ -1,4 +1,21 @@
 $.fn.renderallpokemon = function () {
+    console.log(qs["list"])
+
+    if(typeof qs["list"] === "undefined" || qs["list"] === "") {
+        $.ajax({
+            url: "/api/" + $('#user-profile').data('username') + "/dex/getall",
+            type: 'GET',
+            success: function (r) {
+                qs["list"] = r["results"][0]["value"]
+                $('.list-header .ui.dropdown').dropdown('set selected', qs["list"])
+            },
+            error: function (e) {
+                console.log(e.status)
+                return false
+            }
+        })
+    }
+
     let _qs = '?' + $.param(qs)
     let _container = $(this)
 
@@ -327,12 +344,6 @@ $(function () {
         return
     }
 
-    if (!params.has("list")) {
-        params.set("list", $('.list-selectors .menu .item:first').attr('data-value'))
-        $('#list-select').val($('.list-selectors .menu .item:first').attr('data-value'))
-        $('.list-header .ui.dropdown').dropdown()
-    }
-
     if ($('#gen-select').val() !== 'None') {
         qs.gen = $('#gen-select').val()
     }
@@ -370,10 +381,6 @@ $('.sidebar-link').mouseenter(function () {
 // POKEDEX
 
 $('.sidebar-link.living-dex').click(function () {
-    $('#list-select').val($('.list-selectors .menu .item:first').attr('data-value'))
-    $('.list-header .ui.dropdown').dropdown()
-    qs.list == $('#list-select').val()
-
     if (!$('.sidebar-link.living-dex').hasClass('active')) {
         $('.content-panel.active').fadeOut('fast', function () {
             $('.content-panel.active').removeClass('active')
@@ -397,9 +404,16 @@ $('#pokemon-filters .ui.dropdown').dropdown().on('change', '#gen-select', functi
     $('#pokemon-list').renderallpokemon()
 })
 
-$('.list-header .ui.dropdown').dropdown().on('change', '#list-select', function () {
-    qs.list = $('#list-select').val()
-    $('#pokemon-list').renderallpokemon()
+$('.list-header .ui.dropdown').dropdown({
+    apiSettings: {
+        url: "/api/" + $('#user-profile').data('username') + "/dex/getall",
+        method: 'GET',
+        cache: false,
+    },
+    onChange: function (value, text, $selectedItem) {
+        qs.list = $('#list-select').val()
+        $('#pokemon-list').renderallpokemon()
+    }
 })
 
 $('#filter-view i').popup().click(function () {
@@ -701,7 +715,9 @@ $('.ui.modal.create-dex-popup')
                 data: data,
                 type: 'PUT',
                 success: function (r) {
-
+                    $('.ui.dropdown.list-edit-select').dropdown('change values',null)
+                    $('.list-header .ui.dropdown').dropdown('change values',null)
+                    _form.form('reset')
                 },
                 error: function (e) {
                     console.log(e.status)
@@ -712,9 +728,18 @@ $('.ui.modal.create-dex-popup')
     })
 
 $('.ui.dropdown.list-edit-select').dropdown({
+    apiSettings: {
+        url: "/api/" + $('#user-profile').data('username') + "/dex/getall",
+        method: 'GET',
+        cache: false,
+    },
     onChange: function (value, text, $selectedItem) {
+        if (value === "") {
+            return
+        }
+
         $.ajax({
-            url: '/api/' + $('#user-profile').data('username') + '/dex/get?list=' + encodeURIComponent(value),
+            url: '/api/' + $('#user-profile').data('username') + '/dex/get?list=' + value,
             type: 'GET',
             success: function (r) {
                 _vs = []
@@ -732,6 +757,7 @@ $('.ui.dropdown.list-edit-select').dropdown({
                     viewsettings: _vs,
                 })
                 $('.ui.modal.edit-dex-popup').modal('show')
+                $('.ui.dropdown.list-edit-select').dropdown('clear')
             },
             error: function (e) {
                 console.log(e.status)
@@ -799,8 +825,9 @@ $('.ui.modal.edit-dex-popup')
                 data: data,
                 type: 'PUT',
                 success: function (r) {
-                    $(".sidebar-link.user-settings").trigger("click")
-                    history.go(0)
+                    $('.ui.dropdown.list-edit-select').dropdown('change values',null)
+                    $('.list-header .ui.dropdown').dropdown('change values',null)
+                    _form.form('reset')
                 },
                 error: function (e) {
                     console.log(e.status)

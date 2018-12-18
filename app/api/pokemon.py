@@ -313,6 +313,63 @@ def fetch_egg_hatches():
     return Response(r, status=200, mimetype="application/json")
 
 
+@bp.route("/<username>/dex/get", methods=["GET"])
+@login_required
+def get_list(username):
+    if current_user.username != username:
+        r = json.dumps({"success": False})
+        return Response(r, status=403, mimetype="application/json")
+
+    user = User.query.filter(
+        func.lower(User.username) == func.lower(username)
+    ).first_or_404()
+
+    list = request.args.get("list")
+
+    rq_list = next((item for item in user.pokemon_owned if item["value"] == list), None)
+    db.session.close()
+
+    if rq_list is None:
+        r = json.dumps({"success": False})
+        return Response(r, status=404, mimetype="application/json")
+
+    _list = {
+        "name": rq_list["name"],
+        "value": rq_list["value"],
+        "colour": rq_list["colour"],
+        "view-settings": rq_list["view-settings"],
+    }
+
+    r = json.dumps({"success": True, "list-settings": _list})
+    return Response(r, status=200, mimetype="application/json")
+
+
+@bp.route("/<username>/dex/getall", methods=["GET"])
+@login_required
+def get_lists(username):
+    if current_user.username != username:
+        r = json.dumps({"success": False})
+        return Response(r, status=403, mimetype="application/json")
+
+    user = User.query.filter(
+        func.lower(User.username) == func.lower(username)
+    ).first_or_404()
+
+    _lists = []
+
+    for d in user.pokemon_owned:
+        _lists.append({
+            "name": "<div class='ui " + d["colour"] + " empty circular label'></div>" + d["name"],
+            "value": d["value"],
+            "text": "<div class='ui " + d["colour"] + " empty circular label'></div>" + d["name"],
+        })
+
+    db.session.close()
+
+    r = json.dumps({"success": True, "results": _lists})
+    return Response(r, status=200, mimetype="application/json")
+
+
 @bp.route("/<username>/dex/add", methods=["PUT"])
 @login_required
 def add_list(username):
@@ -347,33 +404,6 @@ def add_list(username):
     db.session.close()
 
     r = json.dumps({"success": True})
-    return Response(r, status=200, mimetype="application/json")
-
-
-@bp.route("/<username>/dex/get", methods=["GET"])
-@login_required
-def get_list(username):
-    if current_user.username != username:
-        r = json.dumps({"success": False})
-        return Response(r, status=403, mimetype="application/json")
-
-    user = User.query.filter(
-        func.lower(User.username) == func.lower(username)
-    ).first_or_404()
-
-    list = request.args.get("list")
-
-    rq_list = next((item for item in user.pokemon_owned if item["value"] == list), None)
-    db.session.close()
-
-    _list = {
-        "name": rq_list["name"],
-        "value": rq_list["value"],
-        "colour": rq_list["colour"],
-        "view-settings": rq_list["view-settings"],
-    }
-
-    r = json.dumps({"success": True, "list-settings": _list})
     return Response(r, status=200, mimetype="application/json")
 
 
