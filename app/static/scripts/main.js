@@ -687,6 +687,10 @@ $('.create-dex-popup .ui.form').form({
 $('.ui.modal.create-dex-popup')
     .modal({
         closable: true,
+        onHidden: function() {
+            $('.create-dex-popup .ui.form').form('reset')
+            $('.create-dex-popup .ui.form .ui.error.message').empty();
+        },
         onApprove: function () {
             let _obj = {}
             let _vs = {}
@@ -800,6 +804,10 @@ $('.edit-dex-popup .ui.form').form({
 $('.ui.modal.edit-dex-popup')
     .modal({
         closable: true,
+        onHidden: function() {
+            $('.edit-dex-popup .ui.form').form('reset')
+            $('.edit-dex-popup .ui.form .ui.error.message').empty();
+        },
         onApprove: function () {
             let _obj = {}
             let _vs = {}
