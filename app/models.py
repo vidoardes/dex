@@ -23,7 +23,14 @@ class User(UserMixin, db.Model):
             "colour": "red",
             "type": "exclusive",
             "exclusions": [],
-            "view-settings": {},
+            "view-settings": {
+                "show-costumed": True,
+                "show-alolan": True,
+                "show-unown": True,
+                "show-spinda": True,
+                "show-castform": True,
+                "show-deoxys": True,
+            },
             "pokemon": [],
         }
     ]

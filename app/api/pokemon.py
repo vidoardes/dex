@@ -25,6 +25,20 @@ def merge_dict_lists(key, l1, l2, append=True):
     return [val for (_, val) in merged.items()]
 
 
+def generate_list_key(v):
+    r = (
+        v.lower()
+        .replace(" ", "_")
+        .replace("+", "plus")
+        .replace("-", "negative")
+        .replace(">", "gt")
+        .replace("<", "lt")
+        .replace("|", "pipe")
+    )
+
+    return r
+
+
 @bp.route("/<username>/pokemon/get", methods=["GET"])
 def fetch_pokemon(username):
     user = User.query.filter(
@@ -75,80 +89,63 @@ def fetch_pokemon(username):
             Pokemon.dex.in_(active_list["inclusions"])
         )
 
-    for key, value in pokemon_filters.items():
-        if key == "show-spinda" and not value:
-            filtered_query = filtered_query.filter(
-                Pokemon.forme.notin_(
-                    [
-                        "Spinda #2",
-                        "Spinda #3",
-                        "Spinda #4",
-                        "Spinda #5",
-                        "Spinda #6",
-                        "Spinda #7",
-                        "Spinda #8",
-                    ]
-                )
+    if not pokemon_filters.get("show-spinda", False):
+        filtered_query = filtered_query.filter(
+            Pokemon.p_uid.notin_(
+                ["327_12", "327_13", "327_14", "327_15", "327_16", "327_17", "327_18"]
             )
+        )
 
-        if key == "show-unown" and not value:
-            filtered_query = filtered_query.filter(
-                Pokemon.forme.notin_(
-                    [
-                        "Unown (A)",
-                        "Unown (B)",
-                        "Unown (C)",
-                        "Unown (D)",
-                        "Unown (E)",
-                        "Unown (G)",
-                        "Unown (H)",
-                        "Unown (I)",
-                        "Unown (J)",
-                        "Unown (K)",
-                        "Unown (L)",
-                        "Unown (M)",
-                        "Unown (N)",
-                        "Unown (O)",
-                        "Unown (P)",
-                        "Unown (Q)",
-                        "Unown (R)",
-                        "Unown (S)",
-                        "Unown (T)",
-                        "Unown (U)",
-                        "Unown (V)",
-                        "Unown (W)",
-                        "Unown (X)",
-                        "Unown (Y)",
-                        "Unown (Z)",
-                        "Unown (!)",
-                        "Unown (?)",
-                    ]
-                )
+    if not pokemon_filters.get("show-unown", False):
+        filtered_query = filtered_query.filter(
+            Pokemon.forme.notin_(
+                [
+                    "Unown (A)",
+                    "Unown (B)",
+                    "Unown (C)",
+                    "Unown (D)",
+                    "Unown (E)",
+                    "Unown (G)",
+                    "Unown (H)",
+                    "Unown (I)",
+                    "Unown (J)",
+                    "Unown (K)",
+                    "Unown (L)",
+                    "Unown (M)",
+                    "Unown (N)",
+                    "Unown (O)",
+                    "Unown (P)",
+                    "Unown (Q)",
+                    "Unown (R)",
+                    "Unown (S)",
+                    "Unown (T)",
+                    "Unown (U)",
+                    "Unown (V)",
+                    "Unown (W)",
+                    "Unown (X)",
+                    "Unown (Y)",
+                    "Unown (Z)",
+                    "Unown (!)",
+                    "Unown (?)",
+                ]
             )
+        )
 
-        if key == "show-castform" and not value:
-            filtered_query = filtered_query.filter(
-                Pokemon.forme.notin_(
-                    ["Sunny Castform", "Rainy Castform", "Snowy Castform"]
-                )
-            )
+    if not pokemon_filters.get("show-castform", False):
+        filtered_query = filtered_query.filter(
+            Pokemon.forme.notin_(["351_12", "351_13", "351_14"])
+        )
 
-        if key == "show-deoxys" and not value:
-            filtered_query = filtered_query.filter(
-                Pokemon.forme.notin_(
-                    [
-                        "Deoxys (Attack Forme)",
-                        "Deoxys (Defense Forme)",
-                        "Deoxys (Speed Forme)",
-                    ]
-                )
-            )
+    if not pokemon_filters.get("show-deoxys", False):
+        filtered_query = filtered_query.filter(
+            Pokemon.forme.notin_(["386_12", "386_13", "386_14"])
+        )
 
-        if key == "show-alolan" and not value:
-            filtered_query = filtered_query.filter_by(alolan=False)
+    if not pokemon_filters.get("show-alolan", False):
+        filtered_query = filtered_query.filter_by(alolan=False)
 
-        if key == "show-costumed" and not value:
-            filtered_query = filtered_query.filter_by(costumed=False)
+    if not pokemon_filters.get("show-costumed", False):
+        filtered_query = filtered_query.filter_by(costumed=False)
 
     for u in filtered_query.all():
         pokemon_list.append(u.as_dict())
@@ -328,20 +325,17 @@ def add_list(username):
     ).first_or_404()
 
     old_pokemon_owned = user.pokemon_owned
-    new_list = json.loads(request.form.get("data"))
+    _nl = json.loads(request.form.get("data"))
     db.session.close()
 
-    new_list["value"] = re.sub(
-        "[\-=<>|]", "", new_list["name"].lower().replace(" ", "_")
-    )
-    new_list["type"] = "exclusive"
-    new_list["exclusions"] = []
-    new_list["view-settings"] = {}
-    new_list["pokemon"] = []
+    _nl["value"] = generate_list_key(_nl["name"])
+    _nl["type"] = "exclusive"
+    _nl["exclusions"] = []
+    _nl["pokemon"] = []
 
     new_pokemon_owned = []
     new_pokemon_owned[:] = [d for d in old_pokemon_owned]
-    new_pokemon_owned.append(new_list)
+    new_pokemon_owned.append(_nl)
 
     user = User.query.filter(
         func.lower(User.username) == func.lower(username)
@@ -370,6 +364,7 @@ def get_list(username):
     list = request.args.get("list")
 
     rq_list = next((item for item in user.pokemon_owned if item["value"] == list), None)
+    db.session.close()
 
     _list = {
         "name": rq_list["name"],
@@ -377,8 +372,6 @@ def get_list(username):
         "colour": rq_list["colour"],
         "view-settings": rq_list["view-settings"],
     }
-
-    db.session.close()
 
     r = json.dumps({"success": True, "list-settings": _list})
     return Response(r, status=200, mimetype="application/json")
@@ -396,20 +389,21 @@ def update_list(username):
     ).first_or_404()
 
     old_pokemon_owned = user.pokemon_owned
-    updated_list = json.loads(request.form.get("data"))
     db.session.close()
 
-    updated_list["value"] = updated_list["name"].lower().replace(" ", "_")
-    _list = next(
-        (d for d in old_pokemon_owned if d["value"] == updated_list["old-list"]), None
-    )
+    _ul = json.loads(request.form.get("data"))
 
-    _new_list = {**_list, **updated_list}
+    _ul["value"] = generate_list_key(_ul["name"])
+
+    _list = next((d for d in old_pokemon_owned if d["value"] == _ul["old-list"]), None)
+
+    _new_list = {**_list, **_ul}
 
     new_pokemon_owned = []
     new_pokemon_owned[:] = [
-        d for d in old_pokemon_owned if d["value"] != updated_list["old-list"]
+        d for d in old_pokemon_owned if d["value"] != _ul["old-list"]
     ]
+    _new_list.pop("old-list")
     new_pokemon_owned.append(_new_list)
 
     user = User.query.filter(

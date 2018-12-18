@@ -659,6 +659,15 @@ $('.create-dex-popup .ui.form').form({
                 value: /^[A-Za-z0-9]*(?:[\sA-Za-z0-9\+\-\<\>\|]+)$/i,
                 prompt: 'Names can only contain letters, numbers, spaces, and the following characters: + - > < |.'
             }]
+        },
+        oldlist: {
+            identifier: "oldlist",
+        },
+        listcolour: {
+            identifier: "listcolour",
+        },
+        viewsettings: {
+            identifier: "viewsettings",
         }
     }
 })
@@ -668,24 +677,22 @@ $('.ui.modal.create-dex-popup')
         closable: true,
         onApprove: function () {
             let _obj = {}
-            let _view_settings = {}
-            let _query_string = ''
+            let _vs = {}
+            let _form = $('.create-dex-popup .ui.form')
 
-            if (!$('.create-dex-popup .ui.form').form('is valid')) {
+            if (!_form.form('is valid')) {
                 return false
             }
 
             _obj['name'] = $('.create-dex-popup #list-name').val()
             _obj['colour'] = $('.create-dex-popup #list-colour').val()
-            // _obj['filter-query'] = '?gen=' + $('.create-dex-popup #gen-select').val() + '&cat=' + $('.create-dex-popup #cat-select').val() + '&own=' + $('.create-dex-popup #own-select').val()
 
-            $('.create-dex-popup .view-settings .ui.checkbox input').each(function (i, obj) {
-                let _setting_changed = $(this).attr('name')
-
-                _view_settings[_setting_changed] = $(this).is(':checked')
-            })
-
-            _obj['view-settings'] = _view_settings
+            for (const [i, v] of _form.form('get value', 'viewsettings').entries()) {
+                if (v) {
+                    _vs[v] = true
+                }
+            }
+            _obj['view-settings'] = _vs
 
             let data = {data: JSON.stringify(_obj)}
 
@@ -707,15 +714,22 @@ $('.ui.modal.create-dex-popup')
 $('.ui.dropdown.list-edit-select').dropdown({
     onChange: function (value, text, $selectedItem) {
         $.ajax({
-            url: '/api/' + $('#user-profile').data('username') + '/dex/get?list=' + value,
+            url: '/api/' + $('#user-profile').data('username') + '/dex/get?list=' + encodeURIComponent(value),
             type: 'GET',
             success: function (r) {
-                console.log(r)
+                _vs = []
+
+                for (const [key, value] of Object.entries(r["list-settings"]["view-settings"])) {
+                    if (value) {
+                        _vs.push(key)
+                    }
+                }
+
                 $('.edit-dex-popup .ui.form').form('set values', {
                     oldlist: r["list-settings"]["value"],
                     listname: r["list-settings"]["name"],
                     listcolour: r["list-settings"]["colour"],
-                    viewsettings: r["list-settings"]["view-settings"],
+                    viewsettings: _vs,
                 })
                 $('.ui.modal.edit-dex-popup').modal('show')
             },
@@ -759,10 +773,10 @@ $('.ui.modal.edit-dex-popup')
         closable: true,
         onApprove: function () {
             let _obj = {}
-            let _view_settings = {}
-            let _query_string = ''
+            let _vs = {}
+            let _form = $('.edit-dex-popup .ui.form')
 
-            if (!$('.edit-dex-popup .ui.form').form('is valid')) {
+            if (!_form.form('is valid')) {
                 return false
             }
 
@@ -770,15 +784,15 @@ $('.ui.modal.edit-dex-popup')
             _obj['old-list'] = $('.edit-dex-popup #old-list').val()
             _obj['colour'] = $('.edit-dex-popup #list-colour').val()
 
-            $('.edit-dex-popup .view-settings .ui.checkbox input').each(function (i, obj) {
-                let _setting_changed = $(this).attr('name')
+            for (const [i, v] of _form.form('get value', 'viewsettings').entries()) {
+                if (v) {
+                    _vs[v] = true
+                }
+            }
 
-                _view_settings[_setting_changed] = $(this).is(':checked')
-            })
+            _obj['view-settings'] = _vs
 
-            _obj['view-settings'] = _view_settings
-
-            let data = {data: JSON.stringify(_obj)}
+            data = {data: JSON.stringify(_obj)}
 
             $.ajax({
                 url: '/api/' + $('#user-profile').data('username') + '/dex/update',
