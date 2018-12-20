@@ -9,6 +9,7 @@ html {
 
 body {
   height: 100vh;
+  font-family: 'Open Sans', sans-serif;
 }
 
 h1 {
@@ -100,6 +101,7 @@ input[type=checkbox] {
 #sidebar i.icon {
   height: auto;
   line-height: inherit;
+  font-size: 1.4em
 }
 
 i.icon.legendary {

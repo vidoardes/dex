@@ -343,7 +343,7 @@
     display: grid;
     grid-template-areas: "body" "footer";
     grid-template-rows: auto 40px;
-    border-right: 1px #e1e4e8 solid;
+    border-right: 1px #d4d4d5 solid;
     transition: all 0.3s ease-out;
 
     @include tablet {
@@ -370,7 +370,6 @@
 
     #sidebar-body {
       grid-area: body;
-      padding: 24px;
       width: 302px;
 
       @include phone {
@@ -382,7 +381,7 @@
 
         .sidebar-link {
           display: grid;
-          grid-template-columns: 35px 1fr 24px;
+          grid-template-columns: 45px 1fr 24px;
           width: 100%;
           font-family: 'Patua One', cursive;
           font-size: 20px;
@@ -390,7 +389,6 @@
           color: #215788;
           padding: 10px 10px;
           text-align: left;
-          border-radius: 3px;
           line-height: 30px;
 
           &:hover {
@@ -399,8 +397,12 @@
           }
 
           &.active {
-            background: lighten(#215788, 60%);
+            background: #215788;
+            color: #fff;
 
+            i {
+              filter: brightness(0) invert(1);
+            }
           }
         }
       }
@@ -408,11 +410,13 @@
 
     #player-card {
       display: grid;
-      height: 60px;
       grid-template-columns: 60px 1fr;
       grid-template-rows: auto auto;
       grid-template-areas: "logo name" "logo level";
       grid-column-gap: 10px;
+      margin-bottom: 12px;
+      padding: 24px 24px 12px;
+      background: #e3eef8;
 
       #player-team-logo {
         height: 60px;
@@ -436,12 +440,12 @@
         &.Valor {
           background-image: url('../static/img/TeamValor.svg');
           background-position: -18px -36px;
-          background-size: 95px;
+          background-size: 91px;
         }
 
         &.Harmony {
           background-image: url('../static/img/TeamHarmony.svg');
-          background-position: 10px 0px;
+          background-position: 10px 0;
           background-size: 45px;
         }
       }
@@ -457,6 +461,8 @@
   label {
     grid-area: level;
     text-align: left;
+    font-weight: 700;
+    color: #666;
   }
 
   #content {
@@ -565,6 +571,34 @@
   #pokemon-list {
     overflow-y: scroll;
     height: calc(100vh - 203px);
+    position: relative;
+
+    &:before {
+      content: '';
+      display: block;
+      position: fixed;
+      bottom: 10px;
+      right: 20px;
+      opacity: 0.2;
+      height: 256px;
+      width: 256px;
+    }
+
+    &.Valor:before {
+      background-image: url(../static/img/floor-valor.png);
+    }
+
+    &.Mystic:before {
+      background-image: url(../static/img/floor-mystic.png);
+    }
+
+    &.Instinct:before {
+      background-image: url(../static/img/floor-instinct.png);
+    }
+
+    &.Harmony:before {
+      background-image: url(../static/img/floor-neutral.png);
+    }
 
     @include tablet {
       height: calc(100vh - 193px);
@@ -581,7 +615,7 @@
       grid-template-rows: auto;
       grid-template-columns: repeat(6, 1fr);
       padding: 5px;
-      grid-gap: 20px;
+      grid-gap: 10px;
 
       @include ultrahddesktop {
         grid-template-columns: repeat(10, 1fr);
@@ -606,8 +640,8 @@
       .pokemon {
         border-radius: 3px;
         position: relative;
-        background-color: darken(#f8ffff, 3%);
         filter: grayscale(1) opacity(0.8);
+        background-color: darken(#f8ffff, 2%);
         color: #276f86;
         z-index: 1;
         overflow: hidden;
@@ -642,8 +676,7 @@
             width: 90px;
             height: 90px;
             border-radius: 45px;
-            background: #276f86;
-            opacity: 0.15;
+            background: #e3eef8;
             z-index: -1;
           }
         }
@@ -655,6 +688,8 @@
           width: 100%;
           height: 20px;
           overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
         }
 
         .type {
@@ -665,7 +700,7 @@
 
           img {
             height: 20px;
-            margin-left: -8px;
+            margin-left: -10px;
 
             &:first-child {
               margin: 0;
@@ -789,15 +824,10 @@
           }
 
           .info {
-            grid-area: name;
             text-align: left;
             line-height: 40px;
             height: 40px;
             padding-right: 10px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            z-index: 1;
           }
 
           .dex-special {
@@ -848,7 +878,7 @@
 
         &.img {
           justify-content: center;
-          align-content: end;
+          align-content: center;
           z-index: 1;
 
           &:after {
