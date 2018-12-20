@@ -133,12 +133,12 @@ def fetch_pokemon(username):
 
     if not pokemon_filters.get("show-castform", False):
         filtered_query = filtered_query.filter(
-            Pokemon.forme.notin_(["351_12", "351_13", "351_14"])
+            Pokemon.p_uid.notin_(["351_12", "351_13", "351_14"])
         )
 
     if not pokemon_filters.get("show-deoxys", False):
         filtered_query = filtered_query.filter(
-            Pokemon.forme.notin_(["386_12", "386_13", "386_14"])
+            Pokemon.p_uid.notin_(["386_12", "386_13", "386_14"])
         )
 
     if not pokemon_filters.get("show-alolan", False):
@@ -157,10 +157,10 @@ def fetch_pokemon(username):
 
     for p in pokemon:
         if (
-            ("show-spinda", False) in pokemon_filters.items()
+            not pokemon_filters.get("show-spinda", False)
             and p["forme"] == "Spinda #1"
         ) or (
-            ("show-unown", False) in pokemon_filters.items()
+            not pokemon_filters.get("show-unown", False)
             and p["forme"] == "Unown (F)"
         ):
             p["forme"] = p["name"]
