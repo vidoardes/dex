@@ -80,14 +80,14 @@ def fetch_pokemon(username):
     if name is not None:
         filtered_query = filtered_query.filter_by(forme=name)
 
-    if "all" and "" not in gen:
+    if "all" not in gen and "" not in gen:
         filtered_query = filtered_query.filter(Pokemon.gen.in_(gen))
 
     if "lucky" in cat:
         filtered_query = filtered_query.filter_by(mythical=False)
 
     for i in cat:
-        if i not in ("all", "lucky", ""):
+        if i not in ("all", "lucky", "unreleased", ""):
             filtered_query = filtered_query.filter(getattr(Pokemon, i), True)
 
     if list_type == "exclusive":
