@@ -209,7 +209,7 @@ $.fn.renderpokemoncard = function () {
     `
 
     var _pokemon = $(this).parent()
-    let _qs = '?name=' + _pokemon.data('key')
+    let _qs = '?name=' + encodeURIComponent(_pokemon.data('key')) + '&cat=unreleased'
 
     $.ajax({
         url: '/api/' + $('#user-profile').data('username') + '/pokemon/get' + _qs,

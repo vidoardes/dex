@@ -66,7 +66,10 @@ def fetch_pokemon(username):
     pokemon_filters = active_list["view-settings"]
     list_type = active_list["type"]
 
-    filtered_query = Pokemon.query.filter_by(in_game=True).filter_by(released=True)
+    filtered_query = Pokemon.query.filter_by(in_game=True)
+
+    if "unreleased" not in cat:
+        filtered_query = filtered_query.filter_by(released=True)
 
     if name is not None:
         filtered_query = filtered_query.filter_by(forme=name)
