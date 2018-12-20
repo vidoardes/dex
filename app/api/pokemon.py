@@ -2,6 +2,7 @@ import re
 from flask import request, json, Response
 from flask_login import login_required, current_user
 from sqlalchemy import func
+from werkzeug.urls import url_encode
 
 from app import db
 from app.api import bp
@@ -39,6 +40,15 @@ def generate_list_key(v):
     return r
 
 
+def modify_query(**new_values):
+    args = request.args.copy()
+
+    for key, value in new_values.items():
+        args[key] = value
+
+    return "{}".format(url_encode(args))
+
+
 @bp.route("/<username>/pokemon/get", methods=["GET"])
 def fetch_pokemon(username):
     user = User.query.filter(
@@ -52,8 +62,8 @@ def fetch_pokemon(username):
 
     pokemon_list = []
     list = request.args.get("list")
-    cat = request.args.get("cat", "all").split(",")
-    gen = request.args.get("gen", "all").split(",")
+    cat = request.args.get("cat")
+    gen = request.args.get("gen")
     own = request.args.get("own", "all")
     name = request.args.get("name", None)
 
@@ -62,13 +72,30 @@ def fetch_pokemon(username):
         user.pokemon_owned[0],
     )
 
+    if gen is not "":
+        gen = gen.split(",")
+    else:
+        gen = ["all"]
+
+    if cat is not "":
+        cat = cat.split(",")
+    else:
+        cat = []
+
     owned_pokemon = active_list["pokemon"]
     pokemon_filters = active_list["view-settings"]
 
-    gen.extend(active_list.get("gen-filters", "").split(","))
-    gen.remove('')
-    cat.extend(active_list.get("cat-filters", "").split(","))
-    cat.remove('')
+    if active_list.get("gen-filters", False):
+        gen.extend(active_list.get("gen-filters", "").split(","))
+
+    if active_list.get("cat-filters", False):
+        cat.extend(active_list.get("cat-filters", "").split(","))
+
+    updated_qs = modify_query(
+        cat=",".join(map(str, cat)),
+        gen=",".join(map(str, gen)),
+        list=active_list["value"],
+    )
 
     list_type = active_list["type"]
 
@@ -167,11 +194,9 @@ def fetch_pokemon(username):
 
     for p in pokemon:
         if (
-            not pokemon_filters.get("show-spinda", False)
-            and p["forme"] == "Spinda #1"
+            not pokemon_filters.get("show-spinda", False) and p["forme"] == "Spinda #1"
         ) or (
-            not pokemon_filters.get("show-unown", False)
-            and p["forme"] == "Unown (F)"
+            not pokemon_filters.get("show-unown", False) and p["forme"] == "Unown (F)"
         ):
             p["forme"] = p["name"]
 
@@ -192,7 +217,7 @@ def fetch_pokemon(username):
         pokemon = _pokemon_owned
 
     db.session.close()
-    r = json.dumps({"success": True, "pokemon": pokemon})
+    r = json.dumps({"success": True, "pokemon": pokemon, "updated-qs": updated_qs})
     return Response(r, status=200, mimetype="application/json")
 
 
@@ -212,7 +237,7 @@ def update_pokemon(username):
 
     _list = request.args.get("list")
 
-    if list is None:
+    if _list is None:
         db.session.close()
         r = json.dumps({"success": False})
         return Response(r, status=403, mimetype="application/json")
