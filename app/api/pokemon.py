@@ -69,7 +69,7 @@ def fetch_pokemon(username):
     filtered_query = Pokemon.query.filter_by(in_game=True).filter_by(released=True)
 
     if name is not None:
-        filtered_query = filtered_query.filter_by(name=name)
+        filtered_query = filtered_query.filter_by(forme=name)
 
     if "all" not in gen and "" not in gen:
         filtered_query = filtered_query.filter(Pokemon.gen.in_(gen))
