@@ -106,8 +106,18 @@ $.fn.renderpokemon = function (list, type) {
         }
     }
 
+    function pokemonowned(owned, shinyowned, luckyowned) {
+        if (
+            (qs.cat.includes('shiny') && shinyowned)
+            || (qs.cat.includes('lucky') && luckyowned)
+            || (!qs.cat.includes('shiny') && !qs.cat.includes('lucky') && owned)
+        ) {
+            return 'owned'
+        }
+    }
+
     const Pokemon = ({name, forme, dex, p_uid, released, owned, shiny, shinyowned, male, maleowned, female, femaleowned, ungendered, ungenderedowned, luckyowned, type1, type2,}) => `
-        <div class="pokemon${owned ? ' owned' : ''}"
+        <div class="pokemon ${pokemonowned(owned, shinyowned, luckyowned)} ${shinyowned ? 'shinyowned' : ''}"
             ${maleowned ? 'data-maleowned="True"' : ''}
             ${femaleowned ? 'data-femaleowned="True"' : ''}
             ${ungenderedowned ? 'data-ungenderedowned="True"' : ''}
@@ -118,7 +128,7 @@ $.fn.renderpokemon = function (list, type) {
             data-key="${forme}"
             data-dex="${dex}">
             
-            <div class="img"><img src="../static/img/sprites/pokemon_icon_${p_uid}${qs.cat.includes('shiny') ? '_shiny' : ''}.png"></img></div>
+            <div class="img"><img src="../static/img/sprites/pokemon_icon_${p_uid}${shinyowned ? '_shiny' : ''}.png"></img></div>
             <div class="info">${forme}</div>
             <div class="type">
                 ${type1 !== null ? '<img src="../static/img/types/icon_' + type1 + '.png" />' : ''}
@@ -134,13 +144,11 @@ $.fn.renderpokemon = function (list, type) {
     `
     if (list.length > 0) {
         let arrayLength = list.length
+        let ownedCount = 0
 
         if (type === 'generate') {
-            $('.pokemon-result-count').html(list.length + ' pokemon found').fadeIn("fast")
-
             $(this).html('').append(list.map(Pokemon).join(''))
             $('#pokemon-list .ui.dimmer').dimmer('hide')
-
         } else if (type === 'update') {
             for (let i = 0; i < arrayLength; i++) {
                 let _pokemon = list[i]
@@ -149,6 +157,9 @@ $.fn.renderpokemon = function (list, type) {
                     .replaceWith([_pokemon].map(Pokemon).join(''))
             }
         }
+        ownedCount = $('#pokemon-wrapper > .pokemon.owned').length
+
+        $('.pokemon-result-count').html(ownedCount + ' owned of ' + $('#pokemon-wrapper > .pokemon').length + ' pokemon found').fadeIn("fast")
     } else {
         $('.pokemon-result-count').html(list.length + ' pokemon found').fadeIn("fast")
 
