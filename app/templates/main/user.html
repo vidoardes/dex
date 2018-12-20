@@ -374,6 +374,75 @@
                             </div>
                         </div>
 
+                        <div class="ui small header">Default Filters</div>
+                        <p>Selection values in the filters below will always apply to this list,
+                            regardless of what is selected in the serach filter. Please note: This
+                            will allow for invalid combinations of criteria, so if you were to
+                            select "level 1" as a default filter, picking "mythical", or "baby"
+                            from the, it will yield zero reults.</p>
+
+                        <div class="two fields">
+                            <div class="field">
+                                <label>Generations</label>
+                                <div class="ui multiple search selection fluid dropdown">
+                                    <input type="hidden" id="gen-select" data-validate="genfilters">
+                                    <i class="dropdown icon"></i>
+                                    <div class="default text">Generations</div>
+                                    <div class="menu">
+                                        <div class="item" data-value="all">All Released Generations</div>
+                                        <div class="item" data-value="1">Gen I (Kanto)</div>
+                                        <div class="item" data-value="2">Gen II (Johto)</div>
+                                        <div class="item" data-value="3">Gen III (Hoenn)</div>
+                                        <div class="item" data-value="4">Gen IV (Sinnoh)</div>
+                                        <div class="item" data-value="7">Gen VII (Alola)</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="field">
+                                <label>Categories</label>
+                                <div class="ui multiple search selection fluid dropdown">
+                                    <input type="hidden" id="cat-select" data-validate="catfilters">
+                                    <i class="dropdown icon"></i>
+                                    <div class="default text">Category</div>
+                                    <div class="menu">
+                                        <div class="item" data-value="all">
+                                            <i class="icon book"></i> All Pokemon
+                                        </div>
+                                        <div class="item" data-value="shiny">
+                                            <i class="icon fas fa-star-christmas"></i> Shiny
+                                        </div>
+                                        <div class="item" data-value="alolan">
+                                            <i class="icon alolan"></i> Alolan
+                                        </div>
+                                        <div class="item" data-value="regional">
+                                            <i class="icon fas fa-globe-africa"></i> Regional
+                                        </div>
+                                        <div class="item" data-value="legendary">
+                                            <i class="icon legendary"></i> Legendary
+                                        </div>
+                                        <div class="item" data-value="mythical">
+                                            <i class="icon fas fa-map-marker-question"></i> Mythical
+                                        </div>
+                                        <div class="item" data-value="costumed">
+                                            <i class="icon fab fa-pied-piper-hat"></i> Costumed
+                                        </div>
+                                        <div class="item" data-value="lucky">
+                                            <i class="icon fas fa-dice"></i> Lucky
+                                        </div>
+                                        <div class="item" data-value="level_1">
+                                            <i class="icon fas fa-tachometer-slowest"></i> Level 1
+                                        </div>
+                                        <div class="item" data-value="baby">
+                                            <i class="icon far fa-baby"></i> Baby
+                                        </div>
+                                        <div class="item" data-value="unreleased">
+                                            <i class="icon fas fa-question"></i> Unreleased
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="ui small header">Show / Hide Formes & Variants</div>
                         <p>By default all catchable forms are availible to select, but if you
                             aren't interested in tracking all the variants of Spinda, or have
@@ -478,6 +547,75 @@
                                     <option value="yellow">Yellow</option>
                                     <option value="pink">Pink</option>
                                 </select>
+                            </div>
+                        </div>
+
+                        <div class="ui small header">Default Filters</div>
+                        <p>Selection values in the filters below will always apply to this list,
+                            regardless of what is selected in the serach filter. Please note: This
+                            will allow for invalid combinations of criteria, so if you were to
+                            select "level 1" as a default filter, picking "mythical", or "baby"
+                            from the, it will yield zero reults.</p>
+
+                        <div class="two fields">
+                            <div class="field">
+                                <label>Generations</label>
+                                <div class="ui multiple search selection fluid dropdown">
+                                    <input type="hidden" id="gen-select" data-validate="genfilters">
+                                    <i class="dropdown icon"></i>
+                                    <div class="default text">Generations</div>
+                                    <div class="menu">
+                                        <div class="item" data-value="all">All Released Generations</div>
+                                        <div class="item" data-value="1">Gen I (Kanto)</div>
+                                        <div class="item" data-value="2">Gen II (Johto)</div>
+                                        <div class="item" data-value="3">Gen III (Hoenn)</div>
+                                        <div class="item" data-value="4">Gen IV (Sinnoh)</div>
+                                        <div class="item" data-value="7">Gen VII (Alola)</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="field">
+                                <label>Categories</label>
+                                <div class="ui multiple search selection fluid dropdown">
+                                    <input type="hidden" id="cat-select" data-validate="catfilters">
+                                    <i class="dropdown icon"></i>
+                                    <div class="default text">Category</div>
+                                    <div class="menu">
+                                        <div class="item" data-value="all">
+                                            <i class="icon book"></i> All Pokemon
+                                        </div>
+                                        <div class="item" data-value="shiny">
+                                            <i class="icon fas fa-star-christmas"></i> Shiny
+                                        </div>
+                                        <div class="item" data-value="alolan">
+                                            <i class="icon alolan"></i> Alolan
+                                        </div>
+                                        <div class="item" data-value="regional">
+                                            <i class="icon fas fa-globe-africa"></i> Regional
+                                        </div>
+                                        <div class="item" data-value="legendary">
+                                            <i class="icon legendary"></i> Legendary
+                                        </div>
+                                        <div class="item" data-value="mythical">
+                                            <i class="icon fas fa-map-marker-question"></i> Mythical
+                                        </div>
+                                        <div class="item" data-value="costumed">
+                                            <i class="icon fab fa-pied-piper-hat"></i> Costumed
+                                        </div>
+                                        <div class="item" data-value="lucky">
+                                            <i class="icon fas fa-dice"></i> Lucky
+                                        </div>
+                                        <div class="item" data-value="level_1">
+                                            <i class="icon fas fa-tachometer-slowest"></i> Level 1
+                                        </div>
+                                        <div class="item" data-value="baby">
+                                            <i class="icon far fa-baby"></i> Baby
+                                        </div>
+                                        <div class="item" data-value="unreleased">
+                                            <i class="icon fas fa-question"></i> Unreleased
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 

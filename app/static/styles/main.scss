@@ -478,6 +478,17 @@
   }
 }
 
+.ui.dropdown {
+  .item > i.icon, .item > i.icon:before {
+    color: #215788;
+    float: left;
+  }
+
+  .ui.label > .icon:not(.delete) {
+    display: none;
+  }
+}
+
 .dex {
   #pokemon-filters {
     background: #fff;
@@ -489,17 +500,6 @@
     grid-template-areas: "dd dd dd view";
     grid-template-rows: auto;
     grid-template-columns: 1fr 1fr 1fr 40px;
-
-    & .menu .item > i.icon, & > i.icon:before {
-      color: #215788;
-      float: left;
-    }
-
-    & .dropdown .ui.label {
-      .icon:not(.delete) {
-        display: none;
-      }
-    }
 
     & #filter-view i {
       line-height: 38px;

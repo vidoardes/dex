@@ -702,6 +702,8 @@ $('.ui.modal.create-dex-popup')
 
             _obj['name'] = $('.create-dex-popup #list-name').val()
             _obj['colour'] = $('.create-dex-popup #list-colour').val()
+            _obj['cat-filters'] = $('.create-dex-popup #cat-select').val()
+            _obj['gen-filters'] = $('.create-dex-popup #gen-select').val()
 
             for (const [i, v] of _form.form('get value', 'viewsettings').entries()) {
                 if (v) {
@@ -765,12 +767,15 @@ $('.ui.dropdown.list-edit-select').dropdown({
                     oldlist: r["list-settings"]["value"],
                     listname: r["list-settings"]["name"],
                     listcolour: r["list-settings"]["colour"],
+                    genfilters: r["list-settings"]["gen-filters"].split(","),
+                    catfilters: r["list-settings"]["cat-filters"].split(","),
                     viewsettings: _vs,
                 })
 
                 editing_list_value = r["list-settings"]["value"]
                 editing_list_name = r["list-settings"]["name"]
 
+                $('.ui.modal.edit-dex-popup .ui.dropdown').dropdown()
                 $('.ui.modal.edit-dex-popup').modal('show')
                 $('.ui.dropdown.list-edit-select').dropdown('clear')
             },
@@ -786,7 +791,6 @@ $('.edit-dex-popup .ui.form').form({
     inline: true,
     fields: {
         listname: {
-            identifier: "listname",
             rules: [{
                 type: 'empty',
                 prompt: 'Please enter a name.'
@@ -795,15 +799,6 @@ $('.edit-dex-popup .ui.form').form({
                 value: /^[A-Za-z0-9]*(?:[\sA-Za-z0-9+\-<>|]+)$/i,
                 prompt: 'Names can only contain letters, numbers, spaces, and the following characters: + - > < |.'
             }]
-        },
-        oldlist: {
-            identifier: "oldlist",
-        },
-        listcolour: {
-            identifier: "listcolour",
-        },
-        viewsettings: {
-            identifier: "viewsettings",
         }
     }
 })
@@ -827,6 +822,8 @@ $('.ui.modal.edit-dex-popup')
             _obj['name'] = $('.edit-dex-popup #list-name').val()
             _obj['old-list'] = $('.edit-dex-popup #old-list').val()
             _obj['colour'] = $('.edit-dex-popup #list-colour').val()
+            _obj['cat-filters'] = $('.edit-dex-popup #cat-select').val()
+            _obj['gen-filters'] = $('.edit-dex-popup #gen-select').val()
 
             for (const [i, v] of _form.form('get value', 'viewsettings').entries()) {
                 if (v) {

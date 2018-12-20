@@ -64,6 +64,12 @@ def fetch_pokemon(username):
 
     owned_pokemon = active_list["pokemon"]
     pokemon_filters = active_list["view-settings"]
+
+    gen.extend(active_list.get("gen-filters", "").split(","))
+    gen.remove('')
+    cat.extend(active_list.get("cat-filters", "").split(","))
+    cat.remove('')
+
     list_type = active_list["type"]
 
     filtered_query = Pokemon.query.filter_by(in_game=True)
@@ -74,7 +80,7 @@ def fetch_pokemon(username):
     if name is not None:
         filtered_query = filtered_query.filter_by(forme=name)
 
-    if "all" not in gen and "" not in gen:
+    if "all" and "" not in gen:
         filtered_query = filtered_query.filter(Pokemon.gen.in_(gen))
 
     if "lucky" in cat:
@@ -338,6 +344,8 @@ def get_list(username):
         "value": rq_list["value"],
         "colour": rq_list["colour"],
         "view-settings": rq_list["view-settings"],
+        "cat-filters": rq_list.get("cat-filters", ""),
+        "gen-filters": rq_list.get("gen-filters", ""),
     }
 
     r = json.dumps({"success": True, "list-settings": _list})
