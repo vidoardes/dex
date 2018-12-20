@@ -72,12 +72,12 @@ def fetch_pokemon(username):
         user.pokemon_owned[0],
     )
 
-    if gen is not "":
+    if gen is not "" and gen is not None:
         gen = gen.split(",")
     else:
         gen = ["all"]
 
-    if cat is not "":
+    if cat is not "" and cat is not None:
         cat = cat.split(",")
     else:
         cat = []
