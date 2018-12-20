@@ -118,7 +118,7 @@ $.fn.renderpokemon = function (list, type) {
             data-key="${forme}"
             data-dex="${dex}">
             
-            <div class="img"><img src="../static/img/sprites/pokemon_icon_${p_uid}${qs.cat === 'shiny' ? '_shiny' : ''}.png"></img></div>
+            <div class="img"><img src="../static/img/sprites/pokemon_icon_${p_uid}${qs.cat.includes('shiny') ? '_shiny' : ''}.png"></img></div>
             <div class="info">${forme}</div>
             <div class="type">
                 ${type1 !== null ? '<img src="../static/img/types/icon_' + type1 + '.png" />' : ''}
@@ -171,7 +171,7 @@ $.fn.renderpokemoncard = function () {
             <div class="content">
                 <div class="ui grid stackable two column">
                     <div class="column img">
-                        <img src="../static/img/sprites/pokemon_icon_${p_uid}${qs.cat === 'shiny' ? '_shiny' : ''}.png">
+                        <img src="../static/img/sprites/pokemon_icon_${p_uid}${qs.cat.includes('shiny') ? '_shiny' : ''}.png">
                     </div>
                     <div class="column">
                         <div class="max_cp_stat stat_bar">

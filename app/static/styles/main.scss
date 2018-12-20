@@ -490,9 +490,15 @@
     grid-template-rows: auto;
     grid-template-columns: 1fr 1fr 1fr 40px;
 
-    i {
+    & .menu .item > i.icon, & > i.icon:before {
       color: #215788;
       float: left;
+    }
+
+    & .dropdown .ui.label {
+      .icon:not(.delete) {
+        display: none;
+      }
     }
 
     & #filter-view i {

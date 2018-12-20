@@ -52,8 +52,8 @@ def fetch_pokemon(username):
 
     pokemon_list = []
     list = request.args.get("list")
-    cat = request.args.get("cat", "all")
-    gen = request.args.get("gen", "all")
+    cat = request.args.get("cat", "all").split(",")
+    gen = request.args.get("gen", "all").split(",")
     own = request.args.get("own", "all")
     name = request.args.get("name", None)
 
@@ -71,14 +71,15 @@ def fetch_pokemon(username):
     if name is not None:
         filtered_query = filtered_query.filter_by(name=name)
 
-    if gen != "all":
-        filtered_query = filtered_query.filter_by(gen=gen)
+    if "all" not in gen and "" not in gen:
+        filtered_query = filtered_query.filter(Pokemon.gen.in_(gen))
 
-    if cat == "lucky":
+    if "lucky" in cat:
         filtered_query = filtered_query.filter_by(mythical=False)
 
-    if cat not in ("all", "lucky"):
-        filtered_query = filtered_query.filter(getattr(Pokemon, cat), True)
+    for i in cat:
+        if i not in ("all", "lucky", ""):
+            filtered_query = filtered_query.filter(getattr(Pokemon, i), True)
 
     if list_type == "exclusive":
         filtered_query = filtered_query.filter(

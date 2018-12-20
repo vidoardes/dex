@@ -77,8 +77,8 @@
             <div id="content">
                 <div class="dex content-panel active">
                     <div id="pokemon-filters">
-                        <div class="ui selection fluid dropdown">
-                            <input type="hidden" id="gen-select" value="{{ request.args.get('gen') }}">
+                        <div class="ui multiple search selection fluid dropdown">
+                            <input type="hidden" id="gen-select" value="{{ request.args.get('gen') if request.args.get('gen') != None }}">
                             <i class="dropdown icon"></i>
                             <div class="default text">Generations</div>
                             <div class="menu">
@@ -92,8 +92,8 @@
                         </div>
 
 
-                        <div class="ui selection fluid dropdown">
-                            <input type="hidden" id="cat-select" value="{{ request.args.get('cat') }}">
+                        <div class="ui multiple search selection fluid dropdown">
+                            <input type="hidden" id="cat-select" value="{{ request.args.get('cat') if request.args.get('cat') != None }}">
                             <i class="dropdown icon"></i>
                             <div class="default text">Category</div>
                             <div class="menu">
@@ -101,7 +101,7 @@
                                     <i class="icon book"></i> All Pokemon
                                 </div>
                                 <div class="item" data-value="shiny">
-                                    <i class="icon shiny"></i> Shiny
+                                    <i class="icon fas fa-star-christmas"></i> Shiny
                                 </div>
                                 <div class="item" data-value="alolan">
                                     <i class="icon alolan"></i> Alolan
