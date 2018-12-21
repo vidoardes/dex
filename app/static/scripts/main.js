@@ -391,7 +391,7 @@ $('.sidebar-link.living-dex').click(function () {
     }
 })
 
-$('#pokemon-filters .ui.dropdown').dropdown().on('change', '#gen-select', function () {
+$('#pokemon-filters .ui.dropdown').dropdown({clearable: true}).on('change', '#gen-select', function () {
     qs.gen = $('#gen-select').val()
     $('#pokemon-list').renderallpokemon()
 }).on('change', '#cat-select', function () {
