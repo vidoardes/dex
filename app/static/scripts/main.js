@@ -354,6 +354,7 @@ $(function () {
     let clipboard = new ClipboardJS('.list-header .export-list')
     $('.list-header .export-list').popup({
         on: 'click',
+        position: 'right center',
         onShow: function () {
             setTimeout(function () {
                 $('.list-header .export-list').popup("hide")
