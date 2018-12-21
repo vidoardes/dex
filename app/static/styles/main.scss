@@ -484,14 +484,21 @@
   }
 }
 
-.ui.dropdown {
+.ui.dropdown.multiple {
   .item > i.icon, .item > i.icon:before {
     color: #215788;
     float: left;
   }
 
-  .ui.label > .icon:not(.delete) {
-    display: none;
+  .ui.label {
+    font-size: 10px;
+    height: 26px;
+    line-height: 16px;
+    text-transform: uppercase;
+
+    & > .icon:not(.delete) {
+      display: none;
+    }
   }
 }
 
@@ -536,11 +543,16 @@
   .ui.attached.segment.list-header {
     padding: 12px;
     display: grid;
-    grid-template-columns: repeat(2, 50%);
+    grid-template-columns: 70% 30%;
 
     .pokemon-result-count {
       font-weight: bold;
       font-size: 12px;
+      float: left;
+    }
+
+    .export-list {
+      margin-left: 15px;
     }
 
     @include phone {

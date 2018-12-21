@@ -157,7 +157,10 @@
                     </div>
 
                     <div class="list-header ui top attached segment">
-                        <div class="pokemon-result-count">No Pokemon Found :(</div>
+                        <div class="search-results-summary">
+                            <span class="pokemon-result-count">No Pokemon Found :(</span>
+                            <a class="export-list" data-content="Copied!" data-variation="inverted tiny" data-clipboard-action="copy"><i class="fas fa-clipboard"></i></a>
+                        </div>
                         <div class="list-selectors">
                             <div class="ui dropdown pointing top right">
                                 <input type="hidden" id="list-select" value="{{ request.args.get('list') }}" />
@@ -194,7 +197,7 @@
                             User Settings
                         </h1>
                     </div>
-                    <div class="ui placeholder segment">
+                    <div class="ui segment">
                         <div class="ui two column stackable divided grid">
                             <div class="column">
                                 <div class="ui medium header">
@@ -723,5 +726,6 @@
     <script src="https://cdn.jsdelivr.net/npm/intro.js@2/minified/intro.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2/dist/semantic.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
     <script src="{{ url_for('static', filename='bundle.js') }}"></script>
 {% endblock %}

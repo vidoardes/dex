@@ -12,6 +12,20 @@ $.fn.renderallpokemon = function () {
             $('#pokemon-wrapper').renderpokemon(_pokemon_list, 'generate')
             let urlParts = window.location.href.split('?')
             window.history.replaceState({}, document.title, urlParts[0] + '?' + r['updated-qs'])
+
+            _qs += '&dex-only=true'
+
+            $.ajax({
+                url: '/api/' + $('#user-profile').data('username') + '/pokemon/get' + _qs,
+                type: 'GET',
+                success: function (r) {
+                    let _pokemon_list = r['pokemon'].join(", ")
+                    $('.list-header .export-list').attr('data-clipboard-text', _pokemon_list)
+                },
+                error: function (e) {
+                    console.log(e.status)
+                }
+            })
         },
         error: function (e) {
             console.log(e.status)
@@ -336,6 +350,16 @@ $(function () {
 
     $('.ui.search').search()
     $('#pokemon-wrapper').renderallpokemon()
+
+    let clipboard = new ClipboardJS('.list-header .export-list')
+    $('.list-header .export-list').popup({
+        on: 'click',
+        onShow: function () {
+            setTimeout(function () {
+                $('.list-header .export-list').popup("hide")
+            }, 1500)
+        }
+    })
 
     if ($('body').data("take-tour") === 'True') {
         $.taketour()
