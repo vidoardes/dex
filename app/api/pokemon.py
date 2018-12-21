@@ -188,58 +188,60 @@ def fetch_pokemon(username):
     for u in filtered_query.all():
         pokemon_list.append(u.as_dict())
 
-    if dex_only:
-        pokemon = []
+    pokemon = sorted(
+        merge_dict_lists("forme", pokemon_list, owned_pokemon, append=False),
+        key=lambda k: (k["p_uid"]),
+    )
 
-        for p in pokemon_list:
-            pokemon.append(p["dex"])
+    for p in pokemon:
+        if (
+            not pokemon_filters.get("show-spinda", False) and p["forme"] == "Spinda #1"
+        ) or (
+            not pokemon_filters.get("show-unown", False) and p["forme"] == "Unown (F)"
+        ):
+            p["forme"] = p["name"]
 
-        if "shiny" in cat:
-            pokemon.append("&shiny")
-
-        if "legendary" in cat:
-            pokemon.append("&legendary")
-
-        if "mythical" in cat:
-            pokemon.append("&mythical")
-
-        if "lucky" in cat:
-            pokemon.append("&lucky")
-
-        if "alolan" in cat:
-            pokemon.append("&alola")
-
-        if "level_1" in cat:
-            pokemon.append("&cp10-100")
-    else:
-        pokemon = sorted(
-            merge_dict_lists("forme", pokemon_list, owned_pokemon, append=False),
-            key=lambda k: (k["p_uid"]),
-        )
+    if not own == "all":
+        _pokemon_owned = []
 
         for p in pokemon:
-            if (
-                not pokemon_filters.get("show-spinda", False) and p["forme"] == "Spinda #1"
-            ) or (
-                not pokemon_filters.get("show-unown", False) and p["forme"] == "Unown (F)"
-            ):
-                p["forme"] = p["name"]
+            if "shiny" in cat:
+                _owned = p.get("shinyowned", False)
+            elif "lucky" in cat:
+                _owned = p.get("luckyowned", False)
+            else:
+                _owned = p.get("owned", False)
 
-        if not own == "all":
-            _pokemon_owned = []
+            if (own == "owned" and _owned) or (own == "notowned" and not _owned):
+                _pokemon_owned.append(p)
 
-            for p in pokemon:
-                if "shiny" in cat:
-                    _owned = p.get("shinyowned", False)
-                elif "lucky" in cat:
-                    _owned = p.get("luckyowned", False)
-                else:
-                    _owned = p.get("owned", False)
+        pokemon = _pokemon_owned
 
-                if (own == "owned" and _owned) or (own == "notowned" and not _owned):
-                    _pokemon_owned.append(p)
+    if dex_only:
+        pokemon_dex = []
 
-            pokemon = _pokemon_owned
+        for p in pokemon:
+            pokemon_dex.append(p["dex"])
+
+        if "shiny" in cat:
+            pokemon_dex.append("&shiny")
+
+        if "legendary" in cat:
+            pokemon_dex.append("&legendary")
+
+        if "mythical" in cat:
+            pokemon_dex.append("&mythical")
+
+        if "lucky" in cat:
+            pokemon_dex.append("&lucky")
+
+        if "alolan" in cat:
+            pokemon_dex.append("&alola")
+
+        if "level_1" in cat:
+            pokemon_dex.append("&cp10-100")
+
+        pokemon = pokemon_dex
 
     db.session.close()
     r = json.dumps({"success": True, "pokemon": pokemon, "updated-qs": updated_qs})
