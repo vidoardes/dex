@@ -204,9 +204,9 @@ def fetch_pokemon(username):
         _pokemon_owned = []
 
         for p in pokemon:
-            if cat == "shiny":
+            if "shiny" in cat:
                 _owned = p.get("shinyowned", False)
-            elif cat == "lucky":
+            elif "lucky" in cat:
                 _owned = p.get("luckyowned", False)
             else:
                 _owned = p.get("owned", False)
