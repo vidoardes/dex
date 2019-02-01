@@ -329,7 +329,6 @@ def update_pokemon(username):
 
 
 @bp.route("/pokemon/raidbosses/get", methods=["GET"])
-@login_required
 def fetch_raid_bosses():
     rb_list = (
         Pokemon.query.filter_by(in_game=True)
@@ -355,7 +354,6 @@ def fetch_raid_bosses():
 
 
 @bp.route("/pokemon/egghatches/get", methods=["GET"])
-@login_required
 def fetch_egg_hatches():
     eh_list = (
         Pokemon.query.filter_by(in_game=True)
