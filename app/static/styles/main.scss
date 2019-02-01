@@ -581,8 +581,7 @@
   }
 
   #pokemon-list {
-    overflow-y: scroll;
-    height: calc(100vh - 203px);
+
     position: relative;
 
     &:before {
@@ -613,20 +612,17 @@
     }
 
     @include tablet {
-      height: calc(100vh - 193px);
-      padding: 5px;
-    }
-
-    @include phone {
-      height: calc(100vh - 245px);
       padding: 5px;
     }
 
     #pokemon-wrapper {
-      display: grid;
-      grid-template-rows: auto;
-      grid-template-columns: repeat(6, 1fr);
+      overflow-y: scroll;
+      scroll-snap-type: y mandatory;
+      height: calc(100vh - 231px);
       padding: 5px;
+      display: grid;
+      grid-auto-rows: 194px;
+      grid-template-columns: repeat(6, 1fr);
       grid-gap: 10px;
 
       @include ultrahddesktop {
@@ -642,10 +638,12 @@
       }
 
       @include tablet {
+        height: calc(100vh - 203px);
         grid-template-columns: repeat(4, 1fr);
       }
 
       @include phone {
+        height: calc(100vh - 255px);
         grid-template-columns: repeat(2, 1fr);
       }
 
@@ -657,6 +655,7 @@
         color: #276f86;
         z-index: 1;
         overflow: hidden;
+        scroll-snap-align: start;
         display: grid;
         grid-auto-flow: row;
         grid-template-columns: 100%;
@@ -781,7 +780,7 @@
       }
 
       &.list-view {
-        display: grid;
+        grid-auto-rows: 40px;
         grid-template-columns: repeat(3, 1fr);
 
         @include ultrahddesktop {
@@ -805,7 +804,7 @@
         }
 
         .pokemon {
-          height: 40px;;
+          height: 40px;
           grid-gap: 10px;
           grid-template-rows: 40px;
           grid-template-columns: 45px 45px minmax(0, 1fr) 110px;
