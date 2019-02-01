@@ -376,7 +376,6 @@ def fetch_egg_hatches():
 
 
 @bp.route("/<username>/dex/get", methods=["GET"])
-@login_required
 def get_list(username):
     user = User.query.filter(
         func.lower(User.username) == func.lower(username)
@@ -405,7 +404,6 @@ def get_list(username):
 
 
 @bp.route("/<username>/dex/getall", methods=["GET"])
-@login_required
 def get_lists(username):
     user = User.query.filter(
         func.lower(User.username) == func.lower(username)
