@@ -37,6 +37,8 @@ def maintenance():
 @bp.route("/login", methods=["GET", "POST"])
 def login():
     if current_user.is_authenticated:
+        current_user.last_logged_in = datetime.now()
+        db.session.commit()
         return redirect(url_for("main.show_user", username=current_user.username))
 
     form = LoginForm()
