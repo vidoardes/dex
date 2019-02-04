@@ -76,7 +76,7 @@ def fetch_pokemon(username):
     if gen is not "" and gen is not None:
         gen = gen.split(",")
     else:
-        gen = ["all"]
+        gen = []
 
     if cat is not "" and cat is not None:
         cat = cat.split(",")
@@ -88,12 +88,12 @@ def fetch_pokemon(username):
 
     if active_list.get("gen-filters", False):
         for i in active_list.get("gen-filters", "").split(","):
-            if not i in gen:
+            if i not in gen:
                 gen.append(i)
 
     if active_list.get("cat-filters", False):
         for i in active_list.get("cat-filters", "").split(","):
-            if not i in cat:
+            if i not in cat:
                 cat.append(i)
 
     updated_qs = modify_query(
@@ -113,14 +113,14 @@ def fetch_pokemon(username):
     if name is not None:
         filtered_query = filtered_query.filter_by(forme=name)
 
-    if "all" not in gen and "" not in gen:
+    if "all" not in gen and "" not in gen and len(gen) != 0:
         filtered_query = filtered_query.filter(Pokemon.gen.in_(gen))
 
     if "lucky" in cat:
         filtered_query = filtered_query.filter_by(mythical=False)
 
     for i in cat:
-        if i not in ("all", "lucky", "unreleased", ""):
+        if i not in ("lucky", "unreleased", ""):
             filtered_query = filtered_query.filter(getattr(Pokemon, i), True)
 
     if list_type == "exclusive":

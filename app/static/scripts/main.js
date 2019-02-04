@@ -9,7 +9,6 @@ $.fn.renderallpokemon = function () {
         type: 'GET',
         success: function (r) {
             let _pokemon_list = r['pokemon']
-            $('#pokemon-wrapper').renderpokemon(_pokemon_list, 'generate')
             let urlParts = window.location.href.split('?')
             window.history.replaceState({}, document.title, urlParts[0] + '?' + r['updated-qs'])
 
@@ -20,10 +19,20 @@ $.fn.renderallpokemon = function () {
             qs.own = params.get("own")
             qs.list = params.get("list")
 
-            _qs += '&dex-only=true'
+            filtersactive = false
+
+            $('#pokemon-filters .ui.dropdown').dropdown('clear')
+
+            $('#pokemon-filters #generations').dropdown('set selected', qs.gen.split(','))
+            $('#pokemon-filters #categories').dropdown('set selected', qs.cat.split(','))
+            $('#pokemon-filters #owned').dropdown('set selected', qs.own)
+
+            filtersactive = true
+
+            $('#pokemon-wrapper').renderpokemon(_pokemon_list, 'generate')
 
             $.ajax({
-                url: '/api/' + $('#user-profile').data('username') + '/pokemon/get' + _qs,
+                url: '/api/' + $('#user-profile').data('username') + '/pokemon/get?dex-only=true&' + $.param(qs),
                 type: 'GET',
                 success: function (r) {
                     let _pokemon_list = r['pokemon'].join(", ")
@@ -149,6 +158,7 @@ $.fn.renderpokemon = function (list, type) {
             </div>
         </div>
     `
+
     if (list.length > 0) {
         if (type === 'generate') {
             $(this).html('').append(list.map(Pokemon).join(''))
@@ -309,6 +319,7 @@ $.taketour = function () {
 // INITIALISE UI
 
 let qs = {}
+let filtersactive = true
 
 $(function () {
     var params = new window.URLSearchParams(window.location.search)
@@ -399,15 +410,27 @@ $('.sidebar-link.living-dex').click(function () {
     }
 })
 
+$('.ui.multiple.dropdown').dropdown({
+  onAdd: function (value, text, $selected) {
+    $('.dropdown').blur()
+  }
+})
+
 $('#pokemon-filters .ui.dropdown').dropdown({clearable: true}).on('change', '#gen-select', function () {
-    qs.gen = $('#gen-select').val()
-    $('#pokemon-list').renderallpokemon()
+    if (filtersactive) {
+        qs.gen = $('#gen-select').val()
+        $('#pokemon-list').renderallpokemon()
+    }
 }).on('change', '#cat-select', function () {
-    qs.cat = $('#cat-select').val()
-    $('#pokemon-list').renderallpokemon()
+    if (filtersactive) {
+        qs.cat = $('#cat-select').val()
+        $('#pokemon-list').renderallpokemon()
+    }
 }).on('change', '#own-select', function () {
-    qs.own = $('#own-select').val()
-    $('#pokemon-list').renderallpokemon()
+    if (filtersactive) {
+        qs.own = $('#own-select').val()
+        $('#pokemon-list').renderallpokemon()
+    }
 })
 
 $('.list-header .ui.dropdown').dropdown({
@@ -417,7 +440,11 @@ $('.list-header .ui.dropdown').dropdown({
         cache: false,
     },
     onChange: function (value, text, $selectedItem) {
+        delete qs.gen
+        delete qs.own
+        delete qs.cat
         qs.list = $('#list-select').val()
+
         $('#pokemon-list').renderallpokemon()
     }
 })

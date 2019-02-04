@@ -77,12 +77,11 @@
             <div id="content">
                 <div class="dex content-panel active">
                     <div id="pokemon-filters">
-                        <div class="ui multiple selection fluid dropdown">
+                        <div class="ui multiple selection fluid dropdown" id="generations">
                             <input type="hidden" id="gen-select" value="{{ request.args.get('gen') if request.args.get('gen') != None }}">
                             <i class="dropdown icon"></i>
                             <div class="default text">Generations</div>
                             <div class="menu">
-                                <div class="item" data-value="all">All Released Generations</div>
                                 <div class="item" data-value="1">Gen I (Kanto)</div>
                                 <div class="item" data-value="2">Gen II (Johto)</div>
                                 <div class="item" data-value="3">Gen III (Hoenn)</div>
@@ -92,14 +91,11 @@
                         </div>
 
 
-                        <div class="ui multiple selection fluid dropdown">
+                        <div class="ui multiple selection fluid dropdown" id="categories">
                             <input type="hidden" id="cat-select" value="{{ request.args.get('cat') if request.args.get('cat') != None }}">
                             <i class="dropdown icon"></i>
                             <div class="default text">Category</div>
                             <div class="menu">
-                                <div class="item" data-value="all">
-                                    <i class="icon book"></i> All Pokemon
-                                </div>
                                 <div class="item" data-value="shiny">
                                     <i class="icon fas fa-star-christmas"></i> Shiny
                                 </div>
@@ -133,7 +129,7 @@
                             </div>
                         </div>
 
-                        <div class="ui selection fluid dropdown">
+                        <div class="ui selection fluid dropdown" id="owned">
                             <input type="hidden" id="own-select" value="{{ request.args.get('own') }}">
                             <i class="dropdown icon"></i>
                             <div class="default text">Owned vs. Need</div>
@@ -392,7 +388,6 @@
                                     <i class="dropdown icon"></i>
                                     <div class="default text">Generations</div>
                                     <div class="menu">
-                                        <div class="item" data-value="all">All Released Generations</div>
                                         <div class="item" data-value="1">Gen I (Kanto)</div>
                                         <div class="item" data-value="2">Gen II (Johto)</div>
                                         <div class="item" data-value="3">Gen III (Hoenn)</div>
@@ -408,9 +403,6 @@
                                     <i class="dropdown icon"></i>
                                     <div class="default text">Category</div>
                                     <div class="menu">
-                                        <div class="item" data-value="all">
-                                            <i class="icon book"></i> All Pokemon
-                                        </div>
                                         <div class="item" data-value="shiny">
                                             <i class="icon fas fa-star-christmas"></i> Shiny
                                         </div>
@@ -568,7 +560,6 @@
                                     <i class="dropdown icon"></i>
                                     <div class="default text">Generations</div>
                                     <div class="menu">
-                                        <div class="item" data-value="all">All Released Generations</div>
                                         <div class="item" data-value="1">Gen I (Kanto)</div>
                                         <div class="item" data-value="2">Gen II (Johto)</div>
                                         <div class="item" data-value="3">Gen III (Hoenn)</div>
@@ -584,9 +575,6 @@
                                     <i class="dropdown icon"></i>
                                     <div class="default text">Category</div>
                                     <div class="menu">
-                                        <div class="item" data-value="all">
-                                            <i class="icon book"></i> All Pokemon
-                                        </div>
                                         <div class="item" data-value="shiny">
                                             <i class="icon fas fa-star-christmas"></i> Shiny
                                         </div>
