@@ -87,16 +87,20 @@ def fetch_pokemon(username):
     pokemon_filters = active_list["view-settings"]
 
     if active_list.get("gen-filters", False):
-        gen.extend(active_list.get("gen-filters", "").split(","))
+        for i in active_list.get("gen-filters", "").split(","):
+            if not i in gen:
+                gen.append(i)
 
     if active_list.get("cat-filters", False):
-        cat.extend(active_list.get("cat-filters", "").split(","))
+        for i in active_list.get("cat-filters", "").split(","):
+            if not i in cat:
+                cat.append(i)
 
     updated_qs = modify_query(
         cat=",".join(map(str, cat)),
         gen=",".join(map(str, gen)),
-        list=active_list["value"],
         own=own,
+        list=active_list["value"],
     )
 
     list_type = active_list["type"]
