@@ -96,6 +96,7 @@ def fetch_pokemon(username):
         cat=",".join(map(str, cat)),
         gen=",".join(map(str, gen)),
         list=active_list["value"],
+        own=own,
     )
 
     list_type = active_list["type"]

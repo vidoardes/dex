@@ -13,6 +13,13 @@ $.fn.renderallpokemon = function () {
             let urlParts = window.location.href.split('?')
             window.history.replaceState({}, document.title, urlParts[0] + '?' + r['updated-qs'])
 
+            let params = new window.URLSearchParams(window.location.search)
+
+            qs.gen = params.get("gen")
+            qs.cat = params.get("cat")
+            qs.own = params.get("own")
+            qs.list = params.get("list")
+
             _qs += '&dex-only=true'
 
             $.ajax({
