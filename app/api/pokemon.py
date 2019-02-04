@@ -64,7 +64,7 @@ def fetch_pokemon(username):
     list = request.args.get("list")
     cat = request.args.get("cat")
     gen = request.args.get("gen")
-    own = request.args.get("own", "all")
+    own = request.args.get("own")
     name = request.args.get("name", None)
     dex_only = request.args.get("dex-only", False)
 
@@ -206,7 +206,7 @@ def fetch_pokemon(username):
         ):
             p["forme"] = p["name"]
 
-    if not own == "all":
+    if own in ("owned", "notowned"):
         _pokemon_owned = []
 
         for p in pokemon:
