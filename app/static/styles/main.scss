@@ -581,7 +581,6 @@
   }
 
   #pokemon-list {
-
     position: relative;
 
     &:before {
@@ -617,7 +616,6 @@
 
     #pokemon-wrapper {
       overflow-y: scroll;
-      scroll-snap-type: y mandatory;
       height: calc(100vh - 231px);
       padding: 5px;
       display: grid;
