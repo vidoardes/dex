@@ -410,13 +410,12 @@ $('.sidebar-link.living-dex').click(function () {
     }
 })
 
-$('.ui.multiple.dropdown').dropdown({
-  onAdd: function (value, text, $selected) {
-    $('.dropdown').blur()
-  }
-})
-
-$('#pokemon-filters .ui.dropdown').dropdown({clearable: true}).on('change', '#gen-select', function () {
+$('#pokemon-filters .ui.dropdown').dropdown({
+    clearable: true,
+    onAdd: function (value, text, $selected) {
+        $('.dropdown').blur()
+    }
+}).on('change', '#gen-select', function () {
     if (filtersactive) {
         qs.gen = $('#gen-select').val()
         $('#pokemon-list').renderallpokemon()
@@ -811,7 +810,7 @@ $('.ui.dropdown.list-edit-select').dropdown({
 
                 editing_list_value = r["list-settings"]["value"]
                 editing_list_name = r["list-settings"]["name"]
-                
+
                 $('.ui.modal.edit-dex-popup').modal('show')
                 $('.ui.dropdown.list-edit-select').dropdown('clear')
             },
