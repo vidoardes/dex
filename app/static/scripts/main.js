@@ -798,6 +798,8 @@ $('.ui.dropdown.list-edit-select').dropdown({
                     }
                 }
 
+                $('.ui.modal.edit-dex-popup .ui.dropdown').dropdown('clear')
+
                 $('.edit-dex-popup .ui.form').form('set values', {
                     oldlist: r["list-settings"]["value"],
                     listname: r["list-settings"]["name"],
@@ -809,8 +811,7 @@ $('.ui.dropdown.list-edit-select').dropdown({
 
                 editing_list_value = r["list-settings"]["value"]
                 editing_list_name = r["list-settings"]["name"]
-
-                $('.ui.modal.edit-dex-popup .ui.dropdown').dropdown()
+                
                 $('.ui.modal.edit-dex-popup').modal('show')
                 $('.ui.dropdown.list-edit-select').dropdown('clear')
             },
