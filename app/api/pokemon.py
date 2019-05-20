@@ -210,6 +210,11 @@ def fetch_pokemon(username):
     if not pokemon_filters.get("show-costumed", False):
         filtered_query = filtered_query.filter_by(costumed=False)
 
+    if not pokemon_filters.get("show-letsgo", False):
+        filtered_query = filtered_query.filter(
+            Pokemon.p_uid.notin_(["808_00", "809_00", "891_00", "892_00"])
+        )
+
     for u in filtered_query.all():
         pokemon_list.append(u.as_dict())
 
