@@ -239,6 +239,8 @@ def fetch_pokemon(username):
                 _owned = p.get("shinyowned", False)
             elif "lucky" in cat:
                 _owned = p.get("luckyowned", False)
+            elif "level_1" in cat:
+                _owned = p.get("level_1owned", False)
             else:
                 _owned = p.get("owned", False)
 
