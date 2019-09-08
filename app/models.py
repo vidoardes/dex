@@ -30,6 +30,7 @@ class User(UserMixin, db.Model):
                 "show-spinda": True,
                 "show-castform": True,
                 "show-deoxys": True,
+                "show-shadow": True,
             },
             "pokemon": [],
         }
@@ -141,6 +142,7 @@ class Pokemon(db.Model):
     base_attack_override = db.Column(db.Integer, default=0, nullable=False)
     base_defense_override = db.Column(db.Integer, default=0, nullable=False)
     base_stamina_override = db.Column(db.Integer, default=0, nullable=False)
+    shadow = db.Column(db.Boolean, default=False, server_default="False", nullable=False)
 
     @hybrid_property
     def speed_mod(self):

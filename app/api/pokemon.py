@@ -239,6 +239,8 @@ def fetch_pokemon(username):
                 _owned = p.get("shinyowned", False)
             elif "lucky" in cat:
                 _owned = p.get("luckyowned", False)
+            elif "shadow" in cat:
+                _owned = p.get("shadowowned", False)
             else:
                 _owned = p.get("owned", False)
 
@@ -264,6 +266,9 @@ def fetch_pokemon(username):
 
         if "lucky" in cat:
             pokemon_dex.append("&lucky")
+
+        if "shadow" in cat:
+            pokemon_dex.append("&shadow")
 
         if "alolan" in cat:
             pokemon_dex.append("&alola")
