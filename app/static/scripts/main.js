@@ -105,7 +105,7 @@ $.fn.renderpokemon = function (list, type) {
             'male': 'fa-mars',
             'female': 'fa-venus',
             'ungendered': 'fa-circle',
-            'shiny': 'fa-star',
+            'shiny': 'fa-sparkles',
             'lucky': 'fa-dice'
         }
 
