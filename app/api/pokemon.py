@@ -350,14 +350,17 @@ def update_pokemon(username):
     )
 
     for p in updated_pokemon_list:
+        print(active_list)
         if (
-            ("show-spinda", False) in active_list["view-settings"].items()
+            ("show-spinda" not in active_list["view-settings"].keys() or ("show-spinda", False) in active_list["view-settings"].items())
             and p["forme"] == "Spinda #1"
         ) or (
-            ("show-unown", False) in active_list["view-settings"].items()
+            ("show-unown" not in active_list["view-settings"].keys() or ("show-unown", False) in active_list["view-settings"].items())
             and p["forme"] == "Unown (F)"
         ):
             p["forme"] = p["name"]
+
+        print(p["forme"])
 
     r = json.dumps({"success": True, "updated_pokemon": updated_pokemon_list})
     return Response(r, status=200, mimetype="application/json")

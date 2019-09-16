@@ -1,70 +1,100 @@
-const gulp = require("gulp"),
-    sass = require("gulp-sass"),
-    rename = require("gulp-rename"),
-    browserSync = require("browser-sync"),
-    webpack = require("webpack-stream"),
-    zip = require("gulp-zip"),
-    clean = require("gulp-clean"),
-    runSequence = require("run-sequence")
+"use strict";
 
-let reload = browserSync.reload
-let exec = require("child_process").exec
+// Load plugins
+const gulp = require("gulp");
+const sass = require("gulp-sass");
+const rename = require("gulp-rename");
+const browsersync = require("browser-sync");
+const webpack = require("webpack-stream");
+const zip = require("gulp-zip");
+const del = require("del");
+const postcss = require("gulp-postcss");
+const cssnano = require("cssnano");
+const autoprefixer = require("autoprefixer");
 
 function swallowError(error) {
-    console.log(error.toString())
+    console.log(error.toString());
     this.emit("end")
 }
 
-gulp.task("js", function () {
-    return gulp.src("app/static/scripts/main.js")
+// BrowserSync
+function browserSync(done) {
+    browsersync.init({
+        notify: false,
+        proxy: "127.0.0.1:5003",
+        port: 3000
+    });
+    done();
+}
+
+// BrowserSync reload
+function browserSyncReload(done) {
+    browsersync.reload();
+    done();
+}
+
+// Compile CSS
+function css() {
+    return gulp
+        .src(["app/static/styles/main.scss"])
+        .pipe(sass({outputStyle: "expanded"}))
+        .on("error", swallowError)
+        .pipe(gulp.dest("app/static/")).pipe(postcss([autoprefixer(), cssnano()]))
+        .pipe(gulp.dest("app/static/"))
+        .pipe(browsersync.stream());
+}
+
+// Compile JS
+function js() {
+    return gulp
+        .src(["app/static/scripts/main.js"])
         .pipe(webpack({output: {filename: "bundle.js"}, mode: "production"}))
         .on("error", swallowError)
         .pipe(gulp.dest("app/static/"))
-})
+        .pipe(browsersync.stream());
+}
 
-gulp.task("sass", function () {
-    return gulp.src("app/static/styles/main.scss")
-        .pipe(sass({outputStyle: "compressed"}))
-        .on("error", swallowError)
-        .pipe(gulp.dest("app/static/"))
-})
+function clean() {
+    return del("dist");
+}
 
-gulp.task("clean:tmp", function () {
-    return gulp.src(["tmp"], {read: false}).pipe(clean())
-})
+function build() {
+    gulp
+        .src("prod.env")
+        .pipe(rename(".env"))
+        .pipe(gulp.dest("dist"));
+    gulp
+        .src(["*.py"])
+        .pipe(gulp.dest("dist"));
+    gulp
+        .src(["requirements.txt"])
+        .pipe(gulp.dest("dist"));
+    gulp
+        .src(".deploy-config/*", { dot: true })
+        .pipe(gulp.dest("dist/"));
+    gulp
+        .src(["app/**/*.py", "app/**/*.html", "app/**/*.txt"])
+        .pipe(gulp.dest("dist/app"));
+    gulp
+        .src(["app/static/*.css", "app/static/*.js", "app/static/*.json"])
+        .pipe(gulp.dest("dist/app/static"));
+    gulp
+        .src(["app/static/docs/**/*.pdf"])
+        .pipe(gulp.dest("dist/app/static/docs"));
+    return gulp
+        .src(["app/static/img/**/*.*"])
+        .pipe(gulp.dest("dist/app/static/img/"));
+}
 
-gulp.task("compile", ["clean:tmp"], function () {
-    gulp.src(["dist"], {read: false}).pipe(clean())
-    gulp.src("prod.env").pipe(rename(".env")).pipe(gulp.dest("tmp"))
-    gulp.src(["*.py"]).pipe(gulp.dest("tmp"))
-    gulp.src(["requirements.txt"]).pipe(gulp.dest("tmp"))
-    gulp.src([".ebextensions/*"]).pipe(gulp.dest("tmp/.ebextensions"))
-    gulp.src(["app/**/*.py", "app/**/*.html", "app/**/*.txt"]).pipe(gulp.dest("tmp/app"))
-    gulp.src(["app/static/*.css", "app/static/*.js"]).pipe(gulp.dest("tmp/app/static"))
-    gulp.src(["app/static/docs/**/*.pdf"]).pipe(gulp.dest("tmp/app/static/docs"))
-    return gulp.src(["app/static/img/**/*.*"]).pipe(gulp.dest("tmp/app/static/img/"))
-})
+// Watch files
+function watchFiles() {
+  gulp.watch("app/static/styles/**/*", css);
+  gulp.watch("app/static/scripts/**/*", js);
+  gulp.watch("./app/templates/**/*", gulp.series(browserSyncReload));
+}
 
-gulp.task('archive', ["compile"], function () {
-    return gulp.src("tmp/**/*.*", {dot: true})
-        .pipe(zip("dex-elb.zip"))
-        .pipe(gulp.dest("dist"))
-})
+const dist = gulp.series(css, clean, js, build);
+const watch = gulp.parallel(watchFiles, browserSync);
 
-gulp.task("default", function () {
-    gulp.start("sass")
-    gulp.start("js")
-    browserSync({notify: false, proxy: "127.0.0.1:5003"})
-    gulp.watch(["app/static/styles/**/*.scss"], ["sass"])
-    gulp.watch(["app/static/scripts/**/*.js"], ["js"])
-    gulp.watch(["app/templates/**/*.*", "app/static/styles/**/*.js", "app/static/styles/**/*.scss"], reload)
-})
-
-gulp.task("build", function (callback) {
-    runSequence(
-        ["sass", "js"],
-        "archive",
-        "clean:tmp",
-        callback
-    )
-})
+exports.build = dist;
+exports.default = watch;
