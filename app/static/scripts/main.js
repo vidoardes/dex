@@ -132,7 +132,7 @@ $.fn.renderpokemon = function (list, type) {
         }
     }
 
-    const Pokemon = ({name, forme, dex, p_uid, released, owned, shiny, shinyowned, male, maleowned, female, femaleowned, ungendered, ungenderedowned, luckyowned, type1, type2,}) => `
+    const Pokemon = ({name, forme, dex, gen, p_uid, released, owned, shiny, shinyowned, male, maleowned, female, femaleowned, ungendered, ungenderedowned, luckyowned, type1, type2,}) => `
         <div class="pokemon ${pokemonowned(owned, shinyowned, luckyowned)} ${shinyowned ? 'shinyowned' : ''}"
             ${maleowned ? 'data-maleowned="True"' : ''}
             ${femaleowned ? 'data-femaleowned="True"' : ''}
@@ -144,7 +144,7 @@ $.fn.renderpokemon = function (list, type) {
             data-key="${forme}"
             data-dex="${dex}">
             
-            <div class="img"><img src="../static/img/sprites/pokemon_icon_${p_uid}${shinyowned ? '_shiny' : ''}.png"></img></div>
+            <div class="img"><img src="../static/img/sprites/${gen}/pokemon_icon_${p_uid}${shinyowned ? '_shiny' : ''}.png"></img></div>
             <div class="info">${forme}</div>
             <div class="type">
                 ${type1 !== null ? '<img src="../static/img/types/icon_' + type1 + '.png" />' : ''}
@@ -187,7 +187,7 @@ $.fn.renderpokemon = function (list, type) {
 }
 
 $.fn.renderpokemoncard = function () {
-    const PokemonCard = ({name, forme, dex, p_uid, released, owned, shiny, shinyowned, male, maleowned, female, femaleowned, ungendered, ungenderedowned, luckyowned, type1, type2, classification, max_cp, base_attack, base_defense, base_stamina}) => `
+    const PokemonCard = ({name, forme, dex, gen, p_uid, released, owned, shiny, shinyowned, male, maleowned, female, femaleowned, ungendered, ungenderedowned, luckyowned, type1, type2, classification, max_cp, base_attack, base_defense, base_stamina}) => `
         <div class="ui modal pokemon-card data-key="${forme}" data-dex="${dex}">
             <i class="close icon"></i>
             <div class="header">
@@ -197,7 +197,7 @@ $.fn.renderpokemoncard = function () {
             <div class="content">
                 <div class="ui grid stackable two column">
                     <div class="column img">
-                        <img src="../static/img/sprites/pokemon_icon_${p_uid}${qs.cat.includes('shiny') ? '_shiny' : ''}.png">
+                        <img src="../static/img/sprites/${gen}/pokemon_icon_${p_uid}${qs.cat.includes('shiny') ? '_shiny' : ''}.png">
                     </div>
                     <div class="column">
                         <div class="max_cp_stat stat_bar">
@@ -504,10 +504,10 @@ $('.sidebar-link.raid-bosses').click(function () {
             url: '/api/pokemon/raidbosses/get',
             type: 'GET',
             success: function (r) {
-                const RaidBoss = ({name, forme, dex, p_uid, shiny, raid, battle_cp, max_cp, max_cp_weather, min_cp, min_cp_weather, type1, type2}) => `
+                const RaidBoss = ({name, forme, dex, gen, p_uid, shiny, raid, battle_cp, max_cp, max_cp_weather, min_cp, min_cp_weather, type1, type2}) => `
                     <div class="raid-boss">
                         <div class="img">
-                            <img src="../static/img/sprites/pokemon_icon_${p_uid}${shiny ? '_shiny' : ''}.png" />
+                            <img src="../static/img/sprites/${gen}/pokemon_icon_${p_uid}${shiny ? '_shiny' : ''}.png" />
                             ${shiny ? "<div class='shiny'></div>" : ""}
                         </div>
                         <div class="name">
@@ -558,13 +558,13 @@ $('.sidebar-link.egg-hatches').click(function () {
             url: '/api/pokemon/egghatches/get',
             type: 'GET',
             success: function (r) {
-                const EggHatch = ({forme, dex, shiny, p_uid, min_hatch_cp, max_hatch_cp}) => `
+                const EggHatch = ({forme, dex, gen, shiny, p_uid, min_hatch_cp, max_hatch_cp}) => `
                     <div class="egg-hatch">
                         <div class="name">
                             ${forme.includes("Alolan") ? forme.replace("Alolan", "A.") : forme}
                         </div>
                         <div class="img">
-                            <img src="../static/img/sprites/pokemon_icon_${p_uid}${shiny ? '_shiny' : ''}.png" />
+                            <img src="../static/img/sprites/${gen}/pokemon_icon_${p_uid}${shiny ? '_shiny' : ''}.png" />
                             ${shiny ? "<div class='shiny'></div>" : ""}
                         </div>
                         <div class="cp">
