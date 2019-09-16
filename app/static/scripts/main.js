@@ -92,6 +92,8 @@ $.fn.checkownedstate = function () {
         || this.data('femaleowned')
         || this.data('ungenderedowned')
         || this.data('luckyowned')
+        || this.data('shadowowned')
+        || this.data('purifiedowned')
     ) {
         return true
     } else {
@@ -105,8 +107,10 @@ $.fn.renderpokemon = function (list, type) {
             'male': 'fa-mars',
             'female': 'fa-venus',
             'ungendered': 'fa-circle',
-            'shiny': 'fa-sparkles',
-            'lucky': 'fa-dice'
+            'shiny': 'fa-star',
+            'lucky': 'fa-dice',
+            'shadow': 'fa-smoke',
+            'purified': 'fa-star-christmas',
         }
 
         if (!released) {
@@ -115,6 +119,8 @@ $.fn.renderpokemon = function (list, type) {
 
         if (istype && type === 'ungendered') {
             return `<div class="${type} opt ${isowned ? 'owned' : ''}" data-content="${type}"><i class="${isowned ? 'fas' : 'far'} ${icons[type]}"></i></div><span class="opt"></span>`
+        } else if (type === 'purified' && qs.cat.includes('level_1')) { // L1 can't include purified, so hide icon
+            return '<span class="opt"></span>'
         } else if (istype) {
             return `<div class="${type} opt ${isowned ? 'owned' : ''}" data-content="${type}"><i class="${isowned ? 'fas' : 'far'} ${icons[type]}"></i></div>`
         } else {
@@ -122,22 +128,26 @@ $.fn.renderpokemon = function (list, type) {
         }
     }
 
-    function pokemonowned(owned, shinyowned, luckyowned) {
+    function pokemonowned(owned, shinyowned, luckyowned, shadowowned, purifiedowned) {
         if (
             (qs.cat.includes('shiny') && shinyowned)
             || (qs.cat.includes('lucky') && luckyowned)
+            || (qs.cat.includes('shadow') && shadowowned)
+            || (!qs.cat.includes('level_1') && purifiedowned)
             || (!qs.cat.includes('shiny') && !qs.cat.includes('lucky') && owned)
         ) {
             return 'owned'
         }
     }
-
-    const Pokemon = ({name, forme, dex, gen, p_uid, released, owned, shiny, shinyowned, male, maleowned, female, femaleowned, ungendered, ungenderedowned, luckyowned, type1, type2,}) => `
+  
+    const Pokemon = ({name, forme, dex, gen, p_uid, released, owned, shiny, shinyowned, male, maleowned, female, femaleowned, ungendered, ungenderedowned, luckyowned, type1, type2, shadow, shadowowned, purifiedowned}) => `
         <div class="pokemon ${pokemonowned(owned, shinyowned, luckyowned)} ${shinyowned ? 'shinyowned' : ''}"
             ${maleowned ? 'data-maleowned="True"' : ''}
             ${femaleowned ? 'data-femaleowned="True"' : ''}
             ${ungenderedowned ? 'data-ungenderedowned="True"' : ''}
             ${shinyowned ? 'data-shinyowned="True"' : ''}
+            ${shadowowned ? 'data-shadowowned="True"' : ''}
+            ${purifiedowned ? 'data-purifiedowned="True"' : ''}
             ${luckyowned ? 'data-luckyowned="True"' : ''}
             ${owned ? 'data-owned="True"' : ''}
             ${released ? '' : 'data-unreleased="False"'}
@@ -154,6 +164,8 @@ $.fn.renderpokemon = function (list, type) {
             <div class="pm-opt">
                 ${ungendered ? pokemonoptions('ungendered', ungendered, ungenderedowned, released) : pokemonoptions('male', male, maleowned, released) + pokemonoptions('female', female, femaleowned, released)}
                 ${pokemonoptions('shiny', shiny, shinyowned, released)}
+                ${pokemonoptions('shadow', shadow, shadowowned, released)}
+                ${pokemonoptions('purified', shadow, purifiedowned, released)}
                 ${pokemonoptions('lucky', 'True', luckyowned, released)}
             </div>
         </div>
@@ -187,7 +199,7 @@ $.fn.renderpokemon = function (list, type) {
 }
 
 $.fn.renderpokemoncard = function () {
-    const PokemonCard = ({name, forme, dex, gen, p_uid, released, owned, shiny, shinyowned, male, maleowned, female, femaleowned, ungendered, ungenderedowned, luckyowned, type1, type2, classification, max_cp, base_attack, base_defense, base_stamina}) => `
+    const PokemonCard = ({name, forme, dex, gen, p_uid, released, owned, shiny, shinyowned, male, maleowned, female, femaleowned, ungendered, ungenderedowned, luckyowned, type1, type2, classification, max_cp, base_attack, base_defense, base_stamina, shadow, shadowowned, purified, purifiedowned}) => `
         <div class="ui modal pokemon-card data-key="${forme}" data-dex="${dex}">
             <i class="close icon"></i>
             <div class="header">
@@ -299,7 +311,7 @@ $.taketour = function () {
         })
         .addStep({
             element: document.querySelectorAll('.pm-opt')[0],
-            intro: "You can record wether you have caught one of each gender, it's shiny form, or have a lucky variant. The options will only be active if they apply to the individual Pokemon no telling people you have a shiny Mew!",
+            intro: "You can record wether you have caught one of each gender, its shiny form, or have a lucky or shadow variant. The options will only be active if they apply to the individual Pokemon no telling people you have a shiny Mew!",
         })
         .addStep({
             element: document.querySelectorAll('.pokemon.img img')[0],
@@ -472,6 +484,10 @@ $('#pokemon-wrapper').on('click', 'div.opt.shiny', function () {
     $(this).updatestate('ungenderedowned')
 }).on('click', 'div.opt.lucky', function () {
     $(this).updatestate('luckyowned')
+}).on('click', 'div.opt.shadow', function () {
+    $(this).updatestate('shadowowned')
+}).on('click', 'div.opt.purified', function () {
+    $(this).updatestate('purifiedowned')
 })
 
 // LEGACY MOVES
