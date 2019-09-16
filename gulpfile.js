@@ -54,47 +54,36 @@ function js() {
         .pipe(browsersync.stream());
 }
 
-// Build AWS ZIP
-function build() {
-    del("dist");
+function clean() {
+    return del("dist");
+}
 
+function build() {
     gulp
         .src("prod.env")
         .pipe(rename(".env"))
-        .pipe(gulp.dest("tmp"));
+        .pipe(gulp.dest("dist"));
     gulp
         .src(["*.py"])
-        .pipe(gulp.dest("tmp"));
+        .pipe(gulp.dest("dist"));
     gulp
         .src(["requirements.txt"])
-        .pipe(gulp.dest("tmp"));
+        .pipe(gulp.dest("dist"));
     gulp
-        .src([".ebextensions/*"])
-        .pipe(gulp.dest("tmp/.ebextensions"));
+        .src(".deploy-config/*", { dot: true })
+        .pipe(gulp.dest("dist/"));
     gulp
         .src(["app/**/*.py", "app/**/*.html", "app/**/*.txt"])
-        .pipe(gulp.dest("tmp/app"));
+        .pipe(gulp.dest("dist/app"));
     gulp
         .src(["app/static/*.css", "app/static/*.js", "app/static/*.json"])
-        .pipe(gulp.dest("tmp/app/static"));
+        .pipe(gulp.dest("dist/app/static"));
     gulp
         .src(["app/static/docs/**/*.pdf"])
-        .pipe(gulp.dest("tmp/app/static/docs"));
-
+        .pipe(gulp.dest("dist/app/static/docs"));
     return gulp
         .src(["app/static/img/**/*.*"])
-        .pipe(gulp.dest("tmp/app/static/img/"));
-}
-
-function clean() {
-    return del("tmp");
-}
-
-function archive() {
-    return gulp
-        .src("tmp/**/*.*", {dot: true})
-        .pipe(zip("dex-elb.zip"))
-        .pipe(gulp.dest("dist"));
+        .pipe(gulp.dest("dist/app/static/img/"));
 }
 
 // Watch files
@@ -104,8 +93,8 @@ function watchFiles() {
   gulp.watch("./app/templates/**/*", gulp.series(browserSyncReload));
 }
 
-const awsbuild = gulp.series(css, js, build, archive, clean);
+const dist = gulp.series(css, clean, js, build);
 const watch = gulp.parallel(watchFiles, browserSync);
 
-exports.awsbuild = awsbuild;
+exports.build = dist;
 exports.default = watch;

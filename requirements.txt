@@ -5,6 +5,7 @@ flask-mail
 Flask-Migrate
 Flask-SQLAlchemy
 Flask-wtf
+gunicorn
 itsdangerous
 Jinja2
 psycopg2-binary

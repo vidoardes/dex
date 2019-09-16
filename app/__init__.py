@@ -1,7 +1,3 @@
-import logging
-import os
-from logging.handlers import RotatingFileHandler
-
 from flask import Flask, render_template
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager, mixins
@@ -69,24 +65,6 @@ def create_app(config_class=Config):
     from app.admin import bp as admin_bp
 
     application.register_blueprint(admin_bp, url_prefix="/admin")
-
-    if not application.debug and not application.testing:
-        if not os.path.exists("logs"):
-            os.mkdir("logs")
-
-        file_handler = RotatingFileHandler(
-            "logs/default.log", maxBytes=10240, backupCount=10
-        )
-        file_handler.setFormatter(
-            logging.Formatter(
-                "%(asctime)s %(levelname)s: %(message)s " "[in %(pathname)s:%(lineno)d]"
-            )
-        )
-        file_handler.setLevel(logging.INFO)
-        application.logger.addHandler(file_handler)
-
-        application.logger.setLevel(logging.INFO)
-        application.logger.info("Dex startup")
 
     return application
 
