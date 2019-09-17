@@ -11,6 +11,7 @@ Jinja2
 psycopg2-binary
 python-dotenv
 pyjwt
+requests
 structlog
 SQLAlchemy
 Werkzeug

@@ -1,0 +1,33 @@
+Dear {{ user.username }},
+
+
+** SEARCH STRING ISSUES
+------------------------------------------------------------
+
+Apologies if you have already recieved this email, btu I halted the rollout as there were issues with the new search string function. This is now hopefully resolved.
+
+ 
+** NEW FEATURES GALORE
+------------------------------------------------------------
+
+One the back of this weeks long awaited release of multi lists, I've got a few new goodies for you just in time for Christmas:
+
+ 	* Multi Select Filters - Filters can now be combined to vastly improve you filtering options, with variations on generation and category.
+ 	* Default Filters on Lists - in addition to the above you can now set default filters on a list, which will always be applied regardless of what is selected on the search screen
+ 	* Collected Count - There is now a live count of what has been collected, which is relative to the filters selected i.e if you pick shiny, it will only count and highlight ones you have tagged as shiny owned.
+ 	* Extra Filter Options - Baby and Unreleased are now options in the category filter; unreleased will display the Pokemon that have had assets added to the game, but are not yet available to catch.
+ 	* Export Search String for Pokemon GO - Next to the result counter you may notice a clipboard button has appeared! This will copy the current results to your clipboard, in a format that can be pasted into Pokemon GO as a search string. You can share this with friends as an easy way for them to check if they have any you still need. There is a small GIF demonstrating how this works here (https://gfycat.com/EmotionalGregariousGrassspider)
+
+That's about it for this release, which will probably be the last one of 2018. I just wanted to thank you all for your support in the app, and to let you know I will continue to keep improving and updating it into the next year.
+
+I am taking feature requests, so head on over to the GitHub repo (https://github.com/vidoardes/dex/issues) and let me know if there is something you'd like to see, or if you have any issues please drop me a message on reddit (https://reddit.com/u/vidoardes) or on discord (vidoardes#2460), or drop an issue on the GitHub repo (https://github.com/vidoardes/dex/issues) .
+
+Merry Christmas and a Happy New Year!
+
+Sincerely,
+
+The Dex Team
+
+------------------------------------------------------------
+
+Although this isn't for profit, it does cost money to run, so if you would like to make a donation to keep the server up I would very much appreciate it. You can find my ko-fi page here. (https://ko-fi.com/vidoardes)

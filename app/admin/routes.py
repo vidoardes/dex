@@ -1,4 +1,6 @@
-import copy
+from datetime import timedelta
+from time import time
+
 from flask import json, Response
 from flask_login import current_user, login_required
 
@@ -16,11 +18,12 @@ def update_email():
         return Response(r, status=403, mimetype="application/json")
 
     users = User.query.filter_by(unsubscribe=False).filter_by(deleted=False).all()
-
     sent_list = []
+    delay = 0
 
     for u in users:
-        send_update_email(u)
+        send_update_email(u, time() + delay)
+        delay += 60
         sent_list.append(u.email)
 
     db.session.close()

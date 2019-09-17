@@ -1,0 +1,40 @@
+Dear {{ user.username }},
+
+ 
+** MULTI LISTS IS LIVE!
+------------------------------------------------------------
+
+Told you I wouldn't be long ;) Multi lists is now live, with the following features:
+
+ 	* Custom named lists - You can add as many custom named lists as you wish to track. Each one can be colour coded to make them easier to spot in the list.
+ 	* Forms - You can select which forms you do or don't want on a per list basis
+ 	* URL parameter - Lists have been added to the URL query parameters to make sharing directly easier
+
+Upcoming additions to this function include:
+
+ 	* Inclusive or Exclusive - You will be able to pick between inclusive lists, which will only show the specific ones you want, or exclusive which will show all except ones you want to hide.
+ 	* Default filters - The list will load with default filter set so you can show it exactly how you want your friends to view it!
+ 	* Default list - You will be able to pick a default list which is the one that shows when your profile loads without one selected
+
+ 
+** OTHER FEATURES IN THIS RELEASE
+------------------------------------------------------------
+
+ 	* Mobile "Add to desktop" - for a more native feel pin the website to your home screen to have it behave like a native app
+
+ 
+** UPCOMING FEATURES
+------------------------------------------------------------
+
+ 	* Search strings for Pokemon GO - you will be able to export a search string for a set of results, so for example you can select "shinys" and "not owned", export the list and send it to a friend, who can then paste it into Pokemon GO and see instantly if they have what you need!
+ 	* Pokedex features - I am gathering more data to improve these panels, first up is evolution data and candy details
+
+Sorry for the wall of text. I am taking feature requests, so head on over to the GitHub repo (https://github.com/vidoardes/dex/issues) and let me know if there is something you'd like to see, or if you have any issues please drop me a message on reddit (https://reddit.com/u/vidoardes) or on discord (vidoardes#2460), or drop an issue on the GitHub repo (https://github.com/vidoardes/dex/issues) .
+
+Sincerely,
+
+The Dex Team
+
+------------------------------------------------------------
+
+Although this isn't for profit, it does cost money to run, so if you would like to make a donation to keep the server up I would very much appreciate it. You can find my ko-fi page here. (https://ko-fi.com/vidoardes)

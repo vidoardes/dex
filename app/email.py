@@ -1,21 +1,17 @@
-from threading import Thread
-
+import requests
+from time import time
 from flask import current_app
-from flask_mail import Message
-
-from app import mail
 
 
-def send_async_email(app, msg):
-    with app.app_context():
-        mail.send(msg)
-
-
-def send_email(subject, sender, recipients, text_body, html_body):
-    msg = Message(subject, sender=sender, recipients=recipients)
-    msg.body = text_body
-    msg.html = html_body
-    print(current_app._get_current_object())
-    Thread(
-        target=send_async_email, args=(current_app._get_current_object(), msg)
-    ).start()
+def send_email(subject, sender, recipients, text_body, html_body, send_time=time()):
+    return requests.post(
+        current_app.config.get('MAIL_API_URL'),
+        auth=("api", current_app.config.get('MAIL_API_KEY')),
+        data={"from": "Living DEX " + sender,
+              "o:deliverytime": send_time,
+              "o:testmode": current_app.config.get('MAIL_API_DEBUG'),
+              "to": recipients,
+              "subject": subject,
+              "text": text_body,
+              "html": html_body}
+    )

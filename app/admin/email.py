@@ -1,9 +1,10 @@
 import time
+
 from app.email import send_email
 from flask import render_template, current_app
 
 
-def send_update_email(user):
+def send_update_email(user, send_time):
     send_email(
         subject=str(
             "[Dex] New Updates Released! - " + time.strftime("%A, %d %B", time.gmtime())
@@ -12,4 +13,5 @@ def send_update_email(user):
         recipients=[user.email],
         text_body=render_template("admin/email/update_email.txt", user=user),
         html_body=render_template("admin/email/update_email.html", user=user),
+        send_time=send_time
     )
