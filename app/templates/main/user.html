@@ -36,12 +36,12 @@
                     </div>
                     <div id="sidebar-links">
                         <div class="sidebar-link living-dex active">
-                            <i class="icon far fa-ballot-check"></i>
+                            <i class="icon fas fa-ballot-check"></i>
                             <span>Living DEX</span>
                             <i class="icon right angle"></i>
                         </div>
                         <div class="sidebar-link legacy-moves">
-                            <i class="bolt icon"></i>
+                            <i class="fas fa-bolt icon"></i>
                             <span>Legacy Moves</span>
                             <i class="icon right angle"></i>
                         </div>
@@ -64,6 +64,12 @@
                                 <i class="icon right angle"></i>
                             </div>
                         {% endif %}
+
+                        <div class="sidebar-link support-site">
+                            <i class="fas fa-mug-hot icon"></i>
+                            <span>Support DEX!</span>
+                            <i class="icon right angle"></i>
+                        </div>
                     </div>
 
                     <div id="footer-links">
@@ -113,7 +119,7 @@
                                     <i class="icon fas fa-map-marker-question"></i> Mythical
                                 </div>
                                 <div class="item" data-value="costumed">
-                                    <i class="icon fab fa-pied-piper-hat"></i> Costumed
+                                    <i class="icon fas fa-hat-santa"></i> Costumed
                                 </div>
                                 <div class="item" data-value="lucky">
                                     <i class="icon fas fa-dice"></i> Lucky
@@ -756,6 +762,28 @@
                         <i class="trash icon"></i>
                         Yes, delete this list
                     </div>
+                </div>
+            </div>
+
+            <div class="ui modal support-site-popup">
+              <i class="close icon"></i>
+                <div class="header">
+                    <i class="icon fad fa-mug-hot"></i> Enjoying the app?
+                </div>
+                <div class="content">
+                    <p>
+                        This is a fun pet project, but if you have any ideas, suggestions, or
+                        just want to see how it all works
+                        <a href="https://github.com/vidoardes/dex" target="_blank">you can
+                            check out the GitHub repo here.</a>
+                    </p>
+                    <p>
+                        Although this isn't for profit, it does cost money to run, so if you
+                        would like to make a donation to keep the server up I would very much
+                        appreciate it.
+                        <a href="https://ko-fi.com/vidoardes" target="_blank">You can find my
+                            ko-fi page here.</a>
+                    </p>
                 </div>
             </div>
         {% endblock %}
