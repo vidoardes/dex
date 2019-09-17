@@ -33,9 +33,10 @@
                     <p>{{ form.submit() }}</p>
                 </form>
                 <p>
-                    <a href="{{ url_for('auth.reset_password_request') }}">Forgot Your
-                        Password?</a>
+                    <a href="{{ url_for('auth.reset_password_request') }}">Forgot Your Password?</a>
                 </p>
+
+                <a id="privacy-policy" href="/static/docs/privacy-policy.pdf">Privacy Policy</a>
             </div>
         {% endblock %}
 
