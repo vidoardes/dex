@@ -137,12 +137,10 @@ def resend_confirmation():
         user = User.query.filter_by(email=form.email.data).first()
 
         if user is None:
-            print("user none")
             flash("Email is not registered", "error")
             return redirect(url_for("auth.resend_confirmation"))
 
         if user.email_registered:
-            print("user already reg")
             flash(
                 "You have already confirmed your account. Please login below.",
                 "success",

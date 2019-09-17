@@ -70,14 +70,6 @@ class User(UserMixin, db.Model):
         )
 
     def get_password_token(self, expires_in=600):
-        print(
-            jwt.encode(
-                {"password_token": self.id, "exp": time() + expires_in},
-                current_app.config["SECRET_KEY"],
-                algorithm="HS256",
-            ).decode("utf-8")
-        )
-
         return jwt.encode(
             {"password_token": self.id, "exp": time() + expires_in},
             current_app.config["SECRET_KEY"],
