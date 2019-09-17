@@ -107,7 +107,7 @@ $.fn.renderpokemon = function (list, type) {
             'male': 'fa-mars',
             'female': 'fa-venus',
             'ungendered': 'fa-circle',
-            'shiny': 'fa-star',
+            'shiny': 'fa-sparkles',
             'lucky': 'fa-dice',
             'shadow': 'fa-smoke',
             'purified': 'fa-star-christmas',
@@ -118,13 +118,13 @@ $.fn.renderpokemon = function (list, type) {
         }
 
         if (istype && type === 'ungendered') {
-            return `<div class="${type} opt ${isowned ? 'owned' : ''}" data-content="${type}"><i class="${isowned ? 'fas' : 'far'} ${icons[type]}"></i></div><span class="opt"></span>`
+            return `<div class="${type} opt ${isowned ? 'owned' : ''}" data-content="${type}"><i class="fas ${icons[type]}"></i></div><span class="opt"></span>`
         } else if (type === 'purified' && qs.cat.includes('level_1')) { // L1 can't include purified, so hide icon
             return '<span class="opt"></span>'
         } else if (istype) {
-            return `<div class="${type} opt ${isowned ? 'owned' : ''}" data-content="${type}"><i class="${isowned ? 'fas' : 'far'} ${icons[type]}"></i></div>`
+            return `<div class="${type} opt ${isowned ? 'owned' : ''}" data-content="${type}"><i class="fas ${icons[type]}"></i></div>`
         } else {
-            return `<span class="${type} opt ${isowned ? 'owned' : ''}" data-content="${type}"><i class="${isowned ? 'fas' : 'far'} ${icons[type]}"></i></span>`
+            return `<span class="${type} opt ${isowned ? 'owned' : ''}" data-content="${type}"><i class="fas ${icons[type]}"></i></span>`
         }
     }
 
@@ -650,6 +650,10 @@ $('.sidebar-link.user-settings').click(function () {
             }
         })
     })
+})
+
+$('.sidebar-link.support-site').click(function () {
+    $('.ui.modal.support-site-popup').modal('show')
 })
 
 $('#update-email').click(function () {
