@@ -488,6 +488,7 @@
 
       &.active {
         display: grid;
+        height: calc(100vh - 83px);
       }
     }
   }
@@ -678,6 +679,8 @@
           display: grid;
           justify-content: center;
           align-content: end;
+          width: 100%;
+          height: 110px;
 
           img {
             max-height: 110px;
@@ -713,7 +716,7 @@
         .type {
           grid-area: types;
           height: 20px;
-          max-width: 35px;
+          width: 100%;
           margin: auto;
 
           img {
@@ -830,6 +833,8 @@
 
           .img {
             align-content: center;
+            width: 100%;
+            height: 40px;
 
             img {
               max-height: 40px;
