@@ -236,6 +236,7 @@ def fetch_pokemon(username):
     if own == "owned":
         filtered_query = filtered_query.filter(Pokemon.forme.in_(_pokemon_owned))
     elif own == "notowned":
+        total_owned = 0
         filtered_query = filtered_query.filter(Pokemon.forme.notin_(_pokemon_owned))
 
     total_results = filtered_query.count()
