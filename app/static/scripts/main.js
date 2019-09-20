@@ -104,7 +104,7 @@ $.fn.renderpokemon = function (list, type) {
             'ungendered': 'fa-circle',
             'shiny': 'fa-sparkles',
             'lucky': 'fa-dice',
-            'shadow': 'fa-smoke',
+            'shadow': 'fa-fire',
             'purified': 'fa-star-christmas',
         };
 
@@ -134,9 +134,9 @@ $.fn.renderpokemon = function (list, type) {
             return 'owned'
         }
     }
-  
+
     const Pokemon = ({name, forme, dex, gen, p_uid, released, owned, shiny, shinyowned, male, maleowned, female, femaleowned, ungendered, ungenderedowned, luckyowned, type1, type2, shadow, shadowowned, purifiedowned}) => `
-        <div class="pokemon ${pokemonowned(owned, shinyowned, luckyowned)} ${shinyowned ? 'shinyowned' : ''}"
+        <div class="pokemon ${type1} ${pokemonowned(owned, shinyowned, luckyowned)} ${shinyowned ? 'shinyowned' : ''} ${luckyowned ? 'luckyowned' : ''} ${shadowowned ? 'shadowowned' : ''}"
             ${maleowned ? 'data-maleowned="True"' : ''}
             ${femaleowned ? 'data-femaleowned="True"' : ''}
             ${ungenderedowned ? 'data-ungenderedowned="True"' : ''}
