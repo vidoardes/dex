@@ -929,6 +929,13 @@
             width: 100%;
             height: 40px;
 
+            &:after {
+              bottom: 0;
+              left: 55px;
+              width: 40px;
+              height: 40px;
+            }
+
             img {
               max-height: 40px;
               max-width: 50px;
@@ -941,7 +948,8 @@
 
           .info {
             text-align: left;
-            line-height: 40px;
+            line-height: 35px;
+            font-size: 12px;
             height: 40px;
             padding-right: 10px;
           }
@@ -952,6 +960,7 @@
 
           .pm-opt {
             margin: 0;
+            background: #eff;
 
             .opt {
               height: 40px;
