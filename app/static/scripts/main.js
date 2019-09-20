@@ -1,91 +1,91 @@
 $.fn.renderallpokemon = function () {
-    let _qs = '?' + $.param(qs)
-    let _container = $(this)
-
-    $('#pokemon-list .ui.dimmer').dimmer('show')
+    let _qs = '?' + $.param(qs);
+    let _container = $(this);
 
     $.ajax({
         url: '/api/' + $('#user-profile').data('username') + '/pokemon/get' + _qs,
         type: 'GET',
         success: function (r) {
-            let _pokemon_list = r['pokemon']
-            let urlParts = window.location.href.split('?')
-            window.history.replaceState({}, document.title, urlParts[0] + '?' + r['updated-qs'])
+            if (r['pokemon'] === "end") {
+                return false
+            }
 
-            let params = new window.URLSearchParams(window.location.search)
+            if (r['pokemon'].length === 0) {
+                $('.pokemon-result-count').html('No pokemon found :(').fadeIn("fast");
+                $('<p id="no-results">Unfortunately there are no Pokemon that match your criteria. Please select a different option from the filters above.</p>').insertBefore($('#sentinel'))
+                return false
+            }
 
-            qs.gen = params.get("gen")
-            qs.cat = params.get("cat")
-            qs.own = params.get("own")
-            qs.list = params.get("list")
+            let _pokemon_list = r['pokemon'];
+            let urlParts = window.location.href.split('?');
 
-            filtersactive = false
+            window.history.replaceState({}, document.title, urlParts[0] + '?' + r['updated-qs']);
 
-            $('#pokemon-filters .ui.dropdown').dropdown('clear')
+            let params = new window.URLSearchParams(window.location.search);
 
-            $('#pokemon-filters #generations').dropdown('set selected', qs.gen.split(','))
-            $('#pokemon-filters #categories').dropdown('set selected', qs.cat.split(','))
-            $('#pokemon-filters #owned').dropdown('set selected', qs.own)
+            qs.gen = params.get("gen");
+            qs.cat = params.get("cat");
+            qs.own = params.get("own");
+            qs.list = params.get("list");
 
-            filtersactive = true
+            filtersactive = false;
 
-            $('#pokemon-wrapper').renderpokemon(_pokemon_list, 'generate')
+            $('#pokemon-filters #generations').dropdown('set selected', qs.gen.split(','));
+            $('#pokemon-filters #categories').dropdown('set selected', qs.cat.split(','));
+            $('#pokemon-filters #owned').dropdown('set selected', qs.own);
 
-            $.ajax({
-                url: '/api/' + $('#user-profile').data('username') + '/pokemon/get?dex-only=true&' + $.param(qs),
-                type: 'GET',
-                success: function (r) {
-                    let _pokemon_list = r['pokemon'].join(", ")
-                    $('.list-header .export-list').attr('data-clipboard-text', _pokemon_list)
-                },
-                error: function (e) {
-                    console.log(e.status)
-                }
-            })
+            filtersactive = true;
+
+            $('.pokemon-result-count').html(r['total_owned'] + ' owned of ' + r['total_results'] + ' pokemon found').fadeIn("fast")
+
+            $('#pokemon-wrapper').renderpokemon(_pokemon_list, 'generate');
+
+            iob.unobserve(iob_target);
+            iob.observe(iob_target);
+
+            $('.list-header .export-list').attr('data-clipboard-text', r['dex_str'])
         },
         error: function (e) {
             console.log(e.status)
-            $('#pokemon-list .ui.dimmer').dimmer('hide')
         }
     })
-}
+};
 
 $.fn.updatestate = function (statetype) {
-    let _qs = '?' + $.param(qs)
-    var _pokemon = $(this).parent().parent()
+    let _qs = '?' + $.param(qs);
+    let _pokemon = $(this).parent().parent();
 
-    _pokemon.data(statetype, !_pokemon.data(statetype))
+    _pokemon.data(statetype, !_pokemon.data(statetype));
 
-    var _forme = _pokemon.data('key')
-    var _dex = _pokemon.data('dex')
-    var _state = _pokemon.data(statetype)
-    var _ownedstate = _pokemon.checkownedstate()
+    let _forme = _pokemon.data('key');
+    let _dex = _pokemon.data('dex');
+    let _state = _pokemon.data(statetype);
+    let _ownedstate = _pokemon.checkownedstate();
 
-    var obj = {}
-    obj['forme'] = _forme
-    obj['dex'] = _dex
-    obj[statetype] = _state
-    obj['owned'] = _ownedstate
+    let obj = {};
+    obj['forme'] = _forme;
+    obj['dex'] = _dex;
+    obj[statetype] = _state;
+    obj['owned'] = _ownedstate;
 
-    var data = {data: JSON.stringify(obj)}
+    let data = {data: JSON.stringify(obj)};
 
     $.ajax({
         url: '/api/' + $('#user-profile').data('username') + '/pokemon/update' + _qs,
         data: data,
         type: 'PUT',
         success: function (r) {
-            let _pokemon_list = r['updated_pokemon']
+            let _pokemon_list = r['updated_pokemon'];
             $('#pokemon-wrapper').renderpokemon(_pokemon_list, 'update')
         },
         error: function (e) {
             console.log(e.status)
         }
     })
-}
+};
 
 $.fn.checkownedstate = function () {
-    if (
-        this.data('shinyowned')
+    return !!(this.data('shinyowned')
         || this.data('alolanowned')
         || this.data('regionalowned')
         || this.data('maleowned')
@@ -93,13 +93,8 @@ $.fn.checkownedstate = function () {
         || this.data('ungenderedowned')
         || this.data('luckyowned')
         || this.data('shadowowned')
-        || this.data('purifiedowned')
-    ) {
-        return true
-    } else {
-        return false
-    }
-}
+        || this.data('purifiedowned'));
+};
 
 $.fn.renderpokemon = function (list, type) {
     function pokemonoptions(type, istype, isowned, released) {
@@ -111,7 +106,7 @@ $.fn.renderpokemon = function (list, type) {
             'lucky': 'fa-dice',
             'shadow': 'fa-smoke',
             'purified': 'fa-star-christmas',
-        }
+        };
 
         if (!released) {
             return ``
@@ -154,11 +149,11 @@ $.fn.renderpokemon = function (list, type) {
             data-key="${forme}"
             data-dex="${dex}">
             
-            <div class="img"><img src="../static/img/sprites/${gen}/pokemon_icon_${p_uid}${shinyowned ? '_shiny' : ''}.png"></img></div>
+            <div class="img"><img class="lazy" data-src="../static/img/sprites/${gen}/pokemon_icon_${p_uid}${shinyowned ? '_shiny' : ''}.png" alt="${p_uid}" /></div>
             <div class="info">${forme}</div>
             <div class="type">
-                ${type1 !== null ? '<img src="../static/img/types/icon_' + type1 + '.png" />' : ''}
-                ${type2 !== null ? '<img src="../static/img/types/icon_' + type2 + '.png" />' : ''}
+                ${type1 !== null ? '<img class="lazy" data-src="../static/img/types/icon_' + type1 + '.png" alt="' + type1 + '" />' : ''}
+                ${type2 !== null ? '<img class="lazy" data-src="../static/img/types/icon_' + type2 + '.png" alt="' + type2 + '" />' : ''}
             </div>
             <div class="dex-num">#${dex.toString().padStart(3, '0')}</div>
             <div class="pm-opt">
@@ -169,38 +164,39 @@ $.fn.renderpokemon = function (list, type) {
                 ${pokemonoptions('lucky', 'True', luckyowned, released)}
             </div>
         </div>
-    `
+    `;
 
-    if (list.length > 0) {
-        if (type === 'generate') {
-            $(this).html('').append(list.map(Pokemon).join(''))
-            $('#pokemon-list .ui.dimmer').dimmer('hide')
-        } else if (type === 'update') {
-            for (let i = 0; i < list.length; i++) {
-                let _pokemon = list[i]
-                $(this)
-                    .find('[data-key="' + _pokemon.forme + '"]')
-                    .replaceWith([_pokemon].map(Pokemon).join(''))
-            }
+    if (type === 'generate') {
+        iob.unobserve(iob_target);
+        $('#no-results').remove();
+
+        for (let i = 0; i < list.length; i++) {
+            let template = [list[i]].map(Pokemon)[0];
+            $(template).insertBefore($('#sentinel'));
+
+            qs.c += 1
         }
 
-        let ownedCount = $('#pokemon-wrapper > .pokemon.owned').length
-
-        $('.pokemon-result-count').html(ownedCount + ' owned of ' + $('#pokemon-wrapper > .pokemon').length + ' pokemon found').fadeIn("fast")
-    } else {
-        $('.pokemon-result-count').html('No pokemon found :(').fadeIn("fast")
-
-        $(this).fadeOut("fast", function () {
-            $(this).html('<p id="no-results">Unfortunatly there are no Pokemon that match your criteria. Please select a different option from the filters above.</p>').fadeIn("fast")
-            $('#pokemon-list .ui.dimmer').dimmer('hide')
-
-        })
+        iob.observe(iob_target)
+    } else if (type === 'update') {
+        for (let i = 0; i < list.length; i++) {
+            let _pokemon = list[i];
+            $(this)
+                .find('[data-key="' + _pokemon.forme + '"]')
+                .replaceWith([_pokemon].map(Pokemon).join(''))
+        }
     }
-}
+
+    $('.lazy').Lazy({
+        effect: 'fadeIn',
+        effectTime: '100',
+        appendScroll: $('#pokemon-wrapper'),
+    });
+};
 
 $.fn.renderpokemoncard = function () {
     const PokemonCard = ({name, forme, dex, gen, p_uid, released, owned, shiny, shinyowned, male, maleowned, female, femaleowned, ungendered, ungenderedowned, luckyowned, type1, type2, classification, max_cp, base_attack, base_defense, base_stamina, shadow, shadowowned, purified, purifiedowned}) => `
-        <div class="ui modal pokemon-card data-key="${forme}" data-dex="${dex}">
+        <div class="ui modal pokemon-card" data-key="${forme}" data-dex="${dex}">
             <i class="close icon"></i>
             <div class="header">
                 #${dex.toString().padStart(3, '0')} ${forme}
@@ -244,24 +240,24 @@ $.fn.renderpokemoncard = function () {
                 </div>
             </div>
         </div>
-    `
+    `;
 
-    var _pokemon = $(this).parent()
-    let _qs = '?name=' + encodeURIComponent(_pokemon.data('key')) + '&cat=unreleased&list=' + qs.list
+    let _pokemon = $(this).parent();
+    let _qs = '?name=' + encodeURIComponent(_pokemon.data('key')) + '&cat=unreleased&list=' + qs.list;
 
     $.ajax({
         url: '/api/' + $('#user-profile').data('username') + '/pokemon/get' + _qs,
         type: 'GET',
         success: function (r) {
-            let _pokemon_list = r['pokemon']
+            let _pokemon_list = r['pokemon'];
 
             if (_pokemon_list.length > 0) {
-                let _pokemon = _pokemon_list[0]
+                let _pokemon = _pokemon_list[0];
 
-                $('body .pokemon-card').remove()
-                $('body').append([_pokemon].map(PokemonCard).join(''))
+                $('body .pokemon-card').remove();
+                $('body').append([_pokemon].map(PokemonCard).join(''));
 
-                $('.ui.progress').progress({showActivity: false,})
+                $('.ui.progress').progress({showActivity: false,});
 
                 $('.pokemon-card.modal').modal({
                     blurring: true,
@@ -272,18 +268,18 @@ $.fn.renderpokemoncard = function () {
             console.log(e.status)
         }
     })
-}
+};
 
 $.fn.api.settings.api = {
     'search': '/api/users/get?q={query}',
-}
+};
 
 $.taketour = function () {
     introJs()
         .oncomplete(function () {
-            let obj = {}
-            obj['tour'] = true
-            let data = {data: JSON.stringify(obj)}
+            let obj = {};
+            obj['tour'] = true;
+            let data = {data: JSON.stringify(obj)};
 
             $.ajax({
                 url: '/api/user/' + $('#user-profile').data('username') + '/settings/update',
@@ -326,39 +322,54 @@ $.taketour = function () {
             intro: "..and last but but by no means least these options will allow you to get back to your own profile, or to log out if you want to leave (*sniff*)<br /><br />That marks the end of our tour. Hope you find the tool useful, and happy hunting!",
         })
         .start()
-}
+};
 
 // INITIALISE UI
 
-let qs = {}
-let filtersactive = true
+let qs = {};
+let filtersactive = true;
+let iob_target = document.querySelector('#sentinel');
+
+let iob = new IntersectionObserver(entries => {
+        if (entries[0].intersectionRatio <= 0) {
+            return;
+        }
+
+        $('#pokemon-wrapper').renderallpokemon()
+    }, {
+        root: document.querySelector('#pokemon-list'),
+        rootMargin: '50px 0px 50px',
+        threshold: 0.1
+    }
+);
 
 $(function () {
-    var params = new window.URLSearchParams(window.location.search)
-    var viewportWidth = $(window).width()
+    let params = new window.URLSearchParams(window.location.search);
+    let viewportWidth = $(window).width();
+
     if (viewportWidth < 421) {
-        $("#pokemon-wrapper").addClass("list-view")
-        $("#filter-view .th-list").hide()
+        $("#pokemon-wrapper").addClass("list-view");
+        $("#filter-view .th-list").hide();
         $("#filter-view .th-large").show()
     }
 
     if (params.get("page") === "legacy") {
-        $(".sidebar-link.legacy-moves").trigger("click")
+        $(".sidebar-link.legacy-moves").trigger("click");
         return
     }
 
     if (params.get("page") === "raid") {
-        $(".sidebar-link.raid-bosses").trigger("click")
+        $(".sidebar-link.raid-bosses").trigger("click");
         return
     }
 
     if (params.get("page") === "eggs") {
-        $(".sidebar-link.egg-hatches").trigger("click")
+        $(".sidebar-link.egg-hatches").trigger("click");
         return
     }
 
     if (params.get("page") === "settings") {
-        $(".sidebar-link.user-settings").trigger("click")
+        $(".sidebar-link.user-settings").trigger("click");
         return
     }
 
@@ -378,10 +389,11 @@ $(function () {
         qs.list = $('#list-select').val()
     }
 
-    $('.ui.search').search()
-    $('#pokemon-wrapper').renderallpokemon()
+    qs.c = 0;
 
-    let clipboard = new ClipboardJS('.list-header .export-list')
+    $('.ui.search').search();
+
+    let clipboard = new ClipboardJS('.list-header .export-list');
     $('.list-header .export-list').popup({
         on: 'click',
         position: 'right center',
@@ -390,37 +402,39 @@ $(function () {
                 $('.list-header .export-list').popup("hide")
             }, 1500)
         }
-    })
+    });
 
     if ($('body').data("take-tour") === 'True') {
         $.taketour()
     }
-})
+
+    iob.observe(iob_target);
+});
 
 // SIDEBAR
 
 $('#sidebartoggle').click(function () {
     $('#sidebar').toggleClass('show-sidebar')
-})
+});
 
 $('.sidebar-link').mouseenter(function () {
     $(this).children(".icon.right").transition('jiggle')
-})
+});
 
 // POKEDEX
 
 $('.sidebar-link.living-dex').click(function () {
     if (!$('.sidebar-link.living-dex').hasClass('active')) {
         $('.content-panel.active').fadeOut('fast', function () {
-            $('.content-panel.active').removeClass('active')
-            $('.sidebar-link.active').removeClass('active')
-            $('.sidebar-link.living-dex').addClass('active')
-            $('#pokemon-wrapper').renderallpokemon()
-            $('.content-panel.dex').addClass('active').fadeIn()
+            $('.content-panel.active').removeClass('active');
+            $('.sidebar-link.active').removeClass('active');
+            $('.sidebar-link.living-dex').addClass('active');
+            $('#pokemon-wrapper').renderallpokemon();
+            $('.content-panel.dex').addClass('active').fadeIn();
             $('#sidebar').removeClass('show-sidebar')
         })
     }
-})
+});
 
 $('#pokemon-filters .ui.dropdown').dropdown({
     clearable: true,
@@ -429,20 +443,32 @@ $('#pokemon-filters .ui.dropdown').dropdown({
     }
 }).on('change', '#gen-select', function () {
     if (filtersactive) {
-        qs.gen = $('#gen-select').val()
+        qs.gen = $('#gen-select').val();
+        qs.c = 0;
+
+        iob.unobserve(iob_target);
+        $('#pokemon-wrapper .pokemon').remove();
         $('#pokemon-list').renderallpokemon()
     }
 }).on('change', '#cat-select', function () {
     if (filtersactive) {
-        qs.cat = $('#cat-select').val()
+        qs.cat = $('#cat-select').val();
+        qs.c = 0;
+
+        iob.unobserve(iob_target);
+        $('#pokemon-wrapper .pokemon').remove();
         $('#pokemon-list').renderallpokemon()
     }
 }).on('change', '#own-select', function () {
     if (filtersactive) {
-        qs.own = $('#own-select').val()
+        qs.own = $('#own-select').val();
+        qs.c = 0;
+
+        iob.unobserve(iob_target);
+        $('#pokemon-wrapper .pokemon').remove();
         $('#pokemon-list').renderallpokemon()
     }
-})
+});
 
 $('.list-header .ui.dropdown').dropdown({
     apiSettings: {
@@ -451,24 +477,27 @@ $('.list-header .ui.dropdown').dropdown({
         cache: false,
     },
     onChange: function (value, text, $selectedItem) {
-        delete qs.gen
-        delete qs.own
-        delete qs.cat
-        qs.list = $('#list-select').val()
+        delete qs.gen;
+        delete qs.own;
+        delete qs.cat;
+        qs.c = 0;
+        qs.list = $('#list-select').val();
 
-        $('#pokemon-list').renderallpokemon()
+        $('#pokemon-filters .ui.dropdown').dropdown('clear');
+        $('#pokemon-wrapper .pokemon').remove();
+        $('#pokemon-wrapper').renderallpokemon()
     }
-})
+});
 
 $('#filter-view i').popup().click(function () {
-    $('#filter-view .fa-th-large').toggle()
-    $('#filter-view .fa-th-list').toggle()
+    $('#filter-view .fa-th-large').toggle();
+    $('#filter-view .fa-th-list').toggle();
     $('#pokemon-wrapper').toggleClass('list-view')
-})
+});
 
 $('#pokemon-wrapper').on('click', '.pokemon .img', function () {
     $(this).renderpokemoncard()
-})
+});
 
 $('#pokemon-wrapper').on('click', 'div.opt.shiny', function () {
     $(this).updatestate('shinyowned')
@@ -488,18 +517,18 @@ $('#pokemon-wrapper').on('click', 'div.opt.shiny', function () {
     $(this).updatestate('shadowowned')
 }).on('click', 'div.opt.purified', function () {
     $(this).updatestate('purifiedowned')
-})
+});
 
 // LEGACY MOVES
 
 $('.sidebar-link.legacy-moves').click(function () {
     if (!$('.sidebar-link.legacy-moves').hasClass('active')) {
         $('.content-panel.active').fadeOut('fast', function () {
-            $('.content-panel.active').removeClass('active')
-            $('.sidebar-link.active').removeClass('active')
-            $('.sidebar-link.legacy-moves').addClass('active')
-            $('.content-panel.legacy-moves #legacy-moves-list').html('')
-            $('.content-panel.legacy-moves').addClass('active').fadeIn()
+            $('.content-panel.active').removeClass('active');
+            $('.sidebar-link.active').removeClass('active');
+            $('.sidebar-link.legacy-moves').addClass('active');
+            $('.content-panel.legacy-moves #legacy-moves-list').html('');
+            $('.content-panel.legacy-moves').addClass('active').fadeIn();
             $('#sidebar').removeClass('show-sidebar')
         })
     }
@@ -509,12 +538,12 @@ $('.sidebar-link.legacy-moves').click(function () {
 
 $('.sidebar-link.raid-bosses').click(function () {
     $('.content-panel.active').fadeOut('fast', function () {
-        $('.content-panel.active').removeClass('active')
-        $('.sidebar-link.active').removeClass('active')
-        $('.sidebar-link.raid-bosses').addClass('active')
-        $('.content-panel.raid-bosses #raid-bosses-list').html('')
-        $('.content-panel.raid-bosses').addClass('active').fadeIn()
-        $('#sidebar').removeClass('show-sidebar')
+        $('.content-panel.active').removeClass('active');
+        $('.sidebar-link.active').removeClass('active');
+        $('.sidebar-link.raid-bosses').addClass('active');
+        $('.content-panel.raid-bosses #raid-bosses-list').html('');
+        $('.content-panel.raid-bosses').addClass('active').fadeIn();
+        $('#sidebar').removeClass('show-sidebar');
 
         $.ajax({
             url: '/api/pokemon/raidbosses/get',
@@ -539,20 +568,20 @@ $('.sidebar-link.raid-bosses').click(function () {
                             <div class="cp_range_weather">${min_cp_weather.toLocaleString('en')} - ${max_cp_weather.toLocaleString('en')}</div>
                         </div>
                     </div>
-                `
+                `;
 
-                let _raid_bosses = r['raidbosses']
-                let sorted_tiers = []
+                let _raid_bosses = r['raidbosses'];
+                let sorted_tiers = [];
 
                 for (const key in _raid_bosses) {
                     sorted_tiers[sorted_tiers.length] = key
                 }
 
-                sorted_tiers.sort().reverse()
+                sorted_tiers.sort().reverse();
 
                 for (const tier in sorted_tiers) {
-                    let _tier = sorted_tiers[tier]
-                    let _raid_bosses_tier = _raid_bosses[_tier]
+                    let _tier = sorted_tiers[tier];
+                    let _raid_bosses_tier = _raid_bosses[_tier];
 
                     $("#raid-bosses-list")
                         .append('<div class="raid-boss-tier t' + _tier + ' ui segment">' + _raid_bosses_tier.map(RaidBoss).join('') + '</div>')
@@ -564,7 +593,7 @@ $('.sidebar-link.raid-bosses').click(function () {
             }
         })
     })
-})
+});
 
 // EGGS
 
@@ -588,22 +617,29 @@ $('.sidebar-link.egg-hatches').click(function () {
                             <div class="cp_range">${min_hatch_cp} - ${max_hatch_cp}</div>
                         </div>
                     </div>
-                `
+                `;
 
-                let _egg_hatches = r['egghatches']
+                let _egg_hatches = r['egghatches'];
 
-                $('.content-panel.active').removeClass('active')
-                $('.sidebar-link.active').removeClass('active')
-                $('.sidebar-link.egg-hatches').addClass('active')
-                $('.content-panel.egg-hatches #egg-hatches-list').html('')
-                $('.content-panel.egg-hatches').addClass('active').fadeIn()
-                $('#sidebar').removeClass('show-sidebar')
+                $('.content-panel.active').removeClass('active');
+                $('.sidebar-link.active').removeClass('active');
+                $('.sidebar-link.egg-hatches').addClass('active');
+                $('.content-panel.egg-hatches #egg-hatches-list').html('');
+                $('.content-panel.egg-hatches').addClass('active').fadeIn();
+                $('#sidebar').removeClass('show-sidebar');
 
                 for (const [key, value] of Object.entries(_egg_hatches)) {
-                    let _egg_hatches_group = value
+                    let _egg_hatches_group = value;
 
                     $("#egg-hatches-list")
-                        .append('<div class="ui segment egg-hatch-tier tier-' + key + 'km"><div class="tier-header"><img src="../static/img/egg_' + key + 'km.png" />' + key + 'KM Eggs</div><div class="pokemon_list">' + _egg_hatches_group.map(EggHatch).join('') + '</div></div>')
+                        .append(`<div class="ui segment egg-hatch-tier tier-${key}km">
+                                    <div class="tier-header">
+                                        <img src="../static/img/egg_${key}km.png" />
+                                        ${key}KM Eggs
+                                    </div>
+                                    <div class="pokemon_list">${_egg_hatches_group.map(EggHatch).join('')}</div>
+                                 </div>
+                                `)
                         .fadeIn()
                 }
             },
@@ -612,7 +648,7 @@ $('.sidebar-link.egg-hatches').click(function () {
             }
         })
     })
-})
+});
 
 
 // SETTINGS
@@ -623,7 +659,7 @@ $('.sidebar-link.user-settings').click(function () {
             url: '/api/user/' + $('#user-profile').data('username') + '/settings/get',
             type: 'GET',
             success: function (r) {
-                let _settings = r['settings']
+                let _settings = r['settings'];
 
                 if (!_settings.public) {
                     $('.content-panel.user-settings .ui.checkbox.private-profile').checkbox('set checked')
@@ -637,12 +673,12 @@ $('.sidebar-link.user-settings').click(function () {
                     $('.content-panel.user-settings .ui.checkbox.private-profile').checkbox('set unchecked')
                 }
 
-                $('.content-panel.active').removeClass('active')
-                $('.sidebar-link.active').removeClass('active')
-                $('.sidebar-link.user-settings').addClass('active')
-                $('.content-panel.user-settings #email').val(_settings.email)
-                $('.content-panel.user-settings #level').val(_settings.player_level)
-                $('.content-panel.user-settings').addClass('active').fadeIn()
+                $('.content-panel.active').removeClass('active');
+                $('.sidebar-link.active').removeClass('active');
+                $('.sidebar-link.user-settings').addClass('active');
+                $('.content-panel.user-settings #email').val(_settings.email);
+                $('.content-panel.user-settings #level').val(_settings.player_level);
+                $('.content-panel.user-settings').addClass('active').fadeIn();
                 $('#sidebar').removeClass('show-sidebar')
             },
             error: function (e) {
@@ -650,68 +686,68 @@ $('.sidebar-link.user-settings').click(function () {
             }
         })
     })
-})
+});
 
 $('.sidebar-link.support-site').click(function () {
     $('.ui.modal.support-site-popup').modal('show')
-})
+});
 
 $('#update-email').click(function () {
-    let _obj = {}
-    _obj['email'] = $('#email').val()
-    let data = {data: JSON.stringify(_obj)}
+    let _obj = {};
+    _obj['email'] = $('#email').val();
+    let data = {data: JSON.stringify(_obj)};
 
     $.ajax({
         url: '/api/user/' + $('#user-profile').data('username') + '/settings/update',
         data: data,
         type: 'PUT',
         success: function (r) {
-            $('#update-email').removeClass("primary").addClass("positive").html("<i class='fas fa-fw fa-check'></i> Email Saved!").transition('pulse')
+            $('#update-email').removeClass("primary").addClass("positive").html("<i class='fas fa-fw fa-check'></i> Email Saved!").transition('pulse');
             setTimeout(function () {
                 $('#update-email').transition('pulse').removeClass("positive").addClass("primary").html("<i class='fas fa-fw fa-envelope'></i> Update Email")
             }, 3000)
         },
         error: function (e) {
-            console.log(e.status)
-            $('#update-email').removeClass("primary").addClass("negative").html("<i class='fas fa-fw fa-times'></i> Already Taken!").transition('shake')
+            console.log(e.status);
+            $('#update-email').removeClass("primary").addClass("negative").html("<i class='fas fa-fw fa-times'></i> Already Taken!").transition('shake');
             setTimeout(function () {
                 $('#update-email').transition('pulse').removeClass("negative").addClass("primary").html("<i class='fas fa-fw fa-envelope'></i> Update Email")
             }, 3000)
         }
     })
-})
+});
 
-$('#update-player-level').click(function () {
-    let _obj = {}
-    _obj['player_level'] = $('#level').val()
-    let data = {data: JSON.stringify(_obj)}
+$(`#update-player-level`).click(function () {
+    let _obj = {};
+    _obj['player_level'] = $('#level').val();
+    let data = {data: JSON.stringify(_obj)};
 
     $.ajax({
         url: '/api/user/' + $('#user-profile').data('username') + '/settings/update',
         data: data,
         type: 'PUT',
         success: function (r) {
-            $('#update-player-level').removeClass("primary").addClass("positive").html("<i class='fas fa-fw fa-check'></i> Leveled Up!").transition('pulse')
+            $('#update-player-level').removeClass("primary").addClass("positive").html(`<i class="fas fa-fw fa-check"></i> Leveled Up!`).transition('pulse');
             setTimeout(function () {
                 $('#update-player-level').transition('pulse').removeClass("positive").addClass("primary").html("<i class='fas fa-fw fa-hand-point-up'></i> Level Up!")
             }, 3000)
         },
         error: function (e) {
-            console.log(e.status)
-            $('#update-player-level').removeClass("primary").addClass("negative").html("<i class='fas fa-fw fa-times'></i> Invalid Level!").transition('shake')
+            console.log(e.status);
+            $('#update-player-level').removeClass("primary").addClass("negative").html("<i class='fas fa-fw fa-times'></i> Invalid Level!").transition('shake');
             setTimeout(function () {
                 $('#update-player-level').transition('pulse').removeClass("negative").addClass("primary").html("<i class='fas fa-fw fa-hand-point-up'></i> Level Up!")
             }, 3000)
         }
     })
-})
+});
 
 $('.create-dex').click(function () {
-    $('.ui.modal.create-dex-popup .ui.dropdown').dropdown()
+    $('.ui.modal.create-dex-popup .ui.dropdown').dropdown();
     $('.ui.modal.create-dex-popup').modal('show')
-})
+});
 
-$('.create-dex-popup .ui.form').form({
+$(`.create-dex-popup .ui.form`).form({
     on: 'blur',
     inline: true,
     fields: {
@@ -736,38 +772,38 @@ $('.create-dex-popup .ui.form').form({
             identifier: "viewsettings",
         }
     }
-})
+});
 
-$('.ui.modal.create-dex-popup')
+$(`.ui.modal.create-dex-popup`)
     .modal({
         closable: true,
         onHidden: function () {
-            $('.create-dex-popup .ui.form').form('reset')
+            $('.create-dex-popup .ui.form').form('reset');
             $('.create-dex-popup .ui.form .ui.error.message').empty()
         },
         onApprove: function () {
-            let _obj = {}
-            let _vs = {}
-            let _form = $('.create-dex-popup .ui.form')
+            let _obj = {};
+            let _vs = {};
+            let _form = $('.create-dex-popup .ui.form');
 
             if (!_form.form('is valid')) {
                 return false
             }
 
-            _obj['name'] = $('.create-dex-popup #list-name').val()
-            _obj['colour'] = $('.create-dex-popup #list-colour').val()
-            _obj['cat-filters'] = $('.create-dex-popup #cat-select').val()
-            _obj['gen-filters'] = $('.create-dex-popup #gen-select').val()
+            _obj['name'] = $('.create-dex-popup #list-name').val();
+            _obj['colour'] = $('.create-dex-popup #list-colour').val();
+            _obj['cat-filters'] = $('.create-dex-popup #cat-select').val();
+            _obj['gen-filters'] = $('.create-dex-popup #gen-select').val();
 
             for (const [i, v] of _form.form('get value', 'viewsettings').entries()) {
                 if (v) {
                     _vs[v] = true
                 }
             }
-            _obj['view-settings'] = _vs
+            _obj['view-settings'] = _vs;
 
-            let data = {data: JSON.stringify(_obj)}
-            let _form_valid = false
+            let data = {data: JSON.stringify(_obj)};
+            let _form_valid = false;
 
             $.ajax({
                 async: false,
@@ -775,24 +811,24 @@ $('.ui.modal.create-dex-popup')
                 data: data,
                 type: 'PUT',
                 success: function (r) {
-                    $('.ui.dropdown.list-edit-select').dropdown('change values', null)
-                    $('.list-header .ui.dropdown').dropdown('change values', null)
-                    _form.form('validate form')
-                    _form.form('reset')
+                    $('.ui.dropdown.list-edit-select').dropdown('change values', null);
+                    $('.list-header .ui.dropdown').dropdown('change values', null);
+                    _form.form('validate form');
+                    _form.form('reset');
                     _form_valid = true
                 },
                 error: function (e) {
-                    console.log(e.status)
+                    console.log(e.status);
                     _form.form("add errors", [e.responseJSON["message"]])
                 }
-            })
+            });
 
             return _form_valid
         }
-    })
+    });
 
-let editing_list_value = ""
-let editing_list_name = ""
+let editing_list_value = "";
+let editing_list_name = "";
 
 $('.ui.dropdown.list-edit-select').dropdown({
     apiSettings: {
@@ -809,7 +845,7 @@ $('.ui.dropdown.list-edit-select').dropdown({
             url: '/api/' + $('#user-profile').data('username') + '/dex/get?list=' + value,
             type: 'GET',
             success: function (r) {
-                _vs = []
+                let _vs = [];
 
                 for (const [key, value] of Object.entries(r["list-settings"]["view-settings"])) {
                     if (value) {
@@ -817,7 +853,7 @@ $('.ui.dropdown.list-edit-select').dropdown({
                     }
                 }
 
-                $('.ui.modal.edit-dex-popup .ui.dropdown').dropdown('clear')
+                $('.ui.modal.edit-dex-popup .ui.dropdown').dropdown('clear');
 
                 $('.edit-dex-popup .ui.form').form('set values', {
                     oldlist: r["list-settings"]["value"],
@@ -826,12 +862,12 @@ $('.ui.dropdown.list-edit-select').dropdown({
                     genfilters: r["list-settings"]["gen-filters"].split(","),
                     catfilters: r["list-settings"]["cat-filters"].split(","),
                     viewsettings: _vs,
-                })
+                });
 
-                editing_list_value = r["list-settings"]["value"]
-                editing_list_name = r["list-settings"]["name"]
+                editing_list_value = r["list-settings"]["value"];
+                editing_list_name = r["list-settings"]["name"];
 
-                $('.ui.modal.edit-dex-popup').modal('show')
+                $('.ui.modal.edit-dex-popup').modal('show');
                 $('.ui.dropdown.list-edit-select').dropdown('clear')
             },
             error: function (e) {
@@ -839,7 +875,7 @@ $('.ui.dropdown.list-edit-select').dropdown({
             }
         })
     }
-})
+});
 
 $('.edit-dex-popup .ui.form').form({
     on: 'blur',
@@ -856,29 +892,29 @@ $('.edit-dex-popup .ui.form').form({
             }]
         }
     }
-})
+});
 
 $('.ui.modal.edit-dex-popup')
     .modal({
         closable: true,
         onHidden: function () {
-            $('.edit-dex-popup .ui.form').form('reset')
+            $('.edit-dex-popup .ui.form').form('reset');
             $('.edit-dex-popup .ui.form .ui.error.message').empty()
         },
         onApprove: function () {
-            let _obj = {}
-            let _vs = {}
-            let _form = $('.edit-dex-popup .ui.form')
+            let _obj = {};
+            let _vs = {};
+            let _form = $('.edit-dex-popup .ui.form');
 
             if (!_form.form('is valid')) {
                 return false
             }
 
-            _obj['name'] = $('.edit-dex-popup #list-name').val()
-            _obj['old-list'] = $('.edit-dex-popup #old-list').val()
-            _obj['colour'] = $('.edit-dex-popup #list-colour').val()
-            _obj['cat-filters'] = $('.edit-dex-popup #cat-select').val()
-            _obj['gen-filters'] = $('.edit-dex-popup #gen-select').val()
+            _obj['name'] = $('.edit-dex-popup #list-name').val();
+            _obj['old-list'] = $('.edit-dex-popup #old-list').val();
+            _obj['colour'] = $('.edit-dex-popup #list-colour').val();
+            _obj['cat-filters'] = $('.edit-dex-popup #cat-select').val();
+            _obj['gen-filters'] = $('.edit-dex-popup #gen-select').val();
 
             for (const [i, v] of _form.form('get value', 'viewsettings').entries()) {
                 if (v) {
@@ -886,10 +922,10 @@ $('.ui.modal.edit-dex-popup')
                 }
             }
 
-            _obj['view-settings'] = _vs
+            _obj['view-settings'] = _vs;
 
-            let data = {data: JSON.stringify(_obj)}
-            let _form_valid = false
+            let data = {data: JSON.stringify(_obj)};
+            let _form_valid = false;
 
             $.ajax({
                 url: '/api/' + $('#user-profile').data('username') + '/dex/update',
@@ -897,17 +933,17 @@ $('.ui.modal.edit-dex-popup')
                 type: 'PUT',
                 async: false,
                 success: function (r) {
-                    $('.ui.dropdown.list-edit-select').dropdown('change values', null)
-                    $('.list-header .ui.dropdown').dropdown('change values', null)
-                    _form.form('validate form')
-                    _form.form('reset')
+                    $('.ui.dropdown.list-edit-select').dropdown('change values', null);
+                    $('.list-header .ui.dropdown').dropdown('change values', null);
+                    _form.form('validate form');
+                    _form.form('reset');
                     _form_valid = true
                 },
                 error: function (e) {
-                    console.log(e.status)
+                    console.log(e.status);
                     _form.form("add errors", [e.responseJSON["message"]])
                 }
-            })
+            });
 
             return _form_valid
         },
@@ -915,14 +951,14 @@ $('.ui.modal.edit-dex-popup')
             $(".ui.modal.delete-dex-popup").modal({
                 closable: true,
                 onShow: function () {
-                    _header = $(this).find('.header')
-                    _content = $(this).find('.content')
+                    _header = $(this).find('.header');
+                    _content = $(this).find('.content');
 
-                    _header.html("Delete list - " + editing_list_name)
+                    _header.html("Delete list - " + editing_list_name);
                     _content.html("<p> Are you sure you want to delete " + editing_list_name + "? This is irreversible!</p>")
                 },
                 onHidden: function () {
-                    editing_list_value = ""
+                    editing_list_value = "";
                     editing_list_name = ""
                 },
                 onApprove: function () {
@@ -930,7 +966,7 @@ $('.ui.modal.edit-dex-popup')
                         url: '/api/' + $('#user-profile').data('username') + '/dex/delete?list=' + editing_list_value,
                         type: 'GET',
                         success: function (r) {
-                            $('.ui.dropdown.list-edit-select').dropdown('change values', null)
+                            $('.ui.dropdown.list-edit-select').dropdown('change values', null);
                             $('.list-header .ui.dropdown').dropdown('change values', null)
                         },
                         error: function (e) {
@@ -940,13 +976,13 @@ $('.ui.modal.edit-dex-popup')
                 }
             }).modal('show')
         }
-    })
+    });
 
 $('.ui.checkbox.private-profile').checkbox({
     onChange: function () {
-        let _obj = {}
-        _obj['public'] = $('.ui.checkbox.private-profile').checkbox('is unchecked')
-        let data = {data: JSON.stringify(_obj)}
+        let _obj = {};
+        _obj['public'] = $('.ui.checkbox.private-profile').checkbox('is unchecked');
+        let data = {data: JSON.stringify(_obj)};
 
         $.ajax({
             url: '/api/user/' + $('#user-profile').data('username') + '/settings/update',
@@ -960,13 +996,13 @@ $('.ui.checkbox.private-profile').checkbox({
             }
         })
     }
-})
+});
 
 $('.ui.checkbox.unsubscribe').checkbox({
     onChange: function () {
-        let _obj = {}
-        _obj['unsubscribe'] = $('.ui.checkbox.unsubscribe').checkbox('is checked')
-        let data = {data: JSON.stringify(_obj)}
+        let _obj = {};
+        _obj['unsubscribe'] = $('.ui.checkbox.unsubscribe').checkbox('is checked');
+        let data = {data: JSON.stringify(_obj)};
 
         $.ajax({
             url: '/api/user/' + $('#user-profile').data('username') + '/settings/update',
@@ -980,11 +1016,11 @@ $('.ui.checkbox.unsubscribe').checkbox({
             }
         })
     }
-})
+});
 
 $('.delete-profile').click(function () {
     $('.tiny.modal.delete-profile').modal('show')
-})
+});
 
 $('.ui.tiny.modal.delete-profile')
     .modal({
@@ -1000,4 +1036,4 @@ $('.ui.tiny.modal.delete-profile')
                 }
             })
         }
-    })
+    });

@@ -186,7 +186,10 @@
                         <div class="ui inverted dimmer">
                             <div class="ui text loader">Loading</div>
                         </div>
-                        <div id="pokemon-wrapper"></div>
+                        <div id="pokemon-wrapper">
+
+                            <div id="sentinel"></div>
+                        </div>
                     </div>
                 </div>
 
@@ -795,5 +798,6 @@
     <script src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery-lazy@1.7.10/jquery.lazy.min.js"></script>
     <script src="{{ url_for('static', filename='bundle.js') }}"></script>
 {% endblock %}

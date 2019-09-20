@@ -61,15 +61,15 @@ def fetch_pokemon(username):
         return Response(r, status=403, mimetype="application/json")
 
     pokemon_list = []
-    list = request.args.get("list")
+    user_list = request.args.get("list")
     cat = request.args.get("cat")
     gen = request.args.get("gen")
     own = request.args.get("own")
     name = request.args.get("name", None)
-    dex_only = request.args.get("dex-only", False)
+    count = int(request.args.get("c", 0))
 
     active_list = next(
-        (item for item in user.pokemon_owned if item["value"] == list),
+        (item for item in user.pokemon_owned if item["value"] == user_list),
         user.pokemon_owned[0],
     )
 
@@ -215,6 +215,66 @@ def fetch_pokemon(username):
             Pokemon.p_uid.notin_(["808_00", "809_00", "891_00", "892_00"])
         )
 
+    total_owned = 0
+    total_pokemon_list = [u.__dict__ for u in filtered_query.all()]
+    _pokemon_owned = []
+
+    for p in owned_pokemon:
+        if "shiny" in cat:
+            _owned = p.get("shinyowned", False)
+        elif "lucky" in cat:
+            _owned = p.get("luckyowned", False)
+        elif "shadow" in cat:
+            _owned = p.get("shadowowned", False)
+        else:
+            _owned = p.get("owned", False)
+
+        if _owned and any(d["forme"] == p["forme"] for d in total_pokemon_list):
+            total_owned = total_owned + 1
+            _pokemon_owned.append(p["forme"])
+
+    if own == "owned":
+        filtered_query = filtered_query.filter(Pokemon.forme.in_(_pokemon_owned))
+    elif own == "notowned":
+        filtered_query = filtered_query.filter(Pokemon.forme.notin_(_pokemon_owned))
+
+    total_results = filtered_query.count()
+
+    pokemon_dex = []
+
+    for p in total_pokemon_list:
+        pokemon_dex.append(p["dex"])
+
+    if "shiny" in cat:
+        pokemon_dex.append("&shiny")
+
+    if "legendary" in cat:
+        pokemon_dex.append("&legendary")
+
+    if "mythical" in cat:
+        pokemon_dex.append("&mythical")
+
+    if "lucky" in cat:
+        pokemon_dex.append("&lucky")
+
+    if "shadow" in cat:
+        pokemon_dex.append("&shadow")
+
+    if "alolan" in cat:
+        pokemon_dex.append("&alola")
+
+    if "level_1" in cat:
+        pokemon_dex.append("&cp10-100")
+
+    if count == 0:
+        filtered_query = filtered_query.order_by("p_uid").slice(0, 36)
+    elif count >= filtered_query.count():
+        db.session.close()
+        r = json.dumps({"success": True, "pokemon": "end", "updated-qs": updated_qs})
+        return Response(r, status=200, mimetype="application/json")
+    else:
+        filtered_query = filtered_query.order_by("p_uid").slice(count, count + 36)
+
     for u in filtered_query.all():
         pokemon_list.append(u.as_dict())
 
@@ -231,55 +291,17 @@ def fetch_pokemon(username):
         ):
             p["forme"] = p["name"]
 
-    if own in ("owned", "notowned"):
-        _pokemon_owned = []
-
-        for p in pokemon:
-            if "shiny" in cat:
-                _owned = p.get("shinyowned", False)
-            elif "lucky" in cat:
-                _owned = p.get("luckyowned", False)
-            elif "shadow" in cat:
-                _owned = p.get("shadowowned", False)
-            else:
-                _owned = p.get("owned", False)
-
-            if (own == "owned" and _owned) or (own == "notowned" and not _owned):
-                _pokemon_owned.append(p)
-
-        pokemon = _pokemon_owned
-
-    if dex_only:
-        pokemon_dex = []
-
-        for p in pokemon:
-            pokemon_dex.append(p["dex"])
-
-        if "shiny" in cat:
-            pokemon_dex.append("&shiny")
-
-        if "legendary" in cat:
-            pokemon_dex.append("&legendary")
-
-        if "mythical" in cat:
-            pokemon_dex.append("&mythical")
-
-        if "lucky" in cat:
-            pokemon_dex.append("&lucky")
-
-        if "shadow" in cat:
-            pokemon_dex.append("&shadow")
-
-        if "alolan" in cat:
-            pokemon_dex.append("&alola")
-
-        if "level_1" in cat:
-            pokemon_dex.append("&cp10-100")
-
-        pokemon = pokemon_dex
-
     db.session.close()
-    r = json.dumps({"success": True, "pokemon": pokemon, "updated-qs": updated_qs})
+    r = json.dumps(
+        {
+            "success": True,
+            "pokemon": pokemon,
+            "dex_str": pokemon_dex,
+            "updated-qs": updated_qs,
+            "total_results": total_results,
+            "total_owned": total_owned,
+        }
+    )
     return Response(r, status=200, mimetype="application/json")
 
 
@@ -351,14 +373,19 @@ def update_pokemon(username):
 
     for p in updated_pokemon_list:
         if (
-            ("show-spinda" not in active_list["view-settings"].keys() or ("show-spinda", False) in active_list["view-settings"].items())
+            (
+                "show-spinda" not in active_list["view-settings"].keys()
+                or ("show-spinda", False) in active_list["view-settings"].items()
+            )
             and p["forme"] == "Spinda #1"
         ) or (
-            ("show-unown" not in active_list["view-settings"].keys() or ("show-unown", False) in active_list["view-settings"].items())
+            (
+                "show-unown" not in active_list["view-settings"].keys()
+                or ("show-unown", False) in active_list["view-settings"].items()
+            )
             and p["forme"] == "Unown (F)"
         ):
             p["forme"] = p["name"]
-
 
     r = json.dumps({"success": True, "updated_pokemon": updated_pokemon_list})
     return Response(r, status=200, mimetype="application/json")
