@@ -149,11 +149,11 @@ $.fn.renderpokemon = function (list, type) {
             data-key="${forme}"
             data-dex="${dex}">
             
-            <div class="img"><img class="lazy" data-src="../static/img/sprites/${gen}/pokemon_icon_${p_uid}${shinyowned ? '_shiny' : ''}.png" alt="${p_uid}" /></div>
+            <div class="img"><img class="lazy" src="../static/img/sprites/${gen}/pokemon_icon_${p_uid}${shinyowned ? '_shiny' : ''}.png" alt="${p_uid}" /></div>
             <div class="info">${forme}</div>
             <div class="type">
-                ${type1 !== null ? '<img class="lazy" data-src="../static/img/types/icon_' + type1 + '.png" alt="' + type1 + '" />' : ''}
-                ${type2 !== null ? '<img class="lazy" data-src="../static/img/types/icon_' + type2 + '.png" alt="' + type2 + '" />' : ''}
+                ${type1 !== null ? '<img class="lazy" src="../static/img/types/icon_' + type1 + '.png" alt="' + type1 + '" />' : ''}
+                ${type2 !== null ? '<img class="lazy" src="../static/img/types/icon_' + type2 + '.png" alt="' + type2 + '" />' : ''}
             </div>
             <div class="dex-num">#${dex.toString().padStart(3, '0')}</div>
             <div class="pm-opt">
@@ -186,12 +186,6 @@ $.fn.renderpokemon = function (list, type) {
                 .replaceWith([_pokemon].map(Pokemon).join(''))
         }
     }
-
-    $('.lazy').Lazy({
-        effect: 'fadeIn',
-        effectTime: '100',
-        appendScroll: $('#pokemon-wrapper'),
-    });
 };
 
 $.fn.renderpokemoncard = function () {
