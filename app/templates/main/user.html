@@ -84,7 +84,8 @@
                 <div class="dex content-panel active">
                     <div id="pokemon-filters">
                         <div class="ui multiple selection fluid dropdown" id="generations">
-                            <input type="hidden" id="gen-select" value="{{ request.args.get('gen') if request.args.get('gen') != None }}">
+                            <input type="hidden" id="gen-select"
+                                   value="{{ request.args.get('gen') if request.args.get('gen') != None }}">
                             <i class="dropdown icon"></i>
                             <div class="default text">Generations</div>
                             <div class="menu">
@@ -99,7 +100,8 @@
 
 
                         <div class="ui multiple selection fluid dropdown" id="categories">
-                            <input type="hidden" id="cat-select" value="{{ request.args.get('cat') if request.args.get('cat') != None }}">
+                            <input type="hidden" id="cat-select"
+                                   value="{{ request.args.get('cat') if request.args.get('cat') != None }}">
                             <i class="dropdown icon"></i>
                             <div class="default text">Category</div>
                             <div class="menu">
@@ -132,7 +134,7 @@
                                 </div>
                                 <div class="item" data-value="shadow">
                                     <i class="icon fas fa-smoke"></i> Shadow
-				</div>
+                                </div>
                                 <div class="item" data-value="female">
                                     <i class="icon far fa-venus"></i> Female
                                 </div>
@@ -171,11 +173,12 @@
                     <div class="list-header ui top attached segment">
                         <div class="search-results-summary">
                             <span class="pokemon-result-count">No Pokemon Found :(</span>
-                            <a class="export-list" data-content="Copied!" data-variation="inverted tiny" data-clipboard-action="copy"><i class="fas fa-clipboard"></i></a>
+                            <a class="export-list" data-content="Copied!" data-variation="inverted tiny"
+                               data-clipboard-action="copy"><i class="fas fa-clipboard"></i></a>
                         </div>
                         <div class="list-selectors">
                             <div class="ui dropdown pointing top right">
-                                <input type="hidden" id="list-select" value="{{ request.args.get('list') }}" />
+                                <input type="hidden" id="list-select" value="{{ request.args.get('list') }}"/>
                                 <div class="text">Select a DEX...</div>
                                 <i class="dropdown icon"></i>
                             </div>
@@ -349,7 +352,7 @@
                     </div>
                     <div class="content">
                         <p>Are you sure you pant to delete your profile?</p>
-                        <b>This action is irriversable</b>
+                        <b>This action is irreversible</b>
                     </div>
                     <div class="actions">
                         <div class="ui cancel button">
@@ -411,6 +414,7 @@
                                         <div class="item" data-value="2">Gen II (Johto)</div>
                                         <div class="item" data-value="3">Gen III (Hoenn)</div>
                                         <div class="item" data-value="4">Gen IV (Sinnoh)</div>
+                                        <div class="item" data-value="5">Gen V (Unova)</div>
                                         <div class="item" data-value="7">Gen VII (Alola)</div>
                                     </div>
                                 </div>
@@ -449,18 +453,18 @@
                                         <div class="item" data-value="baby">
                                             <i class="icon far fa-baby"></i> Baby
                                         </div>
-					<div class="item" data-value="shadow">
-						<i class="icon fas fa-smoke"></i> Shadow
-					</div>
-					<div class="item" data-value="female">
-					    <i class="icon far fa-venus"></i> Female
-					</div>
-					<div class="item" data-value="male">
-					    <i class="icon far fa-mars"></i> Male
-					</div>
-					<div class="item" data-value="ungendered">
-					    <i class="icon fas fa-circle"></i> Ungendered
-					</div>
+                                        <div class="item" data-value="shadow">
+                                            <i class="icon fas fa-smoke"></i> Shadow
+                                        </div>
+                                        <div class="item" data-value="female">
+                                            <i class="icon far fa-venus"></i> Female
+                                        </div>
+                                        <div class="item" data-value="male">
+                                            <i class="icon far fa-mars"></i> Male
+                                        </div>
+                                        <div class="item" data-value="ungendered">
+                                            <i class="icon fas fa-circle"></i> Ungendered
+                                        </div>
                                         <div class="item" data-value="unreleased">
                                             <i class="icon fas fa-question"></i> Unreleased
                                         </div>
@@ -475,68 +479,84 @@
                             given up the dream of finding all Unown, you can simply remove them
                             from your list via the check boxes below. Deselecting them all
                             will provide you with only unique dex numbers.</p>
-                        <div class="ui stackable five column grid view-settings">
-                            <div class="column">
-                                <div class="inline field">
-                                    <div class="ui checkbox show-costumed">
-                                        <input type="checkbox" name="viewsettings[]"
-                                               value="show-costumed">
-                                        <label>Costumed</label>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="column">
-                                <div class="inline field">
-                                    <div class="ui checkbox show-alolan">
-                                        <input type="checkbox" name="viewsettings[]"
-                                               value="show-alolan">
-                                        <label>Alolan</label>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="column">
-                                <div class="inline field">
+                        <div class="ui small header">Formes</div>
+                        <div class="ui stackable view-settings">
+                            <div class="fields">
+                                <div class="four wide field">
                                     <div class="ui checkbox show-unown">
-                                        <input type="checkbox" name="viewsettings[]"
-                                               value="show-unown">
+                                        <input type="checkbox" name="viewsettings[]" value="show-unown" checked="true">
                                         <label>Unown</label>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="column">
-                                <div class="inline field">
+
+                                <div class="four wide field">
                                     <div class="ui checkbox show-spinda">
-                                        <input type="checkbox" name="viewsettings[]"
-                                               value="show-spinda">
+                                        <input type="checkbox" name="viewsettings[]" value="show-spinda" checked="true">
                                         <label>Spinda</label>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="column">
-                                <div class="inline field">
+
+                                <div class="four wide field">
                                     <div class="ui checkbox show-castform">
-                                        <input type="checkbox" name="viewsettings[]"
-                                               value="show-castform">
+                                        <input type="checkbox" name="viewsettings[]" value="show-castform" checked="true">
                                         <label>Castform</label>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="column">
-                                <div class="inline field">
+
+                                <div class="four wide field">
                                     <div class="ui checkbox show-deoxys">
-                                        <input type="checkbox" name="viewsettings[]"
-                                               value="show-deoxys">
+                                        <input type="checkbox" name="viewsettings[]" value="show-deoxys" checked="true">
                                         <label>Deoxys</label>
                                     </div>
                                 </div>
                             </div>
-                            <div class="column">
-                                <div class="inline field">
-                                    <div class="ui checkbox show-letsgo">
-                                        <input type="checkbox" name="viewsettings[]"
-                                               value="show-letsgo">
-                                        <label>Meltan / Melmetal</label>
+                            <div class="fields">
+                                <div class="four wide field">
+                                    <div class="ui checkbox show-cherrim">
+                                        <input type="checkbox" name="viewsettings[]" value="show-cherrim" checked="true">
+                                        <label>Cherrim</label>
                                     </div>
+                                </div>
+                                <div class="four wide field">
+                                    <div class="ui checkbox show-burmy">
+                                        <input type="checkbox" name="viewsettings[]" value="show-burmy" checked="true">
+                                        <label>Burmy / Wormdam</label>
+                                    </div>
+
+                                </div>
+                                <div class="four wide field">
+                                    <div class="ui checkbox show-shellos">
+                                        <input type="checkbox" name="viewsettings[]" value="show-shellos" checked="true">
+                                        <label>Shellos / Gastrodon</label>
+                                    </div>
+                                </div>
+                                <div class="four wide field">
+                                    <div class="ui checkbox show-giratina">
+                                        <input type="checkbox" name="viewsettings[]" value="show-giratina" checked="true">
+                                        <label>Giratina</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="ui small header">Variants</div>
+                        <div class="ui stackable fields view-settings">
+                            <div class="four wide field">
+                                <div class="ui checkbox show-costumed">
+                                    <input type="checkbox" name="viewsettings[]" value="show-costumed" checked="true">
+                                    <label>Costumed</label>
+                                </div>
+                            </div>
+                            <div class="four wide field">
+                                <div class="ui checkbox show-alolan">
+                                    <input type="checkbox" name="viewsettings[]" value="show-alolan" checked="true">
+                                    <label>Alolan</label>
+                                </div>
+                            </div>
+                            <div class="four wide field">
+                                <div class="ui checkbox show-letsgo">
+                                    <input type="checkbox" name="viewsettings[]" value="show-letsgo" checked="true">
+                                    <label>Let's GO! (Meltan / Melmetal)</label>
                                 </div>
                             </div>
                         </div>
@@ -571,8 +591,7 @@
 
                             <div class="required field">
                                 <label>Colour Indicator</label>
-                                <select class="ui fluid dropdown" id="list-colour"
-                                        data-validate="listcolour">
+                                <select class="ui fluid dropdown" id="list-colour" data-validate="listcolour">
                                     <option value="red">Red</option>
                                     <option value="orange">Orange</option>
                                     <option value="green">Green</option>
@@ -604,6 +623,7 @@
                                         <div class="item" data-value="2">Gen II (Johto)</div>
                                         <div class="item" data-value="3">Gen III (Hoenn)</div>
                                         <div class="item" data-value="4">Gen IV (Sinnoh)</div>
+                                        <div class="item" data-value="5">Gen V (Unova)</div>
                                         <div class="item" data-value="7">Gen VII (Alola)</div>
                                     </div>
                                 </div>
@@ -642,18 +662,18 @@
                                         <div class="item" data-value="baby">
                                             <i class="icon far fa-baby"></i> Baby
                                         </div>
-					<div class="item" data-value="shadow">
-						<i class="icon fas fa-smoke"></i> Shadow
-					</div>
-					<div class="item" data-value="female">
-					    <i class="icon far fa-venus"></i> Female
-					</div>
-					<div class="item" data-value="male">
-					    <i class="icon far fa-mars"></i> Male
-					</div>
-					<div class="item" data-value="ungendered">
-					    <i class="icon fas fa-circle"></i> Ungendered
-					</div>
+                                        <div class="item" data-value="shadow">
+                                            <i class="icon fas fa-smoke"></i> Shadow
+                                        </div>
+                                        <div class="item" data-value="female">
+                                            <i class="icon far fa-venus"></i> Female
+                                        </div>
+                                        <div class="item" data-value="male">
+                                            <i class="icon far fa-mars"></i> Male
+                                        </div>
+                                        <div class="item" data-value="ungendered">
+                                            <i class="icon fas fa-circle"></i> Ungendered
+                                        </div>
                                         <div class="item" data-value="unreleased">
                                             <i class="icon fas fa-question"></i> Unreleased
                                         </div>
@@ -668,68 +688,89 @@
                             given up the dream of finding all Unown, you can simply remove them
                             from your list via the check boxes below. Deselecting them all
                             will provide you with only unique dex numbers.</p>
-                        <div class="ui stackable five column grid view-settings">
-                            <div class="column">
-                                <div class="inline field">
-                                    <div class="ui checkbox show-costumed">
-                                        <input type="checkbox" name="viewsettings[]"
-                                               value="show-costumed">
-                                        <label>Costumed</label>
-                                    </div>
                                 </div>
                             </div>
-                            <div class="column">
-                                <div class="inline field">
-                                    <div class="ui checkbox show-alolan">
-                                        <input type="checkbox" name="viewsettings[]"
-                                               value="show-alolan">
-                                        <label>Alolan</label>
-                                    </div>
                                 </div>
                             </div>
-                            <div class="column">
-                                <div class="inline field">
+
+                        <div class="ui small header">Formes</div>
+                        <div class="ui stackable view-settings">
+                            <div class="fields">
+                                <div class="four wide field">
                                     <div class="ui checkbox show-unown">
-                                        <input type="checkbox" name="viewsettings[]"
-                                               value="show-unown">
+                                        <input type="checkbox" name="viewsettings[]" value="show-unown">
                                         <label>Unown</label>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="column">
-                                <div class="inline field">
+
+                                <div class="four wide field">
                                     <div class="ui checkbox show-spinda">
-                                        <input type="checkbox" name="viewsettings[]"
-                                               value="show-spinda">
+                                        <input type="checkbox" name="viewsettings[]" value="show-spinda">
                                         <label>Spinda</label>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="column">
-                                <div class="inline field">
+
+                                <div class="four wide field">
                                     <div class="ui checkbox show-castform">
-                                        <input type="checkbox" name="viewsettings[]"
-                                               value="show-castform">
+                                        <input type="checkbox" name="viewsettings[]" value="show-castform">
                                         <label>Castform</label>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="column">
-                                <div class="inline field">
+
+                                <div class="four wide field">
                                     <div class="ui checkbox show-deoxys">
-                                        <input type="checkbox" name="viewsettings[]"
-                                               value="show-deoxys">
+                                        <input type="checkbox" name="viewsettings[]" value="show-deoxys">
                                         <label>Deoxys</label>
                                     </div>
                                 </div>
                             </div>
-                            <div class="column">
-                                <div class="inline field">
-                                    <div class="ui checkbox show-letsgo">
-                                        <input type="checkbox" name="viewsettings[]"
-                                               value="show-letsgo">
-                                        <label>Meltan / Melmetal</label>
+                            <div class="fields">
+                                <div class="four wide field">
+                                    <div class="ui checkbox show-cherrim">
+                                        <input type="checkbox" name="viewsettings[]" value="show-cherrim">
+                                        <label>Cherrim</label>
                                     </div>
+                                </div>
+                                <div class="four wide field">
+                                    <div class="ui checkbox show-burmy">
+                                        <input type="checkbox" name="viewsettings[]" value="show-burmy">
+                                        <label>Burmy / Wormdam</label>
+                                    </div>
+
+                                </div>
+                                <div class="four wide field">
+                                    <div class="ui checkbox show-shellos">
+                                        <input type="checkbox" name="viewsettings[]" value="show-shellos">
+                                        <label>Shellos / Gastrodon</label>
+                                    </div>
+                                </div>
+                                <div class="four wide field">
+                                    <div class="ui checkbox show-giratina">
+                                        <input type="checkbox" name="viewsettings[]" value="show-giratina">
+                                        <label>Giratina</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="ui small header">Variants</div>
+                        <div class="ui stackable fields view-settings">
+                            <div class="four wide field">
+                                <div class="ui checkbox show-costumed">
+                                    <input type="checkbox" name="viewsettings[]" value="show-costumed">
+                                    <label>Costumed</label>
+                                </div>
+                            </div>
+                            <div class="four wide field">
+                                <div class="ui checkbox show-alolan">
+                                    <input type="checkbox" name="viewsettings[]" value="show-alolan">
+                                    <label>Alolan</label>
+                                </div>
+                            </div>
+                            <div class="four wide field">
+                                <div class="ui checkbox show-letsgo">
+                                    <input type="checkbox" name="viewsettings[]" value="show-letsgo">
+                                    <label>Let's GO! (Meltan / Melmetal)</label>
                                 </div>
                             </div>
                         </div>
@@ -769,7 +810,7 @@
             </div>
 
             <div class="ui modal support-site-popup">
-              <i class="close icon"></i>
+                <i class="close icon"></i>
                 <div class="header">
                     <i class="icon fad fa-mug-hot"></i> Enjoying the app?
                 </div>

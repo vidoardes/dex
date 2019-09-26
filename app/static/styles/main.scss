@@ -461,16 +461,16 @@
     }
   }
 
-  h2 {
+  & > h2 {
     grid-area: name;
     text-align: left;
     margin: 0;
   }
 
-  label {
+  & > label {
     grid-area: level;
     text-align: left;
-    font-weight: 700;
+    font-weight: 500;
     color: #666;
   }
 

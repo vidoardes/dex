@@ -204,6 +204,26 @@ def fetch_pokemon(username):
             Pokemon.p_uid.notin_(["386_12", "386_13", "386_14"])
         )
 
+    if not pokemon_filters.get("show-cherrim", False):
+        filtered_query = filtered_query.filter(
+            Pokemon.p_uid.notin_(["421_12"])
+        )
+
+    if not pokemon_filters.get("show-burmy", False):
+        filtered_query = filtered_query.filter(
+            Pokemon.p_uid.notin_(["412_12", "412_13", "413_12", "413_13"])
+        )
+
+    if not pokemon_filters.get("show-shellos", False):
+        filtered_query = filtered_query.filter(
+            Pokemon.p_uid.notin_(["422_12", "423_12"])
+        )
+
+    if not pokemon_filters.get("show-giratina", False):
+        filtered_query = filtered_query.filter(
+            Pokemon.p_uid.notin_(["487_12"])
+        )
+
     if not pokemon_filters.get("show-alolan", False):
         filtered_query = filtered_query.filter_by(alolan=False)
 
@@ -289,6 +309,18 @@ def fetch_pokemon(username):
             not pokemon_filters.get("show-spinda", False) and p["forme"] == "Spinda #1"
         ) or (
             not pokemon_filters.get("show-unown", False) and p["forme"] == "Unown (F)"
+        ) or (
+            not pokemon_filters.get("show-burmy", False) and p["forme"] == "Burmy Plant Cloak"
+        ) or (
+            not pokemon_filters.get("show-burmy", False) and p["forme"] == "Wormadam Plant Cloak"
+        ) or (
+            not pokemon_filters.get("show-cherrim", False) and p["forme"] == "Cherrim Overcast"
+        ) or (
+            not pokemon_filters.get("show-shellos", False) and p["forme"] == "Shellos (West Sea)"
+        ) or (
+            not pokemon_filters.get("show-shellos", False) and p["forme"] == "Gastrodon (West Sea)"
+        ) or (
+            not pokemon_filters.get("show-giratina", False) and p["forme"] == "Giratina (Altered Forme)"
         ):
             p["forme"] = p["name"]
 
@@ -339,6 +371,18 @@ def update_pokemon(username):
         updated_pokemon["forme"] = "Spinda #1"
     elif updated_pokemon["forme"] == "Unown":
         updated_pokemon["forme"] = "Unown (F)"
+    elif updated_pokemon["forme"] == "Cherrim":
+        updated_pokemon["forme"] = "Overcast Cherrim"
+    elif updated_pokemon["forme"] == "Burmy":
+        updated_pokemon["forme"] = "Burmy Plant Cloak"
+    elif updated_pokemon["forme"] == "Wormadam":
+        updated_pokemon["forme"] = "Wormadam Plant Cloak"
+    elif updated_pokemon["forme"] == "Shellos":
+        updated_pokemon["forme"] = "Shellos (West Sea)"
+    elif updated_pokemon["forme"] == "Gastrodon":
+        updated_pokemon["forme"] = "Gastrodon (West Sea)"
+    elif updated_pokemon["forme"] == "Giratina":
+        updated_pokemon["forme"] = "Giratina (Altered Forme)"
 
     ul = merge_dict_lists("forme", active_list["pokemon"], [updated_pokemon])
 
@@ -385,6 +429,42 @@ def update_pokemon(username):
                 or ("show-unown", False) in active_list["view-settings"].items()
             )
             and p["forme"] == "Unown (F)"
+        ) or (
+            (
+                "show-burmy" not in active_list["view-settings"].keys()
+                or ("show-burmy", False) in active_list["view-settings"].items()
+            )
+            and p["forme"] == "Burmy Plant Cloak"
+        ) or (
+            (
+                "show-burmy" not in active_list["view-settings"].keys()
+                or ("show-burmy", False) in active_list["view-settings"].items()
+            )
+            and p["forme"] == "Wormadam Plant Cloak"
+        ) or (
+            (
+                "show-cherrim" not in active_list["view-settings"].keys()
+                or ("show-cherrim", False) in active_list["view-settings"].items()
+            )
+            and p["forme"] == "Overcast Cherrim"
+        ) or (
+            (
+                "show-shellos" not in active_list["view-settings"].keys()
+                or ("show-shellos", False) in active_list["view-settings"].items()
+            )
+            and p["forme"] == "Shellos (West Sea)"
+        ) or (
+            (
+                "show-shellos" not in active_list["view-settings"].keys()
+                or ("show-shellos", False) in active_list["view-settings"].items()
+            )
+            and p["forme"] == "Gastrodon (West Sea)"
+        ) or (
+            (
+                "show-giratina" not in active_list["view-settings"].keys()
+                or ("show-giratina", False) in active_list["view-settings"].items()
+            )
+            and p["forme"] == "Giratina (Altered Forme)"
         ):
             p["forme"] = p["name"]
 
