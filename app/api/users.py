@@ -91,7 +91,7 @@ def update_user(username):
 
         if player_level is not None:
             if (
-                player_level.isdigit() and re.match("^([1-9]|3[0-9]|40)$", player_level)
+                player_level.isdigit() and re.match("^([1-9]|2[0-9]|3[0-9]|40)$", player_level)
             ) or player_level is None:
                 user.player_level = player_level
             else:
