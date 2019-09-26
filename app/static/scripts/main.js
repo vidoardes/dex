@@ -1,19 +1,26 @@
 $.fn.renderallpokemon = function () {
     let _qs = '?' + $.param(qs);
-    let _container = $(this);
 
     $.ajax({
-        url: '/api/' + $('#user-profile').data('username') + '/pokemon/get' + _qs,
+        url: '/api/' + $userProfile.data('username') + '/pokemon/get' + _qs,
         type: 'GET',
         success: function (r) {
             if (r['pokemon'] === "end") {
+                console.log('No more results, render complete');
                 return false
             }
 
             if (r['pokemon'].length === 0) {
+                console.log('No results found');
                 $('.pokemon-result-count').html('No pokemon found :(').fadeIn("fast");
-                $('<p id="no-results">Unfortunately there are no Pokemon that match your criteria. Please select a different option from the filters above.</p>').insertBefore($('#sentinel'))
+                $pokemonWrapper.html('<p id="no-results">Unfortunately there are no Pokemon that match your criteria. Please select a different option from the filters above.</p>')
                 return false
+            }
+
+            if (qs.c === 0) {
+                console.log('Render starting...')
+            } else {
+                console.log('Updating results...')
             }
 
             let _pokemon_list = r['pokemon'];
@@ -28,20 +35,20 @@ $.fn.renderallpokemon = function () {
             qs.own = params.get("own");
             qs.list = params.get("list");
 
-            filtersactive = false;
+            filtersActive = false;
+
+            $('#pokemon-filters .ui.dropdown').dropdown('clear');
 
             $('#pokemon-filters #generations').dropdown('set selected', qs.gen.split(','));
             $('#pokemon-filters #categories').dropdown('set selected', qs.cat.split(','));
             $('#pokemon-filters #owned').dropdown('set selected', qs.own);
+            $('.list-header .ui.dropdown').dropdown('set selected', qs.list);
 
-            filtersactive = true;
+            filtersActive = true;
 
             $('.pokemon-result-count').html(r['total_owned'] + ' owned of ' + r['total_results'] + ' pokemon found').fadeIn("fast")
 
-            $('#pokemon-wrapper').renderpokemon(_pokemon_list, 'generate');
-
-            iob.unobserve(iob_target);
-            iob.observe(iob_target);
+            $pokemonWrapper.renderpokemon(_pokemon_list, 'generate');
 
             $('.list-header .export-list').attr('data-clipboard-text', r['dex_str'])
         },
@@ -71,12 +78,12 @@ $.fn.updatestate = function (statetype) {
     let data = {data: JSON.stringify(obj)};
 
     $.ajax({
-        url: '/api/' + $('#user-profile').data('username') + '/pokemon/update' + _qs,
+        url: '/api/' + $userProfile.data('username') + '/pokemon/update' + _qs,
         data: data,
         type: 'PUT',
         success: function (r) {
             let _pokemon_list = r['updated_pokemon'];
-            $('#pokemon-wrapper').renderpokemon(_pokemon_list, 'update')
+            $pokemonWrapper.renderpokemon(_pokemon_list, 'update')
         },
         error: function (e) {
             console.log(e.status)
@@ -149,11 +156,11 @@ $.fn.renderpokemon = function (list, type) {
             data-key="${forme}"
             data-dex="${dex}">
             
-            <div class="img"><img class="lazy" src="../static/img/sprites/${gen}/pokemon_icon_${p_uid}${shinyowned ? '_shiny' : ''}.png" alt="${p_uid}" /></div>
+            <div class="img"><img src="../static/img/sprites/${gen}/pokemon_icon_${p_uid}${shinyowned ? '_shiny' : ''}.png" alt="${forme}" /></div>
             <div class="info">${forme}</div>
             <div class="type">
-                ${type1 !== null ? '<img class="lazy" src="../static/img/types/icon_' + type1 + '.png" alt="' + type1 + '" />' : ''}
-                ${type2 !== null ? '<img class="lazy" src="../static/img/types/icon_' + type2 + '.png" alt="' + type2 + '" />' : ''}
+                ${type1 !== null ? '<img src="../static/img/types/icon_' + type1 + '.png" alt="' + type1 + '" />' : ''}
+                ${type2 !== null ? '<img src="../static/img/types/icon_' + type2 + '.png" alt="' + type2 + '" />' : ''}
             </div>
             <div class="dex-num">#${dex.toString().padStart(3, '0')}</div>
             <div class="pm-opt">
@@ -167,23 +174,32 @@ $.fn.renderpokemon = function (list, type) {
     `;
 
     if (type === 'generate') {
-        iob.unobserve(iob_target);
         $('#no-results').remove();
 
         for (let i = 0; i < list.length; i++) {
             let template = [list[i]].map(Pokemon)[0];
-            $(template).insertBefore($('#sentinel'));
+            $(template).appendTo('#pokemon-wrapper');
+
+            setTimeout(function() {
+                $pokemonWrapper
+                    .find('[data-key="' + list[i].forme + '"]')
+                    .addClass('show');
+            }, i*30);
 
             qs.c += 1
         }
-
-        iob.observe(iob_target)
     } else if (type === 'update') {
         for (let i = 0; i < list.length; i++) {
             let _pokemon = list[i];
             $(this)
                 .find('[data-key="' + _pokemon.forme + '"]')
-                .replaceWith([_pokemon].map(Pokemon).join(''))
+                .replaceWith([_pokemon].map(Pokemon).join(''));
+
+            setTimeout(function() {
+                $pokemonWrapper
+                    .find('[data-key="' + list[i].forme + '"]')
+                    .addClass('show');
+            }, i*30);
         }
     }
 };
@@ -199,7 +215,7 @@ $.fn.renderpokemoncard = function () {
             <div class="content">
                 <div class="ui grid stackable two column">
                     <div class="column img">
-                        <img src="../static/img/sprites/${gen}/pokemon_icon_${p_uid}${qs.cat.includes('shiny') ? '_shiny' : ''}.png">
+                        <img src="../static/img/sprites/${gen}/pokemon_icon_${p_uid}${qs.cat.includes('shiny') ? '_shiny' : ''}.png" alt="${forme}" />
                     </div>
                     <div class="column">
                         <div class="max_cp_stat stat_bar">
@@ -240,7 +256,7 @@ $.fn.renderpokemoncard = function () {
     let _qs = '?name=' + encodeURIComponent(_pokemon.data('key')) + '&cat=unreleased&list=' + qs.list;
 
     $.ajax({
-        url: '/api/' + $('#user-profile').data('username') + '/pokemon/get' + _qs,
+        url: '/api/' + $userProfile.data('username') + '/pokemon/get' + _qs,
         type: 'GET',
         success: function (r) {
             let _pokemon_list = r['pokemon'];
@@ -276,7 +292,7 @@ $.taketour = function () {
             let data = {data: JSON.stringify(obj)};
 
             $.ajax({
-                url: '/api/user/' + $('#user-profile').data('username') + '/settings/update',
+                url: '/api/user/' + $userProfile.data('username') + '/settings/update',
                 data: data,
                 type: 'PUT',
                 success: function (r) {
@@ -319,23 +335,18 @@ $.taketour = function () {
 };
 
 // INITIALISE UI
+let qs = {
+    'list'  : '',
+    'gen'   : [],
+    'cat'   : [],
+    'own'   : '',
+    'c'     : 0,
+};
+let filtersActive = true;
 
-let qs = {};
-let filtersactive = true;
-let iob_target = document.querySelector('#sentinel');
-
-let iob = new IntersectionObserver(entries => {
-        if (entries[0].intersectionRatio <= 0) {
-            return;
-        }
-
-        $('#pokemon-wrapper').renderallpokemon()
-    }, {
-        root: document.querySelector('#pokemon-list'),
-        rootMargin: '50px 0px 50px',
-        threshold: 0.1
-    }
-);
+let $pokemonWrapper = $('#pokemon-wrapper');
+let $listSelector = $('.list-header .ui.dropdown');
+let $userProfile = $('#user-profile');
 
 $(function () {
     let params = new window.URLSearchParams(window.location.search);
@@ -367,31 +378,50 @@ $(function () {
         return
     }
 
-    if ($('#gen-select').val() !== 'None') {
-        qs.gen = $('#gen-select').val()
+    if (params.get("list")) {
+        qs.list = params.get("list");
+        console.log('Loading list: ' + qs.list);
+    } else {
+        console.log('No list provided');
     }
 
-    if ($('#cat-select').val() !== 'None') {
-        qs.cat = $('#cat-select').val()
+    if (params.get("gen")) {
+        qs.gen = params.get("gen");
+        console.log('Loading Generations: ' + qs.gen);
+    } else {
+        console.log('No generation filters provided');
     }
 
-    if ($('#own-select').val() !== 'None') {
-        qs.own = $('#own-select').val()
+    if (params.get("cat")) {
+        qs.cat = params.get("cat");
+        console.log('Loading Categories: ' + qs.cat);
+    } else {
+        console.log('No categories provided');
     }
 
-    if ($('#list-select').val() !== 'None') {
-        qs.list = $('#list-select').val()
+    if (params.get("own")) {
+        qs.own = params.get("own");
+        console.log('Loading Ownership: ' + qs.own);
+    } else {
+        console.log('No ownership flag provided');
     }
 
-    qs.c = 0;
+    $pokemonWrapper.visibility({
+        initialCheck    : true,
+        context         : document.getElementById('pokemon-list'),
+        once            : false,
+        onBottomVisible : function() {
+            $pokemonWrapper.renderallpokemon()
+        }
+    });
 
     $('.ui.search').search();
 
     let clipboard = new ClipboardJS('.list-header .export-list');
     $('.list-header .export-list').popup({
-        on: 'click',
-        position: 'right center',
-        onShow: function () {
+        on          : 'click',
+        position    : 'right center',
+        onShow      : function () {
             setTimeout(function () {
                 $('.list-header .export-list').popup("hide")
             }, 1500)
@@ -401,8 +431,6 @@ $(function () {
     if ($('body').data("take-tour") === 'True') {
         $.taketour()
     }
-
-    iob.observe(iob_target);
 });
 
 // SIDEBAR
@@ -423,7 +451,7 @@ $('.sidebar-link.living-dex').click(function () {
             $('.content-panel.active').removeClass('active');
             $('.sidebar-link.active').removeClass('active');
             $('.sidebar-link.living-dex').addClass('active');
-            $('#pokemon-wrapper').renderallpokemon();
+            $pokemonWrapper.renderallpokemon();
             $('.content-panel.dex').addClass('active').fadeIn();
             $('#sidebar').removeClass('show-sidebar')
         })
@@ -431,69 +459,74 @@ $('.sidebar-link.living-dex').click(function () {
 });
 
 $('#pokemon-filters .ui.dropdown').dropdown({
-    clearable: true,
-    onAdd: function (value, text, $selected) {
+    clearable   : true,
+    onAdd       : function (value, text, $selected) {
         $('.dropdown').blur()
     }
 }).on('change', '#gen-select', function () {
-    if (filtersactive) {
+    if (filtersActive) {
         qs.gen = $('#gen-select').val();
         qs.c = 0;
 
-        iob.unobserve(iob_target);
+        console.log('Generation filter updated');
+
         $('#pokemon-wrapper .pokemon').remove();
-        $('#pokemon-list').renderallpokemon()
+        $pokemonWrapper.renderallpokemon()
     }
 }).on('change', '#cat-select', function () {
-    if (filtersactive) {
+    if (filtersActive) {
         qs.cat = $('#cat-select').val();
         qs.c = 0;
 
-        iob.unobserve(iob_target);
+        console.log('Category filter updated');
+
         $('#pokemon-wrapper .pokemon').remove();
-        $('#pokemon-list').renderallpokemon()
+        $pokemonWrapper.renderallpokemon()
     }
 }).on('change', '#own-select', function () {
-    if (filtersactive) {
+    if (filtersActive) {
         qs.own = $('#own-select').val();
         qs.c = 0;
 
-        iob.unobserve(iob_target);
+        console.log('Ownership filter updated');
+
         $('#pokemon-wrapper .pokemon').remove();
-        $('#pokemon-list').renderallpokemon()
+        $pokemonWrapper.renderallpokemon()
     }
 });
 
-$('.list-header .ui.dropdown').dropdown({
+$listSelector.dropdown({
     apiSettings: {
-        url: "/api/" + $('#user-profile').data('username') + "/dex/getall",
-        method: 'GET',
-        cache: false,
+        url     : "/api/" + $userProfile.data('username') + "/dex/getall",
+        method  : 'GET'
     },
     onChange: function (value, text, $selectedItem) {
-        delete qs.gen;
-        delete qs.own;
-        delete qs.cat;
-        qs.c = 0;
-        qs.list = $('#list-select').val();
+        if (filtersActive) {
+            console.log('List changed');
+            delete qs.gen;
+            delete qs.own;
+            delete qs.cat;
 
-        $('#pokemon-filters .ui.dropdown').dropdown('clear');
-        $('#pokemon-wrapper .pokemon').remove();
-        $('#pokemon-wrapper').renderallpokemon()
+            qs.c = 0;
+            qs.list = $('#list-select').val();
+
+            $('#pokemon-wrapper .pokemon').remove();
+            $pokemonWrapper.renderallpokemon()
+        }
     }
 });
 
 $('#filter-view i').popup().click(function () {
     $('#filter-view .fa-th-large').toggle();
     $('#filter-view .fa-th-list').toggle();
-    $('#pokemon-wrapper').toggleClass('list-view')
+    $pokemonWrapper.toggleClass('list-view')
 });
 
-$('#pokemon-wrapper').on('click', '.pokemon .img', function () {
+$pokemonWrapper.on('click', '.pokemon .img', function () {
     $(this).renderpokemoncard()
 });
 
-$('#pokemon-wrapper').on('click', 'div.opt.shiny', function () {
+$pokemonWrapper.on('click', 'div.opt.shiny', function () {
     $(this).updatestate('shinyowned')
 }).on('click', 'div.opt.alolan', function () {
     $(this).updatestate('alolanowned')
@@ -526,7 +559,7 @@ $('.sidebar-link.legacy-moves').click(function () {
             $('#sidebar').removeClass('show-sidebar')
         })
     }
-})
+});
 
 // RAID BOSSES
 
@@ -540,21 +573,21 @@ $('.sidebar-link.raid-bosses').click(function () {
         $('#sidebar').removeClass('show-sidebar');
 
         $.ajax({
-            url: '/api/pokemon/raidbosses/get',
-            type: 'GET',
-            success: function (r) {
-                const RaidBoss = ({name, forme, dex, gen, p_uid, shiny, raid, battle_cp, max_cp, max_cp_weather, min_cp, min_cp_weather, type1, type2}) => `
+            url     : '/api/pokemon/raidbosses/get',
+            type    : 'GET',
+            success : function (r) {
+                const RaidBoss = ({forme, dex, gen, p_uid, shiny, battle_cp, max_cp, max_cp_weather, min_cp, min_cp_weather, type1, type2}) => `
                     <div class="raid-boss">
                         <div class="img">
-                            <img src="../static/img/sprites/${gen}/pokemon_icon_${p_uid}${shiny ? '_shiny' : ''}.png" />
+                            <img src="../static/img/sprites/${gen}/pokemon_icon_${p_uid}${shiny ? '_shiny' : ''}.png" alt="${forme}" />
                             ${shiny ? "<div class='shiny'></div>" : ""}
                         </div>
                         <div class="name">
                             ${forme}
                         </div>
                         <div class="type">
-                            ${type1 !== null ? '<img src="../static/img/types/icon_' + type1 + '.png" />' : ''}
-                            ${type2 !== null ? '<img src="../static/img/types/icon_' + type2 + '.png" />' : ''}
+                            ${type1 !== null ? '<img src="../static/img/types/icon_' + type1 + '.png" alt="' + type1 + '" />' : ''}
+                            ${type2 !== null ? '<img src="../static/img/types/icon_' + type2 + '.png" alt="' + type2 + '" />' : ''}
                         </div>
                         <div class="battle_cp">${battle_cp.toLocaleString('en')}CP</div>
                         <div class="cp">
@@ -603,7 +636,7 @@ $('.sidebar-link.egg-hatches').click(function () {
                             ${forme.includes("Alolan") ? forme.replace("Alolan", "A.") : forme}
                         </div>
                         <div class="img">
-                            <img src="../static/img/sprites/${gen}/pokemon_icon_${p_uid}${shiny ? '_shiny' : ''}.png" />
+                            <img src="../static/img/sprites/${gen}/pokemon_icon_${p_uid}${shiny ? '_shiny' : ''}.png" alt="${forme}" />
                             ${shiny ? "<div class='shiny'></div>" : ""}
                         </div>
                         <div class="cp">
@@ -623,15 +656,13 @@ $('.sidebar-link.egg-hatches').click(function () {
                 $('#sidebar').removeClass('show-sidebar');
 
                 for (const [key, value] of Object.entries(_egg_hatches)) {
-                    let _egg_hatches_group = value;
-
                     $("#egg-hatches-list")
                         .append(`<div class="ui segment egg-hatch-tier tier-${key}km">
                                     <div class="tier-header">
-                                        <img src="../static/img/egg_${key}km.png" />
+                                        <img src="../static/img/egg_${key}km.png" alt="${key}" />
                                         ${key}KM Eggs
                                     </div>
-                                    <div class="pokemon_list">${_egg_hatches_group.map(EggHatch).join('')}</div>
+                                    <div class="pokemon_list">${value.map(EggHatch).join('')}</div>
                                  </div>
                                 `)
                         .fadeIn()
@@ -650,9 +681,9 @@ $('.sidebar-link.egg-hatches').click(function () {
 $('.sidebar-link.user-settings').click(function () {
     $('.content-panel.active').fadeOut('fast', function () {
         $.ajax({
-            url: '/api/user/' + $('#user-profile').data('username') + '/settings/get',
-            type: 'GET',
-            success: function (r) {
+            url     : '/api/user/' + $userProfile.data('username') + '/settings/get',
+            type    : 'GET',
+            success : function (r) {
                 let _settings = r['settings'];
 
                 if (!_settings.public) {
@@ -692,7 +723,7 @@ $('#update-email').click(function () {
     let data = {data: JSON.stringify(_obj)};
 
     $.ajax({
-        url: '/api/user/' + $('#user-profile').data('username') + '/settings/update',
+        url: '/api/user/' + $userProfile.data('username') + '/settings/update',
         data: data,
         type: 'PUT',
         success: function (r) {
@@ -717,7 +748,7 @@ $(`#update-player-level`).click(function () {
     let data = {data: JSON.stringify(_obj)};
 
     $.ajax({
-        url: '/api/user/' + $('#user-profile').data('username') + '/settings/update',
+        url: '/api/user/' + $userProfile.data('username') + '/settings/update',
         data: data,
         type: 'PUT',
         success: function (r) {
@@ -742,9 +773,9 @@ $('.create-dex').click(function () {
 });
 
 $(`.create-dex-popup .ui.form`).form({
-    on: 'blur',
-    inline: true,
-    fields: {
+    on      : 'blur',
+    inline  : true,
+    fields  : {
         listname: {
             identifier: "listname",
             rules: [{
@@ -752,7 +783,7 @@ $(`.create-dex-popup .ui.form`).form({
                 prompt: 'Please enter a name.'
             }, {
                 type: 'regExp',
-                value: /^[A-Za-z0-9]*(?:[\sA-Za-z0-9\+\-\<\>\|]+)$/i,
+                value: /^[A-Za-z0-9]*(?:[\sA-Za-z0-9+\-<>|]+)$/i,
                 prompt: 'Names can only contain letters, numbers, spaces, and the following characters: + - > < |.'
             }]
         },
@@ -801,12 +832,12 @@ $(`.ui.modal.create-dex-popup`)
 
             $.ajax({
                 async: false,
-                url: '/api/' + $('#user-profile').data('username') + '/dex/add',
+                url: '/api/' + $userProfile.data('username') + '/dex/add',
                 data: data,
                 type: 'PUT',
                 success: function (r) {
                     $('.ui.dropdown.list-edit-select').dropdown('change values', null);
-                    $('.list-header .ui.dropdown').dropdown('change values', null);
+                    $listSelector.dropdown('change values', null);
                     _form.form('validate form');
                     _form.form('reset');
                     _form_valid = true
@@ -826,7 +857,7 @@ let editing_list_name = "";
 
 $('.ui.dropdown.list-edit-select').dropdown({
     apiSettings: {
-        url: "/api/" + $('#user-profile').data('username') + "/dex/getall",
+        url: "/api/" + $userProfile.data('username') + "/dex/getall",
         method: 'GET',
         cache: false,
     },
@@ -836,7 +867,7 @@ $('.ui.dropdown.list-edit-select').dropdown({
         }
 
         $.ajax({
-            url: '/api/' + $('#user-profile').data('username') + '/dex/get?list=' + value,
+            url: '/api/' + $userProfile.data('username') + '/dex/get?list=' + value,
             type: 'GET',
             success: function (r) {
                 let _vs = [];
@@ -922,13 +953,13 @@ $('.ui.modal.edit-dex-popup')
             let _form_valid = false;
 
             $.ajax({
-                url: '/api/' + $('#user-profile').data('username') + '/dex/update',
+                url: '/api/' + $userProfile.data('username') + '/dex/update',
                 data: data,
                 type: 'PUT',
                 async: false,
                 success: function (r) {
                     $('.ui.dropdown.list-edit-select').dropdown('change values', null);
-                    $('.list-header .ui.dropdown').dropdown('change values', null);
+                    $listSelector.dropdown('change values', null);
                     _form.form('validate form');
                     _form.form('reset');
                     _form_valid = true
@@ -957,11 +988,11 @@ $('.ui.modal.edit-dex-popup')
                 },
                 onApprove: function () {
                     $.ajax({
-                        url: '/api/' + $('#user-profile').data('username') + '/dex/delete?list=' + editing_list_value,
+                        url: '/api/' + $userProfile.data('username') + '/dex/delete?list=' + editing_list_value,
                         type: 'GET',
                         success: function (r) {
                             $('.ui.dropdown.list-edit-select').dropdown('change values', null);
-                            $('.list-header .ui.dropdown').dropdown('change values', null)
+                            $listSelector.dropdown('change values', null)
                         },
                         error: function (e) {
                             console.log(e.status)
@@ -979,7 +1010,7 @@ $('.ui.checkbox.private-profile').checkbox({
         let data = {data: JSON.stringify(_obj)};
 
         $.ajax({
-            url: '/api/user/' + $('#user-profile').data('username') + '/settings/update',
+            url: '/api/user/' + $userProfile.data('username') + '/settings/update',
             data: data,
             type: 'PUT',
             success: function (r) {
@@ -999,7 +1030,7 @@ $('.ui.checkbox.unsubscribe').checkbox({
         let data = {data: JSON.stringify(_obj)};
 
         $.ajax({
-            url: '/api/user/' + $('#user-profile').data('username') + '/settings/update',
+            url: '/api/user/' + $userProfile.data('username') + '/settings/update',
             data: data,
             type: 'PUT',
             success: function (r) {
@@ -1021,7 +1052,7 @@ $('.ui.tiny.modal.delete-profile')
         closable: false,
         onApprove: function () {
             $.ajax({
-                url: '/api/user/' + $('#user-profile').data('username') + '/settings/delete',
+                url: '/api/user/' + $userProfile.data('username') + '/settings/delete',
                 success: function (r) {
                     window.location.href = '/logout'
                 },
