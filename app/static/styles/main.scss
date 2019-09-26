@@ -605,6 +605,11 @@
 
     @include tablet {
       padding: 5px;
+      height: calc(100vh - 205px);
+    }
+
+    @include phone {
+      height: calc(100vh - 255px);
     }
 
     #pokemon-wrapper {
@@ -627,12 +632,10 @@
       }
 
       @include tablet {
-        height: calc(100vh - 203px);
         grid-template-columns: repeat(4, 1fr);
       }
 
       @include phone {
-        height: calc(100vh - 255px);
         grid-template-columns: repeat(2, 1fr);
       }
 
