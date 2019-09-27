@@ -490,7 +490,11 @@
 
       &.active {
         display: grid;
-        height: calc(100vh - 83px);
+        height: calc(100vh - 82px);
+
+        @include phone {
+          height: calc(100vh - 72px);
+        }
       }
     }
   }
@@ -515,6 +519,8 @@
 }
 
 .dex {
+  grid-template-rows: max-content max-content 1fr;
+
   #pokemon-filters {
     background: #fff;
     border: 1px solid #d1d5da;
@@ -600,17 +606,7 @@
   #pokemon-list {
     position: relative;
     overflow-y: scroll;
-    height: calc(100vh - 211px);
     background: #fff;
-
-    @include tablet {
-      padding: 5px;
-      height: calc(100vh - 205px);
-    }
-
-    @include phone {
-      height: calc(100vh - 255px);
-    }
 
     #pokemon-wrapper {
       position: relative;
@@ -1077,13 +1073,11 @@
 }
 
 #raid-bosses-list {
-  overflow-y: scroll;
-  height: calc(100vh - 83px);
   padding-right: 10px;
+  overflow-y: scroll;
 
   @include phone {
     padding-right: 5px;
-    height: calc(100vh - 72px);
   }
 
   .raid-boss-tier {
@@ -1220,13 +1214,11 @@
 }
 
 #egg-hatches-list {
-  overflow-y: scroll;
-  height: calc(100vh - 83px);
   padding-right: 10px;
+  overflow-y: scroll;
 
   @include phone {
     padding-right: 5px;
-    height: calc(100vh - 72px);
   }
 
   @include mediumdesktop {
@@ -1353,7 +1345,6 @@
 .content-panel.user-settings {
   padding: 0 10px 0 0;
   overflow-y: scroll;
-  height: calc(100vh - 83px);
   justify-items: center;
 
   .ui.segment {
