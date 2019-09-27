@@ -676,7 +676,7 @@ $('.sidebar-link.egg-hatches').on('click', () => {
 $('.sidebar-link.user-settings').on('click', () => {
     $('.content-panel.active').fadeOut("fast", () => {
         $.ajax({
-            url: '/api/user/' + $userProfile.data('username') + '/settings/get',
+            url: `/api/user/${$userProfile.data('username')}/settings/get`,
             type: 'GET',
             success: function (r) {
                 let _settings = r['settings'];
@@ -718,7 +718,7 @@ $('#update-email').on('click', () => {
     let data = {data: JSON.stringify(_obj)};
 
     $.ajax({
-        url: '/api/user/' + $userProfile.data('username') + '/settings/update',
+        url: `/api/user/${$userProfile.data('username')}/settings/update`,
         data: data,
         type: 'PUT',
         success: function () {
@@ -743,7 +743,7 @@ $('#update-player-level').on('click', () => {
     let data = {data: JSON.stringify(_obj)};
 
     $.ajax({
-        url: '/api/user/' + $userProfile.data('username') + '/settings/update',
+        url: `/api/user/${$userProfile.data('username')}/settings/update`,
         data: data,
         type: 'PUT',
         success: function () {
@@ -827,7 +827,7 @@ $(`.ui.modal.create-dex-popup`)
 
             $.ajax({
                 async: false,
-                url: '/api/' + $userProfile.data('username') + '/dex/add',
+                url: `/api/${$userProfile.data('username')}/dex/add`,
                 data: data,
                 type: 'PUT',
                 success: function () {
@@ -852,7 +852,7 @@ let editing_list_name = "";
 
 $('.ui.dropdown.list-edit-select').dropdown({
     apiSettings: {
-        url: "/api/" + $userProfile.data('username') + "/dex/getall",
+        url: `/api/${$userProfile.data('username')}/dex/getall`,
         method: 'GET',
         cache: false,
     },
@@ -862,7 +862,7 @@ $('.ui.dropdown.list-edit-select').dropdown({
         }
 
         $.ajax({
-            url: '/api/' + $userProfile.data('username') + '/dex/get?list=' + value,
+            url: `/api/${$userProfile.data('username')}/dex/get?list=${value}`,
             type: 'GET',
             success: function (r) {
                 let _vs = [];
@@ -948,11 +948,12 @@ $('.ui.modal.edit-dex-popup')
             let _form_valid = false;
 
             $.ajax({
-                url: '/api/' + $userProfile.data('username') + '/dex/update',
+                url: `/api/${$userProfile.data('username')}/dex/update`,
                 data: data,
                 type: 'PUT',
                 async: false,
                 success: function () {
+                    console.log(`${editing_list_name} changes saved`)
                     $('.ui.dropdown.list-edit-select').dropdown('change values', null);
                     $listSelector.dropdown('change values', null);
                     _form.form('validate form');
@@ -977,15 +978,12 @@ $('.ui.modal.edit-dex-popup')
                     _header.html(`Delete list - ${editing_list_name}`);
                     _content.html(`<p> Are you sure you want to delete ${editing_list_name}? This is irreversible!</p>`)
                 },
-                onHidden: () => {
-                    editing_list_value = "";
-                    editing_list_name = ""
-                },
                 onApprove: () => {
                     $.ajax({
-                        url: `/api/${$userProfile.data('username')}/dex/delete?list='${editing_list_value}`,
+                        url: `/api/${$userProfile.data('username')}/dex/delete?list=${editing_list_value}`,
                         type: 'GET',
                         success: function () {
+                            console.log(`${editing_list_name} deleted`)
                             $('.ui.dropdown.list-edit-select').dropdown('change values', null);
                             $listSelector.dropdown('change values', null);
                         },
@@ -1054,6 +1052,6 @@ $('.ui.tiny.modal.delete-profile')
                 error: function (e) {
                     console.log(e.status)
                 }
-            })
+            }).then(() => {})
         }
     });

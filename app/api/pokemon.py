@@ -677,16 +677,11 @@ def delete_list(username):
     ).first_or_404()
 
     old_pokemon_owned = user.pokemon_owned
-    db.session.close()
-
-    list = request.args.get("list")
+    
+    deleted_list = request.args.get("list")
 
     new_pokemon_owned = []
-    new_pokemon_owned[:] = [d for d in old_pokemon_owned if d["value"] != list]
-
-    user = User.query.filter(
-        func.lower(User.username) == func.lower(username)
-    ).first_or_404()
+    new_pokemon_owned[:] = [d for d in old_pokemon_owned if d["value"] != deleted_list]
 
     user.pokemon_owned = new_pokemon_owned
 
