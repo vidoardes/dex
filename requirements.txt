@@ -1,4 +1,5 @@
 Flask
+Flask-AssetRev
 Flask-Bcrypt
 Flask-Login
 flask-mail

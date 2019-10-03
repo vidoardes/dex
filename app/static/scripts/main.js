@@ -969,6 +969,7 @@ $('.ui.modal.edit-dex-popup')
             });
         },
         onDeny: () => {
+            $('.ui.modal.edit-dex-popup') .modal('close');
             $('.ui.modal.delete-dex-popup').modal({
                 closable: true,
                 onShow: function () {

@@ -17,6 +17,8 @@ class Config(object):
     MAIL_FROM = os.environ.get("MAIL_FROM")
     LANGUAGES = ["en", "es"]
     TIMEZONE = "Europe/Paris"
+    ASSETREV_MANIFEST_FILE = os.environ.get("ASSETREV_MANIFEST_FILE")
+    ASSETREV_RELOAD = os.environ.get('DEBUG')
 
     # Number of times a password is hashed
     BCRYPT_LOG_ROUNDS = 12

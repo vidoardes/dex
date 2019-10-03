@@ -1,4 +1,5 @@
 from flask import Flask, render_template
+from flask_assetrev import AssetRev
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager, mixins
 from flask_mail import Mail
@@ -44,6 +45,7 @@ def create_app(config_class=Config):
     migrate.init_app(application, db)
     login.init_app(application)
     mail.init_app(application)
+    AssetRev(application)
 
     application.register_error_handler(403, permission_denied)
     application.register_error_handler(405, permission_denied)
