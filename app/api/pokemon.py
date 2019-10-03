@@ -261,10 +261,14 @@ def fetch_pokemon(username):
 
     total_results = filtered_query.count()
 
+    total_pokemon_list = [u.__dict__ for u in filtered_query.all()]
+
     pokemon_dex = []
 
     for p in total_pokemon_list:
         pokemon_dex.append(p["dex"])
+
+    pokemon_dex.sort()
 
     if "shiny" in cat:
         pokemon_dex.append("&shiny")
@@ -276,7 +280,10 @@ def fetch_pokemon(username):
         pokemon_dex.append("&mythical")
 
     if "lucky" in cat:
-        pokemon_dex.append("&lucky")
+        if own == "notowned":
+            pokemon_dex.append("&!lucky")
+        else:
+            pokemon_dex.append("&lucky")
 
     if "shadow" in cat:
         pokemon_dex.append("&shadow")
