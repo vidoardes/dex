@@ -266,7 +266,8 @@ def fetch_pokemon(username):
     pokemon_dex = []
 
     for p in total_pokemon_list:
-        pokemon_dex.append(p["dex"])
+        if p["dex"] not in pokemon_dex:
+            pokemon_dex.append(p["dex"])
 
     pokemon_dex.sort()
 
