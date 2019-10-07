@@ -181,6 +181,15 @@
                                 <input type="hidden" id="list-select" value="{{ request.args.get('list') }}"/>
                                 <div class="text">Select a DEX...</div>
                                 <i class="dropdown icon"></i>
+                                <div class="menu">
+                                {%  for i in lists %}
+                                    <div class="item" data-value="{{ i["value"] }}">
+                                        <div class="ui {{ i["colour"] }} empty circular label"></div>
+                                        {{ i["name"] }}
+                                    </div>
+                                {% endfor %}
+                                </div>
+
                             </div>
                         </div>
                     </div>
