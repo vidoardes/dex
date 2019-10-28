@@ -12,6 +12,8 @@ function renderAllPokemon() {
 
             if (r['pokemon'].length === 0) {
                 console.log('No results found');
+                $renderRunning = false;
+                $filterDimmer.removeClass('active');
                 $resultCount.html('No pokemon found :(').fadeIn('fast');
                 $pokemonWrapper.html('<p id="no-results">Unfortunately there are no Pokemon that match your criteria. Please select a different option from the filters above.</p>');
                 return false
@@ -45,10 +47,7 @@ function renderAllPokemon() {
             console.log(e.status)
         }
     }).then(() => {
-        console.log('Finished render');
-        $('.pokemon .img img').on('click', function () {
-            renderPokemonCard($(this));
-        })
+
     })
 }
 
@@ -176,6 +175,16 @@ function renderPokemon(list, type) {
     if (type === 'generate') {
         $('#no-results').remove();
 
+        setTimeout(function() {
+            console.log('Finished render');
+            $filterDimmer.removeClass('active');
+            $renderRunning = false;
+
+            $('.pokemon .img img').on('click', function () {
+                renderPokemonCard($(this));
+            })
+        }, list.length * 30);
+
         for (let i = 0; i < list.length; i++) {
             let template = [list[i]].map(Pokemon)[0];
             $(template).appendTo('#pokemon-wrapper');
@@ -198,6 +207,8 @@ function renderPokemon(list, type) {
                 .find(`[data-key="${_pokemon.forme}"]`)
                 .addClass('show');
         }
+
+        $renderRunning = false;
     }
 }
 
@@ -342,6 +353,8 @@ let $pokemonWrapper = $('#pokemon-wrapper');
 let $listSelector = $('.list-header .ui.dropdown');
 let $userProfile = $('#user-profile');
 let $resultCount = $('.pokemon-result-count');
+let $filterDimmer = $('#pokemon-filters .ui.dimmer');
+let $renderRunning = false;
 
 $(() => {
     let params = new window.URLSearchParams(window.location.search);
@@ -406,7 +419,10 @@ $(() => {
         context: document.getElementById('pokemon-list'),
         once: false,
         onBottomVisible: function () {
-            renderAllPokemon()
+            if($renderRunning === false) {
+                $renderRunning = true;
+                renderAllPokemon()
+            }
         }
     });
 
@@ -460,9 +476,13 @@ $('#pokemon-filters .ui.dropdown').dropdown({
         qs.c = 0;
 
         console.log('Generation filter updated');
-
+        $filterDimmer.addClass('active');
         $('#pokemon-wrapper .pokemon').remove();
-        renderAllPokemon()
+
+        if($renderRunning === false) {
+            $renderRunning = true;
+            renderAllPokemon()
+        }
     }
 }).on('change', '#cat-select', () => {
     if (filtersActive) {
@@ -470,9 +490,13 @@ $('#pokemon-filters .ui.dropdown').dropdown({
         qs.c = 0;
 
         console.log('Category filter updated');
-
+        $filterDimmer.addClass('active');
         $('#pokemon-wrapper .pokemon').remove();
-        renderAllPokemon()
+
+        if($renderRunning === false) {
+            $renderRunning = true;
+            renderAllPokemon()
+        }
     }
 }).on('change', '#own-select', () => {
     if (filtersActive) {
@@ -480,9 +504,13 @@ $('#pokemon-filters .ui.dropdown').dropdown({
         qs.c = 0;
 
         console.log('Ownership filter updated');
-
+        $filterDimmer.addClass('active');
         $('#pokemon-wrapper .pokemon').remove();
-        renderAllPokemon()
+
+        if($renderRunning === false) {
+            $renderRunning = true;
+            renderAllPokemon()
+        }
     }
 });
 
@@ -510,7 +538,6 @@ $listSelector.dropdown({
             $('#pokemon-filters .ui.dropdown').dropdown('clear');
 
             filtersActive = true;
-            renderAllPokemon();
         }
     }
 });

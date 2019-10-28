@@ -82,7 +82,11 @@
         {% block content %}
             <div id="content">
                 <div class="dex content-panel active">
-                    <div id="pokemon-filters">
+                    <div id="pokemon-filters" class="ui basic segment">
+                        <div class="ui inverted dimmer">
+                            <div class="ui loader"></div>
+                        </div>
+
                         <div class="ui multiple selection fluid dropdown" id="generations">
                             <input type="hidden" id="gen-select"
                                    value="{{ request.args.get('gen') if request.args.get('gen') != None }}">
