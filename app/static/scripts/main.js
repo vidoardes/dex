@@ -418,6 +418,8 @@ $(() => {
         initialCheck: true,
         context: document.getElementById('pokemon-list'),
         once: false,
+        offset: 10,
+        observeChanges: true,
         onBottomVisible: function () {
             if($renderRunning === false) {
                 $renderRunning = true;
