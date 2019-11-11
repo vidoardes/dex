@@ -120,7 +120,7 @@ def fetch_pokemon(username):
         filtered_query = filtered_query.filter_by(mythical=False)
 
     for i in cat:
-        if i not in ("lucky", "unreleased", ""):
+        if i not in ("lucky", "unreleased", "purified", ""):
             filtered_query = filtered_query.filter(getattr(Pokemon, i), True)
 
     if list_type == "exclusive":
@@ -246,6 +246,8 @@ def fetch_pokemon(username):
             _owned = p.get("luckyowned", False)
         elif "shadow" in cat:
             _owned = p.get("shadowowned", False)
+        elif "purified" in cat:
+            _owned = p.get("purifiedowned", False)
         else:
             _owned = p.get("owned", False)
 
@@ -265,35 +267,63 @@ def fetch_pokemon(username):
 
     pokemon_dex = []
 
-    for p in total_pokemon_list:
-        if p["dex"] not in pokemon_dex:
-            pokemon_dex.append(p["dex"])
+    if "all" not in gen and "" not in gen and len(gen) != 0:
+        dex_str_map = {
+            1: "Kanto",
+            2: "Johoto",
+            3: "Hoenn",
+            4: "Sinnoh",
+            5: "Unova",
+            6: "Kalos",
+            7: "Alola",
+            8: "Galar",
+        }
 
-    pokemon_dex.sort()
+        dex_str_gen = []
+
+        for g in gen:
+            dex_str_gen.append(dex_str_map[int(g)])
+
+        pokemon_dex.append(",".join(dex_str_gen))
 
     if "shiny" in cat:
-        pokemon_dex.append("&shiny")
+        pokemon_dex.append("shiny")
 
     if "legendary" in cat:
-        pokemon_dex.append("&legendary")
+        pokemon_dex.append("legendary")
 
     if "mythical" in cat:
-        pokemon_dex.append("&mythical")
+        pokemon_dex.append("mythical")
 
     if "lucky" in cat:
         if own == "notowned":
-            pokemon_dex.append("&!lucky")
+            pokemon_dex.append("!lucky")
         else:
-            pokemon_dex.append("&lucky")
+            pokemon_dex.append("lucky")
 
     if "shadow" in cat:
-        pokemon_dex.append("&shadow")
+        pokemon_dex.append("shadow")
+
+    if "purified" in cat:
+        pokemon_dex.append("purified")
 
     if "alolan" in cat:
-        pokemon_dex.append("&alola")
+        pokemon_dex.append("alola")
 
     if "level_1" in cat:
-        pokemon_dex.append("&cp10-100")
+        pokemon_dex.append("cp10-100")
+
+    if len(own) > 0:
+        dex_str_num = []
+
+        for p in total_pokemon_list:
+            if p["dex"] not in pokemon_dex:
+                dex_str_num.append(p["dex"])
+
+        dex_str_num.sort()
+        pokemon_dex.append(",".join(str(x) for x in dex_str_num))
+
+    pokemon_dex = '&'.join(pokemon_dex)
 
     if count == 0:
         filtered_query = filtered_query.order_by("p_uid").slice(0, 36)
