@@ -17,17 +17,17 @@
   },
   "homepage": "https://github.com/vidoardes/dex#readme",
   "dependencies": {
-    "autoprefixer": "^9.6.1",
+    "autoprefixer": "^9.7.3",
     "browser-sync": "^2.26.7",
     "cssnano": "^4.1.10",
-    "del": "^5.0.0",
+    "del": "^5.1.0",
     "gulp": "^4.0.2",
     "gulp-rename": "^1.4.0",
     "gulp-rev": "^9.0.0",
     "gulp-sass": "^4.0.2",
     "natives": "^1.1.6",
     "run-sequence": "^2.2.1",
-    "webpack-stream": "^5.1.1"
+    "webpack-stream": "^5.2.1"
   },
   "devDependencies": {
     "gulp-postcss": "^8.0.0",
