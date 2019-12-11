@@ -1,7 +1,6 @@
-from datetime import timedelta
 from time import time
 
-from flask import json, Response
+from flask import json, request, Response
 from flask_login import current_user, login_required
 
 from app import db
@@ -17,7 +16,13 @@ def update_email():
         r = json.dumps({"success": False})
         return Response(r, status=403, mimetype="application/json")
 
-    users = User.query.filter_by(unsubscribe=False).filter_by(deleted=False).all()
+    email = request.args.get("email")
+
+    if email is not None:
+        users = User.query.filter_by(email=email).all()
+    else:
+        users = User.query.filter_by(unsubscribe=False).filter_by(deleted=False).all()
+
     sent_list = []
     delay = 0
 

@@ -1,4 +1,3 @@
-import re
 from flask import request, json, Response
 from flask_login import login_required, current_user
 from sqlalchemy import func
