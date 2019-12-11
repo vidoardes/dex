@@ -88,6 +88,7 @@ $.fn.updateState = function (stateType) {
 function checkOwnedState(_pokemon) {
     return !!(_pokemon.data('shinyowned')
         || _pokemon.data('alolanowned')
+        || _pokemon.data('galarianowned')
         || _pokemon.data('regionalowned')
         || _pokemon.data('maleowned')
         || _pokemon.data('femaleowned')
@@ -552,10 +553,6 @@ $('#filter-view i').popup().on('click', () => {
 
 $pokemonWrapper.on('click', 'div.opt.shiny', function () {
     $(this).updateState('shinyowned')
-}).on('click', 'div.opt.alolan', function () {
-    $(this).updateState('alolanowned')
-}).on('click', 'div.opt.regional', function () {
-    $(this).updateState('regionalowned')
 }).on('click', 'div.opt.male', function () {
     $(this).updateState('maleowned')
 }).on('click', 'div.opt.female', function () {

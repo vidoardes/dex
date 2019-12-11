@@ -116,6 +116,7 @@ class Pokemon(db.Model):
     shiny = db.Column(db.Boolean, default=False, nullable=False)
     regional = db.Column(db.Boolean, default=False, nullable=False)
     alolan = db.Column(db.Boolean, default=False, nullable=False)
+    galarian = db.Column(db.Boolean, default=False, nullable=False)
     costumed = db.Column(db.Boolean, default=False, nullable=False)
     mega = db.Column(db.Boolean, default=False, nullable=False)
     released = db.Column(db.Boolean, default=False, nullable=False)

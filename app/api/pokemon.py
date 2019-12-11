@@ -227,6 +227,9 @@ def fetch_pokemon(username):
     if not pokemon_filters.get("show-alolan", False):
         filtered_query = filtered_query.filter_by(alolan=False)
 
+    if not pokemon_filters.get("show-galarian", False):
+        filtered_query = filtered_query.filter_by(galarian=False)
+
     if not pokemon_filters.get("show-costumed", False):
         filtered_query = filtered_query.filter_by(costumed=False)
 
@@ -309,6 +312,9 @@ def fetch_pokemon(username):
 
     if "alolan" in cat:
         pokemon_dex.append("alola")
+
+    if "galarian" in cat:
+        pokemon_dex.append("galarian")
 
     if "level_1" in cat:
         pokemon_dex.append("cp10-100")
