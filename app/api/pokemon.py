@@ -390,14 +390,13 @@ def update_pokemon(username):
     old_pokemon_owned = user.pokemon_owned
     db.session.close()
 
-    _list = request.args.get("list")
+    updated_pokemon = json.loads(request.form.get("data"))
+    _list = updated_pokemon["list"]
 
     if _list is None:
         db.session.close()
         r = json.dumps({"success": False})
         return Response(r, status=403, mimetype="application/json")
-
-    updated_pokemon = json.loads(request.form.get("data"))
 
     active_list = next((d for d in old_pokemon_owned if d["value"] == _list), None)
 
@@ -410,7 +409,7 @@ def update_pokemon(username):
     elif updated_pokemon["forme"] == "Unown":
         updated_pokemon["forme"] = "Unown (F)"
     elif updated_pokemon["forme"] == "Cherrim":
-        updated_pokemon["forme"] = "Overcast Cherrim"
+        updated_pokemon["forme"] = "Cherrim Overcast"
     elif updated_pokemon["forme"] == "Burmy":
         updated_pokemon["forme"] = "Burmy Plant Cloak"
     elif updated_pokemon["forme"] == "Wormadam":
@@ -484,7 +483,7 @@ def update_pokemon(username):
                 "show-cherrim" not in active_list["view-settings"].keys()
                 or ("show-cherrim", False) in active_list["view-settings"].items()
             )
-            and p["forme"] == "Overcast Cherrim"
+            and p["forme"] == "Cherrim Overcast"
         ) or (
             (
                 "show-shellos" not in active_list["view-settings"].keys()

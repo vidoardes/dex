@@ -56,18 +56,18 @@ $.fn.updateState = function (stateType) {
     _pokemon.data(stateType, !_pokemon.data(stateType));
 
     let obj = {
-        'forme': _pokemon.data('key'),
-        'dex': _pokemon.data('dex'),
+        "forme": _pokemon.data('key'),
+        "dex": _pokemon.data('dex'),
         "owned": checkOwnedState(_pokemon),
+        "list": qs["list"]
     };
 
     obj[stateType] = _pokemon.data(stateType);
 
     let data = {data: JSON.stringify(obj)};
-    let _qs = '?' + $.param(qs);
 
     $.ajax({
-        url: `/api/${$userProfile.data('username')}/pokemon/update${_qs}`,
+        url: `/api/${$userProfile.data('username')}/pokemon/update`,
         data: data,
         type: 'PUT',
         success: (r) => {
@@ -982,7 +982,7 @@ $('.ui.modal.edit-dex-popup')
                 type: 'PUT',
                 async: false,
                 success: function () {
-                    console.log(`${editing_list_name} changes saved`)
+                    console.log(`${editing_list_name} changes saved`);
                     $('.ui.dropdown.list-edit-select').dropdown('change values', null);
                     $listSelector.dropdown('change values', null);
                     _form.form('validate form');
