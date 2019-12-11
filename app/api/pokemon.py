@@ -313,7 +313,7 @@ def fetch_pokemon(username):
     if "level_1" in cat:
         pokemon_dex.append("cp10-100")
 
-    if len(own) > 0:
+    if own is not None:
         dex_str_num = []
 
         for p in total_pokemon_list:
