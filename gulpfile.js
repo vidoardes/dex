@@ -34,7 +34,7 @@ function browserSyncReload(done) {
 
 // Compile CSS
 function css() {
-    del("app/static/main-*.css");
+    del("app/static/*.css");
     return gulp.src("app/static/styles/main.scss")
         .pipe(sass({outputStyle: 'compressed'}).on("error", swallowError))
         .pipe(postcss([autoprefixer()]))
@@ -47,10 +47,17 @@ function css() {
 
 // Compile JS
 function js() {
-    del("app/static/bundle-*.js");
+    del("app/static/*.js");
     return gulp
-        .src(["app/static/scripts/main.js"])
-        .pipe(webpack({output: {filename: "bundle.js"}, mode: "production"}))
+        .src("app/static/scripts/main.js")
+        .pipe(webpack({
+            entry: {
+               main: "./app/static/scripts/main.js",
+               admin: "./app/static/scripts/admin.js"
+            },
+            output: {filename: "[name].js"},
+            mode: "production"
+        }))
         .on("error", swallowError)
         .pipe(rev())
         .pipe(gulp.dest("app/static/"))
