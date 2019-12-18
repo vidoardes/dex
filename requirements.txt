@@ -7,6 +7,7 @@ Flask-Migrate
 Flask-SQLAlchemy
 Flask-wtf
 gunicorn
+html2text
 itsdangerous
 Jinja2
 psycopg2

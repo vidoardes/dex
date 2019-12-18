@@ -257,6 +257,23 @@ class CPMultipliers(db.Model):
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
 
+class Event(db.Model):
+    __tablename__ = "events"
+
+    id = db.Column(db.Integer, primary_key=True)
+    event_type = db.Column(db.String(64))
+    event_data = db.Column(db.JSON, nullable=False, default={})
+    status = db.Column(db.String(24))
+    job_started = db.Column(db.DateTime, default=datetime.utcnow)
+    last_updated = db.Column(db.DateTime, default=datetime.utcnow)
+
+    def __repr__(self):
+        return "<Event {}>".format(self.id)
+
+    def as_dict(self):
+        return {c.name: getattr(self, c.name) for c in self.__table__.columns}
+
+
 @login.user_loader
 def load_user(id):
     return User.query.get(id)

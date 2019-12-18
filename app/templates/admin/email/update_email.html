@@ -78,11 +78,9 @@
             <table width="624" class="deviceWidth" border="0" cellpadding="0" cellspacing="0" align="center" bgcolor="#ffffff" style="margin:0 auto;">
                 <tr>
                     <td style="font-size: 14px; color: #666; font-weight: normal; text-align: left; font-family: Georgia, sans-serif; line-height: 24px; vertical-align: top; padding:0 20px 10px 20px;" bgcolor="#ffffff">
-                        <p>Dear {{ user.username }},</p>
-                        <h3>New formes and Christmas cheer!</h3>
-                        <p>It's been a little quiet, but I have been making updates I promise! In addition to adding a Galarian filter and the new mons, all of the Christmas additions have now been included. Thanks to your issues on Github many bugs have been squashed and many errors fixed, so keep reporting them!</p>
+                        <p>Dear {{ user["username"] }},</p>
 
-                        <p>Thanks to everyone who has donated, you are helping keep it alive! Hope you all have a happy holiday period and a great new year!</p>
+                        {{ body|safe }}
 
                         <p>Sincerely,</p>
                         <p><strong>The Dex Team</strong></p>
