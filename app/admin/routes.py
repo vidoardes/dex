@@ -8,7 +8,13 @@ from flask_login import current_user, login_required
 from app import db
 from app.admin import bp
 from app.admin.email import send_update_email
-from app.models import User, Event
+from app.models import User, Event, Pokemon
+
+
+def is_user_admin():
+    if not current_user.is_admin:
+        r = json.dumps({"success": False})
+        return Response(r, status=403, mimetype="application/json")
 
 
 @bp.route("/", methods=["GET"])
@@ -55,9 +61,7 @@ def bulk_email():
             db.session.commit()
             db.session.close()
 
-    if not current_user.is_admin:
-        r = json.dumps({"success": False})
-        return Response(r, status=403, mimetype="application/json")
+    is_user_admin()
 
     data = json.loads(request.form.get("data"))
     print(data)
@@ -109,9 +113,7 @@ def bulk_email():
 @bp.route("/api/check_email_send", methods=["GET"])
 @login_required
 def check_email_send():
-    if not current_user.is_admin:
-        r = json.dumps({"success": False})
-        return Response(r, status=403, mimetype="application/json")
+    is_user_admin()
 
     event_id = request.args.get("eid")
     active_event = Event.query.get(event_id)
@@ -132,5 +134,77 @@ def check_email_send():
     if active_event_data == "failed":
         r["success"] = False
         return Response(json.dumps(r), status=200, mimetype="application/json")
+
+    return Response(json.dumps(r), status=200, mimetype="application/json")
+
+
+@bp.route("/api/pokemon/get", methods=["GET"])
+@login_required
+def get_all_pokemon():
+    is_user_admin()
+
+    r = {
+        "success": True,
+        "results": []
+    }
+
+    q = request.args.get("q", "")
+
+    pokemon = (
+        Pokemon.query
+        .filter_by(mega=False)
+        .filter(Pokemon.forme.ilike("%" + str(q) + "%"))
+        .order_by(Pokemon.p_uid)
+        .limit(10)
+        .all()
+    )
+
+    for p in pokemon:
+        p_data = {
+            "name": p.forme,
+            "value": p.p_uid,
+            "text": p.forme,
+            "image": f"../static/img/sprites/{p.gen}/pokemon_icon_{p.p_uid}.png",
+            "imageClass": "ui avatar mini image",
+        }
+
+        r["results"].append(p_data)
+
+    return Response(json.dumps(r), status=200, mimetype="application/json")
+
+
+@bp.route("/api/pokemon/update", methods=["POST"])
+@login_required
+def update_pokemon():
+    is_user_admin()
+
+    data = json.loads(request.form.get("data"))
+
+    if data["pokemon"] == "":
+        pokemon = (
+            Pokemon.query
+            .all()
+        )
+    else:
+        pokemon = (
+            Pokemon.query
+            .filter(Pokemon.p_uid.in_(data["pokemon"].split(',')))
+            .all()
+        )
+
+    if data["type"] == "hatch":
+        for p in pokemon:
+            p.hatch = data["value"] if data["value"] != "" else None
+    elif data["type"] == "raid":
+        for p in pokemon:
+            p.raid = data["value"] if data["value"] != "" else None
+
+    db.session.commit()
+    db.session.close()
+
+    r = {
+        "success": True,
+        "results": []
+    }
 
     return Response(json.dumps(r), status=200, mimetype="application/json")

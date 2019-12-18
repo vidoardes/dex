@@ -28,7 +28,7 @@
                 <div class="ui form send-newsletter">
                     <div class="field">
                         <label for=subject">Subject</label>
-                        <input id="subject" type="text" name="subject" placeholder="Subject" />
+                        <input id="subject" type="text" name="subject" placeholder="Subject"/>
                     </div>
                     <div class="field">
                         <label for="body">Body</label>
@@ -51,25 +51,56 @@
 
             <div class="title">
                 <i class="dropdown icon"></i>
-                <i class="egg icon"></i>
-                Egg Hatches
+                <i class="edit icon"></i>
+                Update Pokemon
             </div>
 
             <div class="content">
                 <div class="ui form egg-hatches">
+                    <div class="ui field">
+                        <div class="ui multiple clearable selection search dropdown" id="pokemon-list">
+                            <input id="pokemon" name="pokemon" type="hidden">
+                            <div class="text">Search for a pokemon...</div>
+                            <i class="dropdown icon"></i>
+                        </div>
+                    </div>
 
-                </div>
-            </div>
+                    <div class="ui divider hidden"></div>
 
-            <div class="title">
-                <i class="dropdown icon"></i>
-                <i class="shield alternate icon"></i>
-                Raid Bosses
-            </div>
 
-            <div class="content">
-                <div class="ui form raid-bosses">
+                    <div class="ui container">
+                        <h4 class="ui header">
+                            <i class="egg icon"></i>
+                            Egg Hatches
+                        </h4>
+                        <div class="ui segment">
+                            <button class="ui button update-pokemon" data-type="hatch" data-value="2">2km eggs</button>
+                            <button class="ui button update-pokemon" data-type="hatch" data-value="5">5km eggs</button>
+                            <button class="ui button update-pokemon" data-type="hatch" data-value="7">7km eggs</button>
+                            <button class="ui button update-pokemon" data-type="hatch" data-value="10" 10>10km eggs</button>
+                        </div>
+                        <button class="ui button update-pokemon right floated red" data-type="hatch" data-value="">Remove
+                            from Eggs
+                        </button>
+                    </div>
 
+                    <div class="ui divider"></div>
+
+                    <div class="ui container">
+                        <h4 class="ui header">
+                            <i class="shield alternate icon"></i>
+                            Raid Bosses
+                        </h4>
+                        <div class="ui segment">
+                            <button class="ui button update-pokemon" data-type="raid" data-value="1">Tier 1</button>
+                            <button class="ui button update-pokemon" data-type="raid" data-value="2">Tier 2</button>
+                            <button class="ui button update-pokemon" data-type="raid" data-value="3">Tier 3</button>
+                            <button class="ui button update-pokemon" data-type="raid" data-value="4">Tier 4</button>
+                            <button class="ui button update-pokemon" data-type="raid" data-value="5">Tier 5</button>
+                            <button class="ui button update-pokemon" data-type="raid" data-value="6">EX Raid</button>
+                        </div>
+                        <button class="ui button update-pokemon right floated red" data-type="raid" data-value="">Remove from Raid Pool</button>
+                    </div>
                 </div>
             </div>
 

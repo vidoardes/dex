@@ -63,3 +63,30 @@ $('.ui.button.send-emails').on('click', () => {
         }
     });
 });
+
+$('#pokemon-list').dropdown({
+    placeholder: 'Select Pokemon',
+    apiSettings: {
+        url: `/admin/api/pokemon/get?q={query}`,
+        cache: false,
+    }
+});
+
+$('.ui.button.update-pokemon').on('click', function() {
+    let _obj = {};
+    _obj['type'] = $(this).data("type");
+    _obj['value'] = $(this).data("value");
+    _obj['pokemon'] = $('#pokemon').val();
+    let data = {data: JSON.stringify(_obj)};
+
+    console.log(data);
+
+    $.ajax({
+        url: '/admin/api/pokemon/update',
+        data: data,
+        type: 'POST',
+        success: function (r) {
+
+        }
+    });
+});
