@@ -526,6 +526,7 @@
     border: 1px solid #d1d5da;
     border-radius: 3px;
     padding: 10px;
+    margin-bottom: 5px;
     display: grid;
     grid-column-gap: 10px;
     grid-template-areas: "dd dd dd view";
@@ -558,41 +559,45 @@
     }
   }
 
-  .ui.attached.segment.list-header {
-    padding: 12px;
-    display: grid;
-    grid-template-columns: 70% 30%;
+  .ui.attached.segment {
+    margin: 0;
 
-    .pokemon-result-count {
-      font-weight: bold;
-      font-size: 12px;
-      float: left;
-    }
-
-    .export-list {
-      margin-left: 15px;
-    }
-
-    @include phone {
-      margin-top: 5px;
-      padding: 5px 10px
-    }
-
-    .list-selectors {
+    &.list-header {
+      padding: 12px;
       display: grid;
-      justify-content: right;
+      grid-template-columns: 70% 30%;
 
-      .text {
+      .pokemon-result-count {
         font-weight: bold;
         font-size: 12px;
+        float: left;
+      }
 
-        i.delete, .text i.edit {
-          display: none;
-        }
+      .export-list {
+        margin-left: 15px;
+      }
 
-        .ui.label {
-          padding: 0.3em !important;
-          margin-right: 3px;
+      @include phone {
+        margin-top: 5px;
+        padding: 5px 10px
+      }
+
+      .list-selectors {
+        display: grid;
+        justify-content: right;
+
+        .text {
+          font-weight: bold;
+          font-size: 12px;
+
+          i.delete, .text i.edit {
+            display: none;
+          }
+
+          .ui.label {
+            padding: 0.3em !important;
+            margin-right: 3px;
+          }
         }
       }
     }
