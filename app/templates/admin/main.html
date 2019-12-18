@@ -16,34 +16,71 @@
         <div class="content">Administration Settings</div>
     </h1>
 
-    <div class="ui segment notifications">
-        <h2 class="ui left aligned header">
-            <i class="newspaper outline icon"></i>
-            <div class="content">Send Newsletter
-                <div class="sub header">Manage your account settings and set e-mail preferences.</div>
-            </div>
-        </h2>
-
-        <div class="ui form send-newsletter">
-            <div class="field">
-                <label for=subject">Subject</label>
-                <input id="subject" type="text" name="subject" placeholder="Subject" />
-            </div>
-            <div class="field">
-                <label for="body">Body</label>
-                <textarea id="body" type="text" name="content" placeholder="Content"></textarea>
-            </div>
-            <button class="ui button send-emails">Send Emails</button>
+    <div class="ui styled fluid accordion">
+        <div class="title">
+            <i class="dropdown icon"></i>
+            <i class="newspaper icon"></i>
+            Send Newsletter
         </div>
 
-        <div class="ui container email-progress" style="display:none;">
-            <div class="ui hidden divider"></div>
-
-            <div class="ui progress olive emails-sent">
-                <div class="bar">
-                    <div class="progress"></div>
+        <div class="content">
+            <div class="ui form send-newsletter">
+                <div class="field">
+                    <label for=subject">Subject</label>
+                    <input id="subject" type="text" name="subject" placeholder="Subject" />
                 </div>
-                <div class="label">Emails Sent</div>
+                <div class="field">
+                    <label for="body">Body</label>
+                    <textarea id="body" type="text" name="content" placeholder="Content"></textarea>
+                </div>
+                <button class="ui button send-emails">Send Emails</button>
+            </div>
+
+            <div class="ui container email-progress" style="display:none;">
+                <div class="ui hidden divider"></div>
+
+                <div class="ui progress olive emails-sent">
+                    <div class="bar">
+                        <div class="progress"></div>
+                    </div>
+                    <div class="label">Emails Sent</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="title">
+            <i class="dropdown icon"></i>
+            <i class="egg icon"></i>
+            Egg Hatches
+        </div>
+
+        <div class="content">
+            <div class="ui form egg-hatches">
+
+            </div>
+        </div>
+
+        <div class="title">
+            <i class="dropdown icon"></i>
+            <i class="shield alternate icon"></i>
+            Raid Bosses
+        </div>
+
+        <div class="content">
+            <div class="ui form raid-bosses">
+
+            </div>
+        </div>
+
+        <div class="title">
+            <i class="dropdown icon"></i>
+            <i class="user circle icon"></i>
+            User Management
+        </div>
+
+        <div class="content">
+            <div class="ui form update-user">
+
             </div>
         </div>
     </div>

@@ -31,6 +31,8 @@ function checkSendStatus(eid) {
     });
 }
 
+$('.ui.accordion').accordion();
+
 let $emailprogress = $('.ui.progress.emails-sent');
 
 $('.ui.button.send-emails').on('click', () => {
