@@ -70,6 +70,12 @@ done
  
  Play around with the parameters to see what you can do, ImageMagick is a very powerful tool.
  
- #### Database
+ #### Credits
+ Without all of these open source projects DEX wouldn't have happened, so massive thank you goes to:
  
- I will be uploading my data source to a seperate repository soon: stay tuned!
+ * [Python](https://www.python.org/)
+ * [Flask](https://github.com/pallets/flask)
+ * [jQuery](https://jquery.com)
+ * [Fomatic UI](https://fomantic-ui.com/)
+ * [Font Awesome](https://fontawesome.com/)
+ 
