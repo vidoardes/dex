@@ -108,6 +108,8 @@ def fetch_pokemon(username):
 
     if "unreleased" not in cat:
         filtered_query = filtered_query.filter_by(released=True)
+    else:
+        filtered_query = filtered_query.filter_by(released=False)
 
     if name is not None:
         filtered_query = filtered_query.filter_by(forme=name)
