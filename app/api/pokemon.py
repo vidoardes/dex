@@ -120,6 +120,9 @@ def fetch_pokemon(username):
     if "lucky" in cat:
         filtered_query = filtered_query.filter_by(mythical=False)
 
+    if "purified" in cat:
+        filtered_query = filtered_query.filter_by(shadow=True)
+
     for i in cat:
         if i not in ("lucky", "unreleased", "purified", ""):
             filtered_query = filtered_query.filter(getattr(Pokemon, i), True)
