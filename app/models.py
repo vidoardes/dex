@@ -112,7 +112,7 @@ class Pokemon(db.Model):
     raid = db.Column(db.Integer, nullable=True)
     buddy = db.Column(db.Integer, nullable=False)
     evolve = db.Column(db.Integer, nullable=True)
-    evolve_into = db.Column(db.Integer, nullable=True)
+    evolve_into = db.Column(db.String(120), default="", nullable=True)
     shiny = db.Column(db.Boolean, default=False, nullable=False)
     regional = db.Column(db.Boolean, default=False, nullable=False)
     alolan = db.Column(db.Boolean, default=False, nullable=False)
