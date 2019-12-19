@@ -152,7 +152,7 @@ def get_all_pokemon():
 
     pokemon = (
         Pokemon.query
-        .filter_by(mega=False)
+        .filter_by(in_game=True)
         .filter(Pokemon.forme.ilike("%" + str(q) + "%"))
         .order_by(Pokemon.p_uid)
         .limit(10)
