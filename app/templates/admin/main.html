@@ -6,7 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
     <meta name="mobile-web-app-capable" content="yes">
     <title>DEX | Administrator Functions</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fomantic-ui@2.8.2/dist/semantic.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/vendor/semantic/dist/semantic.min.css">
+    <script src="https://kit.fontawesome.com/fe2658dbae.js"></script>
+    <style>
+        i.icon.fad {font-family: "Font Awesome 5 Duotone" !important;}
+        i.icon.fad:before {display:block;}
+        i.icon.fas, i.icon.far, i.icon.fal {font-family: "Font Awesome 5 Pro" !important;}
+    </style>
 </head>
 
 <body>
@@ -70,36 +76,48 @@
 
                     <div class="ui container">
                         <h4 class="ui header">
-                            <i class="egg icon"></i>
+                            <i class="fad fa-egg icon"></i>
                             Egg Hatches
                         </h4>
-                        <div class="ui segment">
-                            <button class="ui button update-pokemon" data-type="hatch" data-value="2">2km eggs</button>
-                            <button class="ui button update-pokemon" data-type="hatch" data-value="5">5km eggs</button>
-                            <button class="ui button update-pokemon" data-type="hatch" data-value="7">7km eggs</button>
-                            <button class="ui button update-pokemon" data-type="hatch" data-value="10" 10>10km eggs</button>
+                        <div class="ui container">
+                            <button class="ui button update-pokemon olive" data-type="hatch" data-value="2">2km eggs</button>
+                            <button class="ui button update-pokemon yellow" data-type="hatch" data-value="5">5km eggs</button>
+                            <button class="ui button update-pokemon pink" data-type="hatch" data-value="7">7km eggs</button>
+                            <button class="ui button update-pokemon purple" data-type="hatch" data-value="10" 10>10km eggs</button>
+                            <button class="ui button update-pokemon right floated red" data-type="hatch" data-value="">Remove from Eggs</button>
                         </div>
-                        <button class="ui button update-pokemon right floated red" data-type="hatch" data-value="">Remove
-                            from Eggs
-                        </button>
                     </div>
 
                     <div class="ui divider"></div>
 
                     <div class="ui container">
                         <h4 class="ui header">
-                            <i class="shield alternate icon"></i>
+                            <i class="far fa-shield-alt icon"></i>
                             Raid Bosses
                         </h4>
-                        <div class="ui segment">
-                            <button class="ui button update-pokemon" data-type="raid" data-value="1">Tier 1</button>
-                            <button class="ui button update-pokemon" data-type="raid" data-value="2">Tier 2</button>
-                            <button class="ui button update-pokemon" data-type="raid" data-value="3">Tier 3</button>
-                            <button class="ui button update-pokemon" data-type="raid" data-value="4">Tier 4</button>
-                            <button class="ui button update-pokemon" data-type="raid" data-value="5">Tier 5</button>
-                            <button class="ui button update-pokemon" data-type="raid" data-value="6">EX Raid</button>
+                        <div class="ui container">
+                            <button class="ui button update-pokemon pink" data-type="raid" data-value="1">Tier 1</button>
+                            <button class="ui button update-pokemon pink" data-type="raid" data-value="2">Tier 2</button>
+                            <button class="ui button update-pokemon yellow" data-type="raid" data-value="3">Tier 3</button>
+                            <button class="ui button update-pokemon yellow" data-type="raid" data-value="4">Tier 4</button>
+                            <button class="ui button update-pokemon purple" data-type="raid" data-value="5">Tier 5</button>
+                            <button class="ui button update-pokemon black" data-type="raid" data-value="6">EX Raid</button>
+                            <button class="ui button update-pokemon right floated red" data-type="raid" data-value="">Remove from Raid Pool</button>
                         </div>
-                        <button class="ui button update-pokemon right floated red" data-type="raid" data-value="">Remove from Raid Pool</button>
+                    </div>
+
+                     <div class="ui divider"></div>
+
+                    <div class="ui container">
+                        <h4 class="ui header">
+                            <i class="fad fa-cogs icon"></i>
+                            Other Updates
+                        </h4>
+                        <div class="ui container">
+                            <button class="ui button grey update-pokemon" data-type="other" data-value="shiny"><i class="fad fa-sparkles"></i> Shiny</button>
+                            <button class="ui button green update-pokemon" data-type="other" data-value="released"><i class="fas fa-check-circle"></i> Released</button>
+                            <button class="ui button violet update-pokemon" data-type="other" data-value="shadow"><i class="fad fa-fire"></i> Shadow</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -120,7 +138,7 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/fomantic-ui@2.8.2/dist/semantic.min.js"></script>
+<script src="/static/vendor/semantic/dist/semantic.min.js"></script>
 <script src="{{ asset_url('admin.js') }}"></script>
 </body>
 </html>

@@ -93,6 +93,9 @@ function build() {
     gulp
         .src(["app/static/docs/**/*.pdf"])
         .pipe(gulp.dest("dist/app/static/docs"));
+    gulp
+        .src(["app/static/vendor/**/*"])
+        .pipe(gulp.dest("dist/app/static/vendor"));
     return gulp
         .src(["app/static/img/**/*.*"])
         .pipe(gulp.dest("dist/app/static/img/"));
