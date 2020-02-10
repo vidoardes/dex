@@ -506,6 +506,13 @@
     float: left;
   }
 
+  .menu > .item {
+    white-space: nowrap;
+    word-wrap: normal;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+
   .ui.label {
     font-size: 10px;
     height: 26px;
@@ -528,7 +535,8 @@
     padding: 10px;
     margin-bottom: 5px;
     display: grid;
-    grid-column-gap: 10px;
+    grid-column-gap: 5px;
+    grid-row-gap: 5px;
     grid-template-areas: "dd dd dd view";
     grid-template-rows: auto;
     grid-template-columns: 1fr 1fr 1fr 40px;
@@ -539,23 +547,35 @@
       float: none;
     }
 
-    @include tablet {
-      padding: 5px;
-    }
-
-    @include phone {
-      grid-gap: 5px;
-      grid-template-areas: "dd view" "dd view" "dd view";
-      grid-template-rows: 1fr 1fr 1fr;
-      grid-template-columns: 1fr 40px;
-    }
-
     #filter-view {
       font-size: 30px;
       text-align: center;
       line-height: 38px;
       color: #276f86;
       grid-area: view;
+    }
+
+    #pokemon-search {
+      grid-column: 1 / 4;
+    }
+
+    @include tablet {
+      padding: 5px;
+    }
+
+    @include phone {
+      grid-gap: 5px;
+      grid-template-areas: "dd view" "dd view" "dd view" "dd view";
+      grid-template-rows: 1fr 1fr 1fr;
+      grid-template-columns: 1fr 40px;
+
+      #pokemon-search {
+        grid-column: 1 / 2;
+
+        &[class*="three column"]>.menu>.item {
+          width: 100%;
+        }
+      }
     }
   }
 

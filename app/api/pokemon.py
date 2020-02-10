@@ -48,6 +48,38 @@ def modify_query(**new_values):
     return "{}".format(url_encode(args))
 
 
+@bp.route("/pokemon/get", methods=["GET"])
+@login_required
+def get_all_pokemon():
+    r = {
+        "success": True,
+        "results": []
+    }
+
+    q = request.args.get("q", "")
+
+    pokemon = (
+        Pokemon.query
+        .filter_by(in_game=True)
+        .filter(Pokemon.forme.ilike("%" + str(q) + "%"))
+        .order_by(Pokemon.p_uid)
+        .limit(50)
+        .all()
+    )
+
+    for p in pokemon:
+        p_data = {
+            "name": p.forme,
+            "value": p.p_uid,
+            "text": p.forme,
+            "image": f"../static/img/sprites/{p.gen}/pokemon_icon_{p.p_uid}.png",
+        }
+
+        r["results"].append(p_data)
+
+    return Response(json.dumps(r), status=200, mimetype="application/json")
+
+
 @bp.route("/<username>/pokemon/get", methods=["GET"])
 def fetch_pokemon(username):
     user = User.query.filter(
@@ -64,6 +96,7 @@ def fetch_pokemon(username):
     cat = request.args.get("cat")
     gen = request.args.get("gen")
     own = request.args.get("own")
+    ids = request.args.get("ids")
     name = request.args.get("name", None)
     count = int(request.args.get("c", 0))
 
@@ -71,6 +104,11 @@ def fetch_pokemon(username):
         (item for item in user.pokemon_owned if item["value"] == user_list),
         user.pokemon_owned[0],
     )
+
+    if ids is not "" and ids is not None:
+        ids = ids.split(",")
+    else:
+        ids = []
 
     if gen is not "" and gen is not None:
         gen = gen.split(",")
@@ -105,6 +143,10 @@ def fetch_pokemon(username):
     list_type = active_list["type"]
 
     filtered_query = Pokemon.query.filter_by(in_game=True)
+
+    if len(ids) > 0:
+        print(ids)
+        filtered_query = filtered_query.filter(Pokemon.p_uid.in_(ids))
 
     if "unreleased" not in cat:
         filtered_query = filtered_query.filter_by(released=True)

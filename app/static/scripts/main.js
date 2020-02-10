@@ -7,6 +7,7 @@ function renderAllPokemon() {
         success: (r) => {
             if (r['pokemon'] === "end") {
                 console.log('No more results, render complete');
+                $renderRunning = false;
                 return false
             }
 
@@ -516,6 +517,32 @@ $('#pokemon-filters .ui.dropdown').dropdown({
         }
     }
 });
+
+$('#pokemon-filters #pokemon-search').dropdown({
+    apiSettings: {
+        url: `/api/pokemon/get?q={query}`,
+    },
+    onAdd: () => {
+        $('.dropdown').trigger('blur')
+    }
+}).on('change', '#pokemon-select', () => {
+    if (filtersActive) {
+        qs.ids = $('#pokemon-select').val();
+        qs.c = 0;
+
+        console.log('Pokemon search filter updated');
+        $filterDimmer.addClass('active');
+        $('#pokemon-wrapper .pokemon').remove();
+
+        if($renderRunning === false) {
+            $renderRunning = true;
+            console.log($renderRunning + '1');
+            renderAllPokemon()
+        }
+    }
+});
+
+
 
 $listSelector.dropdown({
     apiSettings: {
