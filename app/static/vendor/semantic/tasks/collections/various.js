@@ -9,8 +9,8 @@
 module.exports = function (gulp) {
 
   var
-    clean   = require('../clean'),
-    version = require('../version')
+    clean   = require('./../clean'),
+    version = require('./../version')
   ;
 
   gulp.task('clean', clean);
