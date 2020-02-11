@@ -17,11 +17,11 @@
   },
   "homepage": "https://github.com/vidoardes/dex#readme",
   "dependencies": {
-    "autoprefixer": "^9.7.3",
+    "autoprefixer": "^9.7.4",
     "browser-sync": "^2.26.7",
     "cssnano": "^4.1.10",
     "del": "^5.1.0",
-    "fomantic-ui": "^2.8.2",
+    "fomantic-ui": "^2.8.3",
     "gulp": "^4.0.2",
     "gulp-rename": "^1.4.0",
     "gulp-rev": "^9.0.0",
