@@ -3,7 +3,7 @@
 
 A simple app that allows you to track and maintain a list of Pokemon, including any variants in a easy to read and sharable format.
 
-Built using Python 3.7
+Built using Python 3.8
 
 ### Features
 * Track and share your living Pokedex with an easy to use UI
@@ -14,7 +14,7 @@ Built using Python 3.7
 
 ### Project Setup
 #### Requirements
-* Python v3.7+
+* Python v3.8+
 * PostgreSQL v10+
 * Node v10+
 * NPM v3.1+
