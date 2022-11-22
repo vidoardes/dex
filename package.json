@@ -18,7 +18,7 @@
   "homepage": "https://github.com/vidoardes/dex#readme",
   "dependencies": {
     "autoprefixer": "^9.7.4",
-    "browser-sync": "^2.26.7",
+    "browser-sync": "^2.27.10",
     "cssnano": "^4.1.10",
     "del": "^5.1.0",
     "fomantic-ui": "^2.8.3",
