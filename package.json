@@ -28,7 +28,7 @@
     "gulp-sass": "^4.0.2",
     "natives": "^1.1.6",
     "run-sequence": "^2.2.1",
-    "webpack-stream": "^5.2.1"
+    "webpack-stream": "^7.0.0"
   },
   "devDependencies": {
     "gulp-postcss": "^8.0.0",
